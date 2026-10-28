@@ -29,32 +29,33 @@ module GameData
           fusion_body = pkmn_data.fusion_body
         end
         
-        if fusion_body
-          head_species = pkmn.species
-          body_species = fusion_body.to_s.upcase.to_sym
-          
-          # Create a FusedPokemon instance preserving all custom configurations
-          # (moves, IVs, EVs, item, shiny, gender, ball, etc.)
-          fused_pkmn = FusedPokemon.new(head_species, pkmn.level, head_species, body_species)
-          
-          # Copy all instance variables from the generated base Pokemon
-          pkmn.instance_variables.each do |var|
-            fused_pkmn.instance_variable_set(var, pkmn.instance_variable_get(var))
-          end
-          
-          # Assign fusion-specific attributes and species data
-          fused_pkmn.fusion_head = head_species
-          fused_pkmn.fusion_body = body_species
-          fused_pkmn.original_head_data = GameData::Species.try_get(head_species)
-          fused_pkmn.original_body_data = GameData::Species.try_get(body_species)
-          
-          # Recalculate blended stats and restore full HP
-          fused_pkmn.calc_stats
-          fused_pkmn.hp = fused_pkmn.totalhp
-          
-          # Replace the standard Pokemon with the fully configured FusedPokemon
-          trainer.party[i] = fused_pkmn
+        next unless fusion_body
+        head_species = pkmn.species
+        body_species = fusion_body.to_s.upcase.to_sym
+        next unless GameData::Species.exists?(body_species)
+
+        # Create a FusedPokemon instance preserving all custom configurations
+        # (moves, IVs, EVs, item, shiny, gender, ball, etc.)
+        fused_pkmn = FusedPokemon.new(head_species, pkmn.level, head_species, body_species)
+        
+        # Copy all instance variables from the generated base Pokemon
+        pkmn.instance_variables.each do |var|
+          fused_pkmn.instance_variable_set(var, pkmn.instance_variable_get(var))
         end
+        
+        # Assign fusion-specific attributes and species data
+        fused_pkmn.fusion_head = head_species
+        fused_pkmn.fusion_body = body_species
+        fused_pkmn.original_head_data = GameData::Species.get_species_form(head_species, pkmn.form)
+        fused_pkmn.original_body_data = GameData::Species.try_get(body_species)
+        fused_pkmn.invalidate_fusion_caches
+        
+        # Recalculate blended stats and restore full HP
+        fused_pkmn.calc_stats
+        fused_pkmn.hp = fused_pkmn.totalhp
+        
+        # Replace the standard Pokemon with the fully configured FusedPokemon
+        trainer.party[i] = fused_pkmn
       end
       
       return trainer

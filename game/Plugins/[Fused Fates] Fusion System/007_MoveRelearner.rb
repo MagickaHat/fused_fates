@@ -6,7 +6,7 @@
 # class MoveRelearnerScreen
 #==================================================================
 class MoveRelearnerScreen
-  alias_method :pbGetRelearnableMoves_fusion, :pbGetRelearnableMoves
+  alias_method :pbGetRelearnableMoves_fusion, :pbGetRelearnableMoves unless method_defined?(:pbGetRelearnableMoves_fusion)
   
   def pbGetRelearnableMoves(pkmn)
     moves = pbGetRelearnableMoves_fusion(pkmn)
@@ -25,6 +25,6 @@ class MoveRelearnerScreen
       moves.unshift(i) # Place egg/first moves at the top of the list
     end
     
-    return moves | []
+    return moves
   end
 end
