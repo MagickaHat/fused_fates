@@ -3,474 +3,360 @@
 #================================================================================================
 
 #==================================================================
+# module FusionSprites
+#==================================================================
+# Fusion graphics are addressed by "virtual" paths containing VIRTUAL_TAG. They never exist
+# on disk: RPG::Cache.load_bitmap is hooked so that loading one returns a generated bitmap.
+# This lets every engine sprite class (party icons, PC icons, summary, battlers, overworld
+# characters) display fusions with its own animation and disposal logic, and means each
+# fusion graphic is generated once and then reused from a small LRU cache.
+module FusionSprites
+  VIRTUAL_TAG  = "__fusion__/"
+  VIRTUAL_ROOT = "Graphics/" + VIRTUAL_TAG
+
+  @cache         = {}   # Virtual path => BitmapWrapper (oldest first)
+  @custom_lookup = {}   # Candidate file path => resolved path, or false if missing
+  @generators    = {}   # Kind => proc { |params| BitmapWrapper or nil }
+
+  #----------------------------------------------------------------
+  # Virtual paths
+  #----------------------------------------------------------------
+  # @param kind [Symbol] :battler, :icon or :follower
+  # @param head [Symbol] head species
+  # @param head_form [Integer] head form
+  # @param body [Symbol] body species
+  # @param body_form [Integer] body form
+  # @param shiny [Boolean]
+  # @param back [Boolean]
+  # @return [String] virtual path under VIRTUAL_TAG (relative to "Graphics/")
+  def self.virtual_name(kind, head, head_form, body, body_form, shiny = false, back = false)
+    return VIRTUAL_TAG + "#{kind}/" + [head, head_form.to_i, body, body_form.to_i, shiny ? 1 : 0, back ? 1 : 0].join(",")
+  end
+
+  # @param path [String]
+  # @return [Boolean] whether the path refers to a generated fusion graphic
+  def self.virtual?(path)
+    return path.is_a?(String) && path.include?(VIRTUAL_TAG)
+  end
+
+  # @param path [String] a virtual path
+  # @return [Array, nil] [kind, head, head_form, body, body_form, shiny, back]
+  def self.parse(path)
+    rest = path[(path.index(VIRTUAL_TAG) + VIRTUAL_TAG.length)..-1]
+    kind, values = rest.split("/", 2)
+    parts = values.to_s.split(",")
+    return nil if parts.length < 6
+    return [kind.to_sym, parts[0].to_sym, parts[1].to_i, parts[2].to_sym, parts[3].to_i,
+            parts[4] == "1", parts[5] == "1"]
+  end
+
+  #----------------------------------------------------------------
+  # Cache
+  #----------------------------------------------------------------
+  # Registers the proc that draws a kind of virtual graphic
+  # @param kind [Symbol]
+  def self.register_generator(kind, &block)
+    @generators[kind] = block
+  end
+
+  # Returns the bitmap for a virtual path, generating it if needed.
+  # A reference is added for the caller, who releases it with dispose.
+  # @param path [String] a virtual path
+  # @return [BitmapWrapper, nil]
+  def self.load_virtual(path)
+    bmp = @cache.delete(path)
+    bmp = nil if bmp&.disposed?
+    if !bmp
+      params = parse(path)
+      generator = params && @generators[params[0]]
+      return nil if !generator
+      begin
+        bmp = generator.call(*params[1..-1])
+      rescue StandardError => e
+        Console.echo_warn("Fusion graphic #{path} could not be generated: #{e.message}") if $DEBUG
+        bmp = nil
+      end
+      return nil if !bmp
+    end
+    @cache[path] = bmp   # Re-inserting marks it as the most recently used
+    trim_cache
+    bmp.addRef
+    return bmp
+  end
+
+  # Releases the oldest cached bitmaps beyond FusionSettings::SPRITE_CACHE_SIZE
+  def self.trim_cache
+    while @cache.length > FusionSettings::SPRITE_CACHE_SIZE
+      _path, old = @cache.shift
+      old.dispose if old && !old.disposed?
+    end
+  end
+
+  # Releases every generated bitmap and forgets which custom files exist
+  # (e.g. after adding custom sprites while the game is running)
+  def self.clear_cache
+    @cache.each_value { |bmp| bmp.dispose if !bmp.disposed? }
+    @cache.clear
+    @custom_lookup.clear
+  end
+
+  # @param path [String] file path without extension
+  # @return [String, nil] the resolved file path, remembered between calls
+  def self.resolve_custom(path)
+    @custom_lookup[path] = (pbResolveBitmap(path) || false) if !@custom_lookup.key?(path)
+    return @custom_lookup[path] || nil
+  end
+
+  # @return [String] HEAD[_form]_BODY[_form]
+  def self.pair_name(head, head_form, body, body_form)
+    head_str = (head_form > 0) ? "#{head}_#{head_form}" : head.to_s
+    body_str = (body_form > 0) ? "#{body}_#{body_form}" : body.to_s
+    return "#{head_str}_#{body_str}"
+  end
+
+  # @param pkmn [FusedPokemon]
+  # @return [Array] [head, head_form, body, body_form, shiny]
+  def self.pokemon_params(pkmn)
+    return [pkmn.fusion_head, pkmn.component_form(:head), pkmn.fusion_body, pkmn.component_form(:body), pkmn.shiny?]
+  end
+
+  #----------------------------------------------------------------
+  # Battler and icon paths
+  #----------------------------------------------------------------
+  # @return [String] custom battle sprite path, or a virtual path for a stitched sprite
+  def self.battler_path(head, head_form, body, body_form, shiny = false, back = false)
+    filename = pair_name(head, head_form, body, body_form)
+    filename += "_back" if back
+    filename += "_shiny" if shiny
+    custom = resolve_custom(FusionSettings::SPRITE_FOLDER + filename)
+    return custom || ("Graphics/" + virtual_name(:battler, head, head_form, body, body_form, shiny, back))
+  end
+
+  # @return [String] custom icon path, or a virtual path for a stitched icon
+  def self.icon_path(head, head_form, body, body_form, shiny = false)
+    filename = pair_name(head, head_form, body, body_form)
+    filename += "_shiny" if shiny
+    custom = resolve_custom(FusionSettings::ICON_FOLDER + filename)
+    return custom || ("Graphics/" + virtual_name(:icon, head, head_form, body, body_form, shiny))
+  end
+
+  # Loads a real graphic, bypassing the virtual path hook
+  # @return [BitmapWrapper, nil]
+  def self.load_source(path)
+    return nil if !path || !pbResolveBitmap(path)
+    return RPG::Cache.load_bitmap("", path)
+  end
+
+  #----------------------------------------------------------------
+  # Colour helpers
+  #----------------------------------------------------------------
+  # Converts a Color object (RGB) into a Hue angle (0-360)
+  def self.rgb_to_hue(color)
+    r, g, b = color.red, color.green, color.blue
+    max, min = [r, g, b].max, [r, g, b].min
+    delta = max - min
+    return 0 if delta == 0 # It's a shade of gray
+
+    hue = if max == r
+            60.0 * (((g - b) / delta) % 6)
+          elsif max == g
+            60.0 * (((b - r) / delta) + 2)
+          else
+            60.0 * (((r - g) / delta) + 4)
+          end
+    return (hue < 0 ? hue + 360 : hue).round
+  end
+
+  # Samples a 10x10 grid of a bitmap region to find the median hue
+  # @return [Integer] hue angle (0-360)
+  def self.get_dominant_hue(bitmap, rect)
+    hues = []
+    step_x = [rect.width / 10, 1].max
+    step_y = [rect.height / 10, 1].max
+
+    (rect.y...(rect.y + rect.height)).step(step_y) do |y|
+      (rect.x...(rect.x + rect.width)).step(step_x) do |x|
+        color = bitmap.get_pixel(x, y)
+        next if color.alpha < 255 # Ignore transparent background
+
+        max, min = [color.red, color.green, color.blue].max, [color.red, color.green, color.blue].min
+        # Ignore outlines (blacks), highlights (whites), and neutral grays
+        next if (max - min) < 20 || max < 40 || max > 240
+
+        hues << rgb_to_hue(color)
+      end
+    end
+
+    return 0 if hues.empty?
+    hues.sort!
+    return hues[hues.size / 2] # Return median hue to avoid stray pixel outliers
+  end
+
+  # Shifts the colours of the head region towards the body region's dominant hue
+  # @param bitmap [Bitmap] bitmap holding the head region (modified in place)
+  # @param head_rect [Rect] region of bitmap to sample for the head's hue
+  # @param body_bmp [Bitmap] source of the body's hue
+  # @param body_rect [Rect] region of body_bmp to sample
+  def self.harmonize_hue(bitmap, head_rect, body_bmp, body_rect)
+    hue_offset = (get_dominant_hue(body_bmp, body_rect) - get_dominant_hue(bitmap, head_rect)) % 360
+    bitmap.hue_change(hue_offset) if hue_offset != 0
+  end
+
+  # Deterministic hue shift for procedural shinies, so a fusion pair always gets the same colours
+  # @return [Integer] hue angle (0-360)
+  def self.procedural_shiny_offset(head, body)
+    offset = (head.to_s.sum + body.to_s.sum) % 360
+    # If the hue is too close to the original colour, push it outward so it looks distinct
+    offset = (offset + 120) % 360 if offset < 45 || offset > 315
+    return offset
+  end
+end
+
+#==================================================================
+# Generators
+#==================================================================
+# Stitched battle sprite: top half of the head over the bottom half of the body
+FusionSprites.register_generator(:battler) do |head, head_form, body, body_form, shiny, back|
+  head_path = GameData::Species.sprite_filename(head, head_form, 0, shiny, false, back)
+  body_path = GameData::Species.sprite_filename(body, body_form, 0, shiny, false, back)
+
+  # If a shiny was requested but the normal sprites were found, generate the shiny colours procedurally
+  is_procedural_shiny = shiny &&
+                        (head_path == GameData::Species.sprite_filename(head, head_form, 0, false, false, back) ||
+                         body_path == GameData::Species.sprite_filename(body, body_form, 0, false, false, back))
+
+  head_bmp = FusionSprites.load_source(head_path)
+  body_bmp = FusionSprites.load_source(body_path)
+  if !head_bmp || !body_bmp
+    head_bmp&.dispose
+    body_bmp&.dispose
+    next nil
+  end
+
+  # Create a unified canvas matching the max dimensions
+  width  = [head_bmp.width, body_bmp.width].max
+  height = [head_bmp.height, body_bmp.height].max
+  result = BitmapWrapper.new(width, height)
+
+  # Draw the bottom half of the body sprite
+  body_slice_height = body_bmp.height / 2
+  body_rect = Rect.new(0, body_slice_height, body_bmp.width, body_bmp.height - body_slice_height)
+  body_x = (width - body_bmp.width) / 2
+  body_y = ((height - body_bmp.height) / 2) + body_slice_height
+  result.blt(body_x, body_y, body_bmp, body_rect)
+
+  # Copy the top half of the head sprite and harmonize it with the body's colours
+  head_slice = Bitmap.new(head_bmp.width, head_bmp.height / 2)
+  head_slice.blt(0, 0, head_bmp, Rect.new(0, 0, head_bmp.width, head_slice.height))
+  FusionSprites.harmonize_hue(head_slice, head_slice.rect, body_bmp, body_rect)
+  result.blt((width - head_slice.width) / 2, (height - body_bmp.height) / 2, head_slice, head_slice.rect)
+  head_slice.dispose
+
+  # Procedural Shiny Harmonization
+  result.hue_change(FusionSprites.procedural_shiny_offset(head, body)) if is_procedural_shiny
+
+  # Release the source sprites (they are reference counted by RPG::Cache)
+  head_bmp.dispose
+  body_bmp.dispose
+  next result
+end
+
+# Stitched party icon, keeping every animation frame of both components
+FusionSprites.register_generator(:icon) do |head, head_form, body, body_form, shiny, _back|
+  head_bmp = FusionSprites.load_source(GameData::Species.icon_filename(head, head_form, 0, shiny))
+  body_bmp = FusionSprites.load_source(GameData::Species.icon_filename(body, body_form, 0, shiny))
+  if !head_bmp || !body_bmp
+    head_bmp&.dispose
+    body_bmp&.dispose
+    next nil
+  end
+
+  frame_size  = [head_bmp.height, body_bmp.height].min
+  head_frames = [head_bmp.width / frame_size, 1].max
+  body_frames = [body_bmp.width / frame_size, 1].max
+  num_frames  = [head_frames, body_frames, 2].max
+  half        = frame_size / 2
+
+  result = BitmapWrapper.new(frame_size * num_frames, frame_size)
+  num_frames.times do |i|
+    x = i * frame_size
+    # Bottom half from the body, top half from the head, straight from the source frames
+    result.blt(x, half, body_bmp, Rect.new((i % body_frames) * frame_size, half, frame_size, frame_size - half))
+    result.blt(x, 0, head_bmp, Rect.new((i % head_frames) * frame_size, 0, frame_size, half))
+  end
+
+  head_bmp.dispose
+  body_bmp.dispose
+  next result
+end
+
+#==================================================================
+# module RPG::Cache
+#==================================================================
+module RPG
+  module Cache
+    class << self
+      alias_method :fusion_load_bitmap, :load_bitmap unless method_defined?(:fusion_load_bitmap)
+
+      # Serves generated fusion graphics for virtual paths; everything else loads normally
+      def load_bitmap(folder_name, filename, hue = 0)
+        path = "#{folder_name}#{filename}"
+        if FusionSprites.virtual?(path)
+          bmp = FusionSprites.load_virtual(path)
+          return bmp if bmp
+          return fusion_load_bitmap("", "")   # Blank placeholder if the graphic can't be made
+        end
+        return fusion_load_bitmap(folder_name, filename, hue)
+      end
+    end
+  end
+end
+
+#==================================================================
 # module GameData class Species
 #==================================================================
 module GameData
   class Species
-    # Converts an RGSS3 Color object (RGB) into a Hue angle (0-360)
-    def self.rgb_to_hue(color)
-      r, g, b = color.red, color.green, color.blue
-      max, min = [r, g, b].max, [r, g, b].min
-      delta = max - min
-      return 0 if delta == 0 # It's a shade of gray
+    class << self
+      alias_method :fusion_sprite_bitmap_from_pokemon, :sprite_bitmap_from_pokemon unless method_defined?(:fusion_sprite_bitmap_from_pokemon)
+      alias_method :fusion_icon_filename_from_pokemon, :icon_filename_from_pokemon unless method_defined?(:fusion_icon_filename_from_pokemon)
+      alias_method :fusion_icon_bitmap_from_pokemon, :icon_bitmap_from_pokemon unless method_defined?(:fusion_icon_bitmap_from_pokemon)
 
-      hue = if max == r
-              60.0 * (((g - b) / delta) % 6)
-            elsif max == g
-              60.0 * (((b - r) / delta) + 2)
-            else
-              60.0 * (((r - g) / delta) + 4)
-            end
-      return (hue < 0 ? hue + 360 : hue).round
-    end
-
-    # Samples a bitmap region to find the median hue
-    def self.get_dominant_hue(bitmap, rect)
-      hues = []
-      # Sample a 10x10 grid to maintain 60 FPS performance
-      step_x = [rect.width / 10, 1].max
-      step_y = [rect.height / 10, 1].max
-
-      (rect.y...(rect.y + rect.height)).step(step_y) do |y|
-        (rect.x...(rect.x + rect.width)).step(step_x) do |x|
-          color = bitmap.get_pixel(x, y)
-          next if color.alpha < 255 # Ignore transparent background
-          
-          max, min = [color.red, color.green, color.blue].max, [color.red, color.green, color.blue].min
-          # Ignore outlines (blacks), highlights (whites), and neutral grays
-          next if (max - min) < 20 || max < 40 || max > 240 
-          
-          hues << rgb_to_hue(color)
+      # Used by battlers, the summary screen and every other PokemonSprite
+      def sprite_bitmap_from_pokemon(pkmn, back = false, species = nil)
+        return fusion_sprite_bitmap_from_pokemon(pkmn, back, species) if pkmn.egg? || !FusionHandlers.fused?(pkmn)
+        head, head_form, body, body_form, shiny = FusionSprites.pokemon_params(pkmn)
+        if species
+          # A specific species was requested (e.g. the evolution scene showing the evolved form)
+          parts = species.to_s.split("_", 2)
+          return fusion_sprite_bitmap_from_pokemon(pkmn, back, species) unless parts.length == 2 &&
+                                                                              GameData::Species.exists?(parts[1].to_sym)
+          head, body = parts[0].to_sym, parts[1].to_sym
         end
+        return AnimatedBitmap.new(FusionSprites.battler_path(head, head_form, body, body_form, shiny, back))
       end
-      
-      return 0 if hues.empty?
-      hues.sort!
-      return hues[hues.size / 2] # Return median hue to avoid stray pixel outliers
+
+      # Used by party icons (PokemonIconSprite) and PC box icons (PokemonBoxIcon)
+      def icon_filename_from_pokemon(pkmn)
+        return fusion_icon_filename_from_pokemon(pkmn) if pkmn.egg? || !FusionHandlers.fused?(pkmn)
+        return FusionSprites.icon_path(*FusionSprites.pokemon_params(pkmn))
+      end
+
+      def icon_bitmap_from_pokemon(pkmn)
+        return fusion_icon_bitmap_from_pokemon(pkmn) if pkmn.egg? || !FusionHandlers.fused?(pkmn)
+        return AnimatedBitmap.new(icon_filename_from_pokemon(pkmn)).deanimate
+      end
     end
 
-    # Resolves or generates a fusion sprite bitmap 
+    # Kept for compatibility: returns a bitmap the caller must dispose
     def self.fusion_sprite_bitmap(head_id, body_id, head_form = 0, body_form = 0, shiny = false, back = false)
-      head_str = head_form > 0 ? "#{head_id}_#{head_form}" : "#{head_id}"
-      body_str = body_form > 0 ? "#{body_id}_#{body_form}" : "#{body_id}"
-
-      folder = "Graphics/Pokemon/Fusions/"
-      filename = "#{head_str}_#{body_str}"
-      filename += "_back" if back
-      filename += "_shiny" if shiny
-      
-      # Check for custom asprite
-      path = pbResolveBitmap(folder + filename)
-      return RPG::Cache.load_bitmap(folder, filename) if path
-      
-      # Procedural Stitched Fallback with Hue Harmonization
-      return generate_procedural_fusion_bitmap(head_id, head_form, body_id, body_form, shiny, back)    
+      path = FusionSprites.battler_path(head_id, head_form, body_id, body_form, shiny, back)
+      return RPG::Cache.load_bitmap("", path)
     end
 
-    def self.generate_procedural_fusion_bitmap(head_id, head_form, body_id, body_form, shiny, back)
-      # Retrieve base species file paths
-      head_path = GameData::Species.sprite_filename(head_id, head_form, 0, shiny, false, back)
-      body_path = GameData::Species.sprite_filename(body_id, body_form, 0, shiny, false, back)
-      
-      normal_head_path = GameData::Species.sprite_filename(head_id, 0, 0, false, false, back)
-      normal_body_path = GameData::Species.sprite_filename(body_id, 0, 0, false, false, back)
-      
-      # If the game requested a shiny, but loaded the normal paths, generate the shiny colors procedurally
-      is_procedural_shiny = shiny && (head_path == normal_head_path || body_path == normal_body_path)
-      
-      head_bmp = pbResolveBitmap(head_path) ? RPG::Cache.load_bitmap("", head_path) : nil
-      body_bmp = pbResolveBitmap(body_path) ? RPG::Cache.load_bitmap("", body_path) : nil
-      
-      return nil unless head_bmp && body_bmp
-
-      # Create a unified canvas matching the max dimensions
-      width = [head_bmp.width, body_bmp.width].max
-      height = [head_bmp.height, body_bmp.height].max
-      result_bmp = Bitmap.new(width, height)
-
-      # Isolate and draw the bottom region of the body sprite
-      body_slice_height = body_bmp.height / 2
-      body_rect = Rect.new(0, body_slice_height, body_bmp.width, body_bmp.height - body_slice_height)
-      
-      body_x = (width - body_bmp.width) / 2
-      body_y = ((height - body_bmp.height) / 2) + body_slice_height
-      
-      result_bmp.blt(body_x, body_y, body_bmp, body_rect)
-
-      # Isolate the upper region of the head sprite
-      head_slice_height = head_bmp.height / 2
-      head_rect = Rect.new(0, 0, head_bmp.width, head_slice_height)
-      
-      head_clone = Bitmap.new(head_bmp.width, head_slice_height)
-      head_clone.blt(0, 0, head_bmp, head_rect)
-      
-      # Apply a procedural hue shift to harmonize the head with the body's color profile
-      head_hue = get_dominant_hue(head_clone, Rect.new(0, 0, head_clone.width, head_clone.height))
-      body_hue = get_dominant_hue(body_bmp, body_rect)
-      
-      hue_offset = (body_hue - head_hue) % 360
-      head_clone.hue_change(hue_offset) if hue_offset != 0
-
-      # Add the modified head onto the upper portion of the canvas
-      head_x = (width - head_clone.width) / 2
-      head_y = (height - body_bmp.height) / 2
-      result_bmp.blt(head_x, head_y, head_clone, head_clone.rect)
-
-      # Procedural Shiny Harmonization
-      if is_procedural_shiny
-        # Calculate a deterministic shift based on the species' internal symbol strings (e.g., :PIKACHU)
-        # This ensures that this exact fusion pair always generates the exact same shiny color
-        shiny_offset = (head_id.to_s.sum + body_id.to_s.sum) % 360
-        
-        # If the math results in a hue too close to the original color, push it outward to ensure it looks distinct
-        if shiny_offset < 45 || shiny_offset > 315
-          shiny_offset = (shiny_offset + 120) % 360 
-        end
-        
-        # Apply the final shiny shift to the completed, harmonized sprite
-        result_bmp.hue_change(shiny_offset)
-      end
-
-      # Clean up temporary memory allocations to prevent memory leaks
-      head_clone.dispose
-      head_bmp.dispose unless head_bmp == body_bmp
-      body_bmp.dispose
-
-      return result_bmp
-    end
-  
-    # Resolves or generates a procedural fusion party icon bitmap
+    # Kept for compatibility: returns a bitmap the caller must dispose
     def self.fusion_icon_bitmap(head_id, head_form, body_id, body_form, shiny = false)
-      head_str = head_form > 0 ? "#{head_id}_#{head_form}" : "#{head_id}"
-      body_str = body_form > 0 ? "#{body_id}_#{body_form}" : "#{body_id}"
-
-      folder = "Graphics/Pokemon/Fusion Icons/"
-      filename = "#{head_str}_#{body_str}"
-      filename += "_shiny" if shiny
-      
-      path = pbResolveBitmap(folder + filename)
-      return RPG::Cache.load_bitmap(folder, filename) if path
-      
-      head_path = GameData::Species.icon_filename(head_id, head_form, 0, shiny)
-      body_path = GameData::Species.icon_filename(body_id, body_form, 0, shiny)
-      
-      head_bmp = pbResolveBitmap(head_path) ? RPG::Cache.load_bitmap("", head_path) : nil
-      body_bmp = pbResolveBitmap(body_path) ? RPG::Cache.load_bitmap("", body_path) : nil
-      
-      return nil unless head_bmp && body_bmp
-
-      frame_size = [head_bmp.height, body_bmp.height].min
-      head_frames = [head_bmp.width / frame_size, 1].max
-      body_frames = [body_bmp.width / frame_size, 1].max
-      num_frames = [head_frames, body_frames, 2].max
-
-      result_bmp = Bitmap.new(frame_size * num_frames, frame_size)
-
-      num_frames.times do |i|
-        h_frame_idx = i % head_frames
-        b_frame_idx = i % body_frames
-
-        head_single = Bitmap.new(frame_size, frame_size)
-        head_single.blt(0, 0, head_bmp, Rect.new(h_frame_idx * frame_size, 0, frame_size, frame_size))
-        
-        body_single = Bitmap.new(frame_size, frame_size)
-        body_single.blt(0, 0, body_bmp, Rect.new(b_frame_idx * frame_size, 0, frame_size, frame_size))
-
-        frame_result = Bitmap.new(frame_size, frame_size)
-
-        body_slice_height = frame_size / 2
-        body_rect = Rect.new(0, body_slice_height, frame_size, frame_size - body_slice_height)
-        frame_result.blt(0, body_slice_height, body_single, body_rect)
-
-        head_slice_height = frame_size / 2
-        head_rect = Rect.new(0, 0, frame_size, head_slice_height)
-        head_clone = Bitmap.new(frame_size, head_slice_height)
-        head_clone.blt(0, 0, head_single, head_rect)
-
-        frame_result.blt(0, 0, head_clone, head_clone.rect)
-
-        result_bmp.blt(i * frame_size, 0, frame_result, frame_result.rect)
-
-        head_clone.dispose
-        head_single.dispose
-        body_single.dispose
-        frame_result.dispose
-      end
-
-      head_bmp.dispose unless head_bmp == body_bmp
-      body_bmp.dispose
-
-      return result_bmp
-    end
-  end
-end
-
-class FusionBitmapWrapper
-  attr_reader :bitmap
-
-  def initialize(custom_bitmap)
-    @bitmap = custom_bitmap
-  end
-
-  # These dimensional methods are crucial for pbSetPosition to work
-  def width; return @bitmap ? @bitmap.width : 0; end
-  def height; return @bitmap ? @bitmap.height : 0; end
-  
-  # Dummy methods to prevent update loops from panicking
-  def update; end
-  def dispose
-    @bitmap.dispose if @bitmap && !@bitmap.disposed?
-  end
-  def disposed?; return @bitmap ? @bitmap.disposed? : true; end
-  def totalFrames; return 1; end
-  def currentIndex; return 0; end
-  def length; return 1; end
-end
-
-#==================================================================
-# class Battle::Scene::BattlerSprite < RPG::Sprite
-#==================================================================
-class Battle::Scene::BattlerSprite < RPG::Sprite
-  alias_method :fusion_setPokemonBitmap, :setPokemonBitmap unless method_defined?(:fusion_setPokemonBitmap)
-
-  def setPokemonBitmap(pkmn, back = false)
-    @pkmn = pkmn
-
-    if pkmn.respond_to?(:fused?) && pkmn.fused?
-      # Clear standard animated bitmaps to prevent visual tearing
-      @_iconBitmap&.dispose if @_iconBitmap
-
-      # Extract forms safely
-      head_form = pkmn.original_head_data ? pkmn.original_head_data.form : 0
-      body_form = pkmn.original_body_data ? pkmn.original_body_data.form : 0
-      
-      custom_bitmap = GameData::Species.fusion_sprite_bitmap(pkmn.fusion_head, pkmn.fusion_body, head_form, body_form, pkmn.shiny?, back)
-
-      @_iconBitmap = FusionBitmapWrapper.new(custom_bitmap)
-
-      self.bitmap = @_iconBitmap.bitmap
-      self.visible = true
-      self.opacity = 255
-
-      pbSetPosition
-    else
-      # Fallback to standard rendering for normal Pokémon
-      fusion_setPokemonBitmap(pkmn, back)
-    end
-  end
-end
-
-#==================================================================
-# class PokemonSprite < Sprite
-#==================================================================
-class PokemonSprite < Sprite
-  alias_method :fusion_setPokemonBitmap, :setPokemonBitmap unless method_defined?(:fusion_setPokemonBitmap)
-
-  def setPokemonBitmap(pokemon, back = false)
-    # Aggressive State Reset
-    @_iconbitmap&.dispose if defined?(@_iconbitmap)
-    @_iconbitmap = nil
-    
-    # Catch nil slots (empty PC slots) explicitly
-    if !pokemon
-      self.bitmap = nil
-      return
-    end
-
-    # Render Fused Pokémon
-    if pokemon.respond_to?(:fused?) && pokemon.fused?
-      begin        
-        # ID Fallbacks
-        head_id = (pokemon.respond_to?(:fusion_head) && pokemon.fusion_head) ? pokemon.fusion_head : pokemon.species
-        body_id = (pokemon.respond_to?(:fusion_body) && pokemon.fusion_body) ? pokemon.fusion_body : pokemon.species
-        
-        # Form extraction 
-        head_form = (pokemon.respond_to?(:original_head_data) && pokemon.original_head_data) ? pokemon.original_head_data.form : 0
-        body_form = (pokemon.respond_to?(:original_body_data) && pokemon.original_body_data) ? pokemon.original_body_data.form : 0
-        
-        shiny = pokemon.respond_to?(:shiny?) ? pokemon.shiny? : false
-        
-        # Generate the fusion bitmap
-        bmp = GameData::Species.fusion_sprite_bitmap(head_id, body_id, head_form, body_form, shiny, back)
-        
-        # Unconditional canvas assignment
-        self.bitmap = bmp || nil
-        
-        # Safe Origin Adjustment
-        changeOrigin if self.bitmap && respond_to?(:changeOrigin)
-        
-      rescue => error
-        # If the fusion data throws an error, wipe the canvas instead of ghosting
-        self.bitmap = nil
-      end
-      return
-    end
-
-    # Fallback to the original method for standard Pokémon
-    fusion_setPokemonBitmap(pokemon, back)
-  end
-end
-
-#==================================================================
-# class PokemonIconSprite < Sprite
-#==================================================================
-class PokemonIconSprite < Sprite
-  alias_method :fusion_pokemon_equals, :pokemon= unless method_defined?(:fusion_pokemon_equals)
-  
-  def pokemon=(pkmn)
-    @anim_frames = nil
-    @frames_count = nil
-    @anim_ticker = 0
-    @current_frame = 0
-
-    if pkmn.respond_to?(:fused?) && pkmn.fused?
-      @pokemon = pkmn
-      @animBitmap&.dispose
-      @animBitmap = nil
-
-      head_form = @pokemon.original_head_data ? @pokemon.original_head_data.form : 0
-      body_form = @pokemon.original_body_data ? @pokemon.original_body_data.form : 0
-
-      bitmap = GameData::Species.fusion_icon_bitmap(
-        @pokemon.fusion_head, head_form, 
-        @pokemon.fusion_body, body_form, 
-        @pokemon.shiny?
-      )
-      
-      if bitmap
-        self.bitmap = bitmap
-        
-        # Constrain the viewable area to a single frame
-        self.src_rect = Rect.new(0, 0, bitmap.height, bitmap.height)
-        
-        # Initialize animation variables
-        @anim_frames = bitmap.width / bitmap.height
-        @frames_count = @anim_frames
-        @anim_ticker = 0
-        @current_frame = 0
-      end
-      return
-    end
-    fusion_pokemon_equals(pkmn)
-  end
-
-  alias_method :fusion_update_frame, :update_frame unless method_defined?(:fusion_update_frame)
-
-  def update_frame
-    fusion_update_frame if respond_to?(:fusion_update_frame)
-
-    # Prevent crashes when the sprite updates before a Pokemon is assigned
-    return if !@pokemon
-
-    if @pokemon.fainted?
-      @current_frame = 0
-      return
-    end
-    
-    duration = ANIMATION_DURATION
-    if @pokemon.hp <= @pokemon.totalhp / 4      # Red HP - 1 second
-      duration *= 4
-    elsif @pokemon.hp <= @pokemon.totalhp / 2   # Yellow HP - 0.5 seconds
-      duration *= 2
-    end
-    
-    # Safe fallback to prevent secondary crashes
-    frames = @frames_count || @anim_frames || 2
-    @current_frame = (frames * (System.uptime % duration) / duration).floor
-  end
-
-  alias_method :fusion_update, :update unless method_defined?(:fusion_update)
-
-  def update
-    # Call the original update method
-    fusion_update if respond_to?(:fusion_update)
-    
-    # Only cycle frames if a multi-frame fusion bitmap is actively loaded
-    if self.bitmap && @anim_frames && @anim_frames > 1
-      @anim_ticker += 1
-      
-      if @anim_ticker >= 5 && !@selected
-        @anim_ticker = 0
-        @current_frame = (@current_frame + 1) % @anim_frames
-        
-        # Shift the viewable window to the next frame
-        self.src_rect.x = @current_frame * self.bitmap.height
-      end
-
-      update_frame
-      
-      if @selected
-        @adjusted_x = 4
-        # Safe fallback for frame counting in the bounce math
-        frames_total = @frames_count || @anim_frames || 2
-        @adjusted_y = (@current_frame >= frames_total / 2) ? -2 : 6
-      else
-        @adjusted_x = 0
-        @adjusted_y = 0
-      end
-      self.x = self.x
-      self.y = self.y
-    end
-  end
-end
-
-#==================================================================
-# class PokemonBoxIcon < IconSprite
-#==================================================================
-class PokemonBoxIcon < IconSprite
-  alias_method :fusion_refresh, :refresh unless method_defined?(:fusion_refresh)
-
-  def refresh
-    return if !@pokemon
-    
-    # Intercept if the Pokémon is a fusion
-    if @pokemon.respond_to?(:fused?) && @pokemon.fused?
-      @_iconBitmap&.dispose
-      @_iconBitmap = nil
-      
-      # Grab the correct forms from the stored clones (safely defaulting to 0)
-      head_form = @pokemon.original_head_data ? @pokemon.original_head_data.form : 0
-      body_form = @pokemon.original_body_data ? @pokemon.original_body_data.form : 0
-      
-      # Pass the forms into the bitmap generator
-      bitmap = GameData::Species.fusion_icon_bitmap(
-        @pokemon.fusion_head, head_form, 
-        @pokemon.fusion_body, body_form, 
-        @pokemon.shiny?
-      )
-      
-      if bitmap
-        self.bitmap = bitmap
-        
-        # Constrain the viewable area to a single square frame
-        self.src_rect = Rect.new(0, 0, bitmap.height, bitmap.height)
-        
-        # Initialize animation variables for the PC UI
-        @anim_frames = bitmap.width / bitmap.height
-        @anim_ticker = 0
-        @current_frame = 0
-      end
-      return
-    end
-    
-    # Fallback to the original method for standard Pokémon
-    fusion_refresh
-  end
-
-  alias_method :fusion_update, :update unless method_defined?(:fusion_update)
-
-  def update
-    # Call the original update
-    fusion_update if respond_to?(:fusion_update)
-    
-    if releasing?
-      self.zoom_x = lerp(1.0, 0.0, 1.5, @release_timer_start, System.uptime)
-      self.zoom_y = self.zoom_x
-      self.opacity = lerp(255, 0, 1.5, @release_timer_start, System.uptime)
-      if self.opacity == 0
-        @release_timer_start = nil
-        dispose
-      end
+      return RPG::Cache.load_bitmap("", FusionSprites.icon_path(head_id, head_form, body_id, body_form, shiny))
     end
   end
 end
