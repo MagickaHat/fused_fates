@@ -44,6 +44,21 @@ module CustomizationSettings
     back:      { name: "Battle",         kind: :trainer, fallback: nil }
   }.freeze
 
+  # Graphics cut out of another context's composite, so they need no art of their own.
+  #   :name   - shown in the editor (translated when drawn)
+  #   :source - context whose composite is cropped
+  DERIVED_CONTEXTS = {
+    mugshot:  { name: "Mugshot",  source: :front },
+    map_icon: { name: "Map icon", source: :walk }
+  }.freeze
+
+  # Largest size (in pixels) of the square mugshot cropped from the top of the front sprite
+  MUGSHOT_SIZE = 64
+
+  # Size (in pixels) of the square town map icon cropped from the walking sprite's head;
+  # matches the stock Graphics/UI/Town Map/player_*.png icons
+  MAP_ICON_SIZE = 32
+
   # Number of composited player graphics kept in memory after nothing displays them
   CACHE_SIZE = 12
 

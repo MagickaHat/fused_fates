@@ -15,6 +15,9 @@
 # Part art lives in CustomizationSettings::ROOT/<context>/<graphic>_<region>[_back].png. A context
 # only counts as having art when every part in CustomizationSettings::REQUIRED_SLOTS has its first
 # region there; otherwise its fallback context is tried, and then the stock sprite is used.
+#
+# Derived contexts (CustomizationSettings::DERIVED_CONTEXTS: the mugshot and the town map icon)
+# have no art of their own; they are cropped from their source context's composite.
 module PlayerCompositor
   VIRTUAL_TAG = "__custom__/"
 
@@ -59,11 +62,39 @@ module PlayerCompositor
     return base.all? { |part| part.supports?(context) && resolve(layer_path(context, part, 1)) }
   end
 
+  # @param context [Symbol]
+  # @return [Boolean] Whether the context is cropped from another context's composite.
+  def self.derived?(context)
+    return CustomizationSettings::DERIVED_CONTEXTS.key?(context)
+  end
+
+  # @param context [Symbol]
+  # @return [Boolean] Whether the context is a drawn or a derived context.
+  def self.known_context?(context)
+    return CustomizationSettings::CONTEXTS.key?(context) || derived?(context)
+  end
+
+  # @return [Array<Symbol>] Every drawn context followed by every derived one.
+  def self.all_contexts
+    return CustomizationSettings::CONTEXTS.keys + CustomizationSettings::DERIVED_CONTEXTS.keys
+  end
+
+  # @param context [Symbol]
+  # @return [String] The context's name as shown to the player.
+  def self.context_name(context)
+    data = CustomizationSettings::CONTEXTS[context] || CustomizationSettings::DERIVED_CONTEXTS[context]
+    return data ? _INTL(data[:name]) : context.to_s
+  end
+
   # @brief The context whose art an appearance is drawn with, following fallbacks.
-  # @param context [Symbol] A key of CustomizationSettings::CONTEXTS.
+  # A derived context is returned as itself when its source context can be drawn.
+  # @param context [Symbol] A key of CustomizationSettings::CONTEXTS or DERIVED_CONTEXTS.
   # @param appearance [PlayerAppearance]
   # @return [Symbol, nil] nil if no art exists and the stock sprite should be used.
   def self.art_context(context, appearance)
+    if derived?(context)
+      return art_context(CustomizationSettings::DERIVED_CONTEXTS[context][:source], appearance) ? context : nil
+    end
     seen = []
     while context && !seen.include?(context)
       return context if has_art?(context, appearance)
@@ -112,7 +143,7 @@ module PlayerCompositor
     digest = name.to_s.split("-", 2)[0]
     appearance = @registry[digest]
     appearance ||= $player.appearance if $player && $player.appearance.digest == digest
-    return nil if !appearance || !CustomizationSettings::CONTEXTS.key?(context.to_sym)
+    return nil if !appearance || !known_context?(context.to_sym)
     return bitmap_for(context.to_sym, appearance)
   end
 
@@ -128,7 +159,9 @@ module PlayerCompositor
     art = art_context(context, appearance)
     return nil if !art
     return @cache.fetch("#{art}|#{appearance.signature}") do
-      next DevLog.guard("Could not composite the player's #{art} sprite") { compose(art, appearance) }
+      next DevLog.guard("Could not composite the player's #{art} sprite") do
+        next derived?(art) ? derive(art, appearance) : compose(art, appearance)
+      end
     end
   end
 
@@ -144,6 +177,59 @@ module PlayerCompositor
   # @return [Hash]
   def self.cache_stats
     return @cache.stats
+  end
+
+  #----------------------------------------------------------------
+  # Derived graphics
+  #----------------------------------------------------------------
+  # @brief Crops a derived graphic out of its source context's composite.
+  # @param context [Symbol] A key of CustomizationSettings::DERIVED_CONTEXTS.
+  # @param appearance [PlayerAppearance]
+  # @return [BitmapWrapper, nil]
+  def self.derive(context, appearance)
+    source = bitmap_for(CustomizationSettings::DERIVED_CONTEXTS[context][:source], appearance)
+    return nil if !source
+    begin
+      case context
+      when :mugshot
+        # Battle back sprites are 5-frame strips; trainer card sprites are a single frame
+        frames = (source.width > source.height * 2) ? 5 : 1
+        return crop_top(source, Rect.new(0, 0, source.width / frames, source.height),
+                        CustomizationSettings::MUGSHOT_SIZE, true)
+      when :map_icon
+        # First frame of the walking sheet: facing down, standing still
+        return crop_top(source, Rect.new(0, 0, source.width / 4, source.height / 4),
+                        CustomizationSettings::MAP_ICON_SIZE, false)
+      end
+      return nil
+    ensure
+      source.dispose
+    end
+  end
+
+  # @brief Copies a square from the top of the visible pixels in one frame of a sheet.
+  # @param sheet [Bitmap]
+  # @param frame [Rect] The frame to crop from.
+  # @param size [Integer] Width and height of the square.
+  # @param fit [Boolean] Shrink the square to the visible width instead of keeping size.
+  # @return [BitmapWrapper, nil] nil if the frame is fully transparent.
+  def self.crop_top(sheet, frame, size, fit)
+    cell = SpriteUtils.slice(sheet, frame)
+    bounds = SpriteUtils.opaque_bounds(cell)
+    if !bounds
+      cell.dispose
+      return nil
+    end
+    size = [size, bounds.width].min if fit
+    # Center the square on the visible pixels, clipping the source rect to the frame
+    x = bounds.x + ((bounds.width - size) / 2)
+    src_x = x.clamp(0, cell.width)
+    width = [size - (src_x - x), cell.width - src_x].min
+    height = [size, cell.height - bounds.y].min
+    ret = BitmapWrapper.new(size, size)
+    ret.blt(src_x - x, 0, cell, Rect.new(src_x, bounds.y, width, height)) if width > 0 && height > 0
+    cell.dispose
+    return ret
   end
 
   #----------------------------------------------------------------

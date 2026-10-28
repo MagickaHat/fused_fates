@@ -108,7 +108,7 @@ class CharacterEditor_Scene
   # @brief Switches the preview to another sprite context.
   # @param step [Integer] 1 for the next context, -1 for the previous.
   def cycle_context(step = 1)
-    keys = CustomizationSettings::CONTEXTS.keys
+    keys = PlayerCompositor.all_contexts
     @context = keys[(keys.index(@context) + step) % keys.length]
     refresh_preview
   end
@@ -136,7 +136,8 @@ class CharacterEditor_Scene
       pattern = (@frame / CustomizationSettings::PREVIEW_FRAME_TIME) % 4
       sprite.src_rect.set(pattern * fw, FACING_ROWS[FACINGS[@facing]] * fh, fw, fh)
     else
-      frames = (bmp.width > bmp.height * 2) ? 5 : 1   # Battle back sprites are 5-frame strips
+      # Battle back sprites are 5-frame strips; trainer card sprites and derived graphics are whole
+      frames = (bmp.width > bmp.height * 2) ? 5 : 1
       sprite.src_rect.set(0, 0, bmp.width / frames, bmp.height)
     end
     sprite.ox = sprite.src_rect.width / 2
@@ -150,13 +151,13 @@ class CharacterEditor_Scene
     overlay = @sprites["overlay"].bitmap
     overlay.clear_rect(LIST_WIDTH, 0, Graphics.width - LIST_WIDTH, Graphics.height - INFO_HEIGHT)
     center = LIST_WIDTH + ((Graphics.width - LIST_WIDTH) / 2)
-    name = _INTL(CustomizationSettings::CONTEXTS[@context][:name])
+    name = PlayerCompositor.context_name(@context)
     texts = [[_INTL("< {1} >", name), center, 12, :center, LIGHT_BASE, LIGHT_SHADOW]]
     if !@art_context
       texts.push([_INTL("No art for this view"), center, ((Graphics.height - INFO_HEIGHT) / 2) - 12,
                   :center, LIGHT_BASE, LIGHT_SHADOW])
     elsif @art_context != @context
-      art_name = _INTL(CustomizationSettings::CONTEXTS[@art_context][:name])
+      art_name = PlayerCompositor.context_name(@art_context)
       texts.push([_INTL("(using {1} art)", art_name), center, 40, :center, LIGHT_BASE, LIGHT_SHADOW])
     end
     texts.push([_INTL("Action: change view"), center, Graphics.height - INFO_HEIGHT - 64,

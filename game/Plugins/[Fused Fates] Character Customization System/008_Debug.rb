@@ -60,10 +60,11 @@ MenuHandlers.add(:debug_menu, :customization_art_report, {
   "effect"      => proc {
     appearance = $player.appearance
     found = []
-    CustomizationSettings::CONTEXTS.each_key do |context|
+    PlayerCompositor.all_contexts.each do |context|
       art = PlayerCompositor.art_context(context, appearance)
       found.push(context) if art
       Console.echoln("#{context}: " + (art ? "drawn with #{art} art" : "stock sprite")) if defined?(Console)
+      next if PlayerCompositor.derived?(context)
       appearance.worn_parts.each do |part|
         (1..part.color_slots).each do |region|
           path = PlayerCompositor.layer_path(context, part, region)
@@ -74,7 +75,7 @@ MenuHandlers.add(:debug_menu, :customization_art_report, {
     if found.empty?
       pbMessage(_INTL("No context has art yet, so the stock sprites are used."))
     else
-      names = found.map { |c| _INTL(CustomizationSettings::CONTEXTS[c][:name]) }
+      names = found.map { |c| PlayerCompositor.context_name(c) }
       pbMessage(_INTL("Custom sprites are used for: {1}.", names.join(", ")))
     end
   }
@@ -83,10 +84,10 @@ MenuHandlers.add(:debug_menu, :customization_art_report, {
 MenuHandlers.add(:debug_menu, :customization_dump, {
   "name"        => _INTL("Dump composited sprites"),
   "parent"      => :customization_menu,
-  "description" => _INTL("Save the player's composited sprite for every context as PNG files."),
+  "description" => _INTL("Save the player's composited sprites, mugshot and map icon as PNG files."),
   "effect"      => proc {
     saved = 0
-    CustomizationSettings::CONTEXTS.each_key do |context|
+    PlayerCompositor.all_contexts.each do |context|
       bmp = PlayerCompositor.bitmap_for(context, $player.appearance)
       next if !bmp
       saved += 1 if SpriteUtils.dump(bmp, "player_#{context}")
