@@ -1,0 +1,44 @@
+#-------------------------------
+[JEANS]
+Name = Jeans
+Slot = Bottom
+Graphic = jeans
+ColorSlots = 1
+DefaultColors = BLUE
+DefaultHues = 0
+DefaultSaturations = 0
+DefaultValues = -10
+Unlocked = true
+#-------------------------------
+[SNEAKERS]
+Name = Sneakers
+Slot = Shoes
+Graphic = sneakers
+ColorSlots = 1
+DefaultColors = WHITE
+DefaultHues = 0
+DefaultSaturations = 0
+DefaultValues = -10
+Unlocked = true
+#-------------------------------
+[TEE]
+Name = Tee
+Slot = Top
+Graphic = tee
+ColorSlots = 1
+DefaultColors = RED
+DefaultHues = 0
+DefaultSaturations = 0
+DefaultValues = -10
+Unlocked = true
+#-------------------------------
+[HAIR_SHORT]
+Name = Short hair
+Slot = Hair
+Graphic = hair_short
+ColorSlots = 1
+DefaultColors = BLACK
+DefaultHues = 0
+DefaultSaturations = 0
+DefaultValues = -10
+Unlocked = true
