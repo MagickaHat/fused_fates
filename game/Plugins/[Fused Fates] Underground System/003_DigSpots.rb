@@ -59,7 +59,8 @@ module Underground
 end
 
 # @brief Dig spot event: starts mining and uses the spot up for today.
-# Call it from a DigSpot event's page 1.
+# Call it from a DigSpot event's page 1. Name the event "DigSpot:name" to use
+# MINING_TABLES[:name] instead of the map's table.
 def pbUndergroundDig
   ev = Underground.calling_event
   return unless ev
@@ -67,7 +68,7 @@ def pbUndergroundDig
   key = [ev.map_id, ev.id]
   return if d.dug_spots.include?(key)
   return unless pbConfirmMessage(_INTL("Something sparkles in the wall. Dig here?"))
-  Underground::Mining.start
+  Underground::Mining.start(ev.map_id, Underground.event_tag(ev)[1])
   d.dug_spots.push(key)
   Underground.set_hidden(ev, true)
 end

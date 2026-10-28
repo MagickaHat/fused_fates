@@ -126,6 +126,7 @@ class UndergroundMenu_Scene
     d = Underground.data
     mission = Underground::MISSIONS[d.mission_stage]
     base = d.base_size ? _INTL(d.base_size.to_s.capitalize) : _INTL("None yet")
+    location = d.base_location ? pbGetMapNameFromId(d.base_location[:map_id]) : _INTL("Not dug yet")
     lines = Underground::LINES.keys.map do |id|
       _INTL("{1}: {2}", _INTL(Underground::LINES[id][:name]),
             d.repaired_lines.include?(id) ? _INTL("Running") : _INTL("Broken"))
@@ -136,7 +137,7 @@ class UndergroundMenu_Scene
       [_INTL("Diglett meter"), [_INTL("{1}/{2}", d.diglett_meter, UndergroundSettings::DIGLETTS_PER_BONUS),
                                 _INTL("Bonus digs left: {1}", d.bonus_digs)], nil],
       [_INTL("Mission"), [mission ? _INTL(mission[:intro]) : _INTL("You've mastered the Underground!")], nil],
-      [_INTL("Secret Base"), [_INTL("Size: {1}", base),
+      [_INTL("Secret Base"), [_INTL("Size: {1}", base), _INTL("Location: {1}", location),
                               _INTL("Pedestals: {1}", Underground::SecretBase.slot_count(:statue)),
                               _INTL("Goods slots: {1}", Underground::SecretBase.slot_count(:good))], nil],
       [_INTL("Mine carts"), lines, nil],
@@ -144,6 +145,7 @@ class UndergroundMenu_Scene
       [_INTL("Records"), [_INTL("Walls dug: {1}", d.stats[:digs]),
                           _INTL("Statues dug: {1}", d.stats[:statues_dug]),
                           _INTL("Trades: {1}", d.stats[:trades]),
+                          _INTL("Sold: {1}", d.stats[:sold]),
                           _INTL("Hideaway catches: {1}", d.stats[:hideaway_catches]),
                           _INTL("Flags taken: {1}", d.stats[:flags])], nil]
     ]

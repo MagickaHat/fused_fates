@@ -26,7 +26,7 @@ module Underground
     },
     { # 2
       intro:  "Pokémon live in the hideaways. Catch one!",
-      done:   "Great catch! You've earned a Secret Base of your own.",
+      done:   "Great catch! You've earned a Secret Base of your own. Find a soft wall in the tunnels and dig it out!",
       check:  proc { |d| d.stats[:hideaway_catches] >= 1 },
       reward: proc { |d|
         d.base_size = :small

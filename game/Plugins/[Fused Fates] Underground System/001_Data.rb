@@ -47,6 +47,43 @@ module Underground
   ]
 
   #-----------------------------------------------------------------------------
+  # Per-tunnel treasure tables
+  #
+  # Keyed by tunnel map ID, or by a name that a dig spot picks itself with
+  # "DigSpot:name". A map ID can also point at a named table (2 => :volcanic).
+  # A dig spot uses its own name first, then its map, then :default.
+  #   :spheres - sphere treasures (format above); defaults to SPHERE_TREASURES
+  #   :items   - :all for every item in the base game's mining table, or a
+  #              list of item IDs from it (only those have mining sprites)
+  #   :weights - { item ID or sphere color => weight multiplier }
+  #   :statues - statue IDs that can be found behind walls here; defaults to
+  #              every statue of an unlocked tier
+  # Fields left out are taken from :default.
+  #-----------------------------------------------------------------------------
+  # @brief Treasure tables for the tunnels.
+  MINING_TABLES = {
+    default: { spheres: SPHERE_TREASURES, items: :all, weights: {} },
+    # Example: hot, rocky tunnels with fire and weather stones
+    volcanic: {
+      items:   [:FIRESTONE, :SUNSTONE, :HEATROCK, :HARDSTONE, :REDSHARD, :STARPIECE,
+                :FLAMEPLATE, :EARTHPLATE, :HEARTSCALE],
+      weights: { red: 2.0, FIRESTONE: 3.0, HEATROCK: 2.0 },
+      statues: [:STATUEGEODUDE, :STATUEMACHOP, :STATUEONIX, :STATUELARVITAR, :STATUEBAGON]
+    },
+    # Example: old seams full of fossils and plates
+    fossil: {
+      items:   [:DOMEFOSSIL, :HELIXFOSSIL, :OLDAMBER, :ROOTFOSSIL, :CLAWFOSSIL,
+                :SKULLFOSSIL, :ARMORFOSSIL, :RAREBONE, :ODDKEYSTONE, :HARDSTONE,
+                :STONEPLATE, :IRONPLATE, :DRACOPLATE],
+      weights: { pale: 2.0, DOMEFOSSIL: 2.0, HELIXFOSSIL: 2.0, SKULLFOSSIL: 2.0, ARMORFOSSIL: 2.0 },
+      statues: [:STATUECRANIDOS, :STATUESHIELDON, :STATUEDIGLETT, :STATUENOSEPASS, :STATUECARBINK]
+    },
+    # Example map assignments (replace with your own tunnel map IDs)
+    2 => :volcanic,
+    3 => :fossil
+  }
+
+  #-----------------------------------------------------------------------------
   # Statues
   #
   #   :species - the Pokémon shown, and the one whose hideaway spawns it boosts
@@ -162,6 +199,7 @@ module Underground
   #   :wares  - goods and statues they can stock; TRADER_STOCK_SIZE of these
   #             are picked each day
   #   :prices - optional price overrides, by ware ID
+  #   :buys   - optional list of what they buy back; defaults to :wares
   # Statues that aren't priced here use STATUE_PRICES by tier, goods use
   # GOOD_PRICE.
   #-----------------------------------------------------------------------------

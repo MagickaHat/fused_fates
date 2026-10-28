@@ -207,18 +207,40 @@ module Underground
   module Mining
     module_function
 
-    # @brief The treasure table for a wall.
+    # @brief The treasure table settings for a dig spot, with anything it
+    # leaves out filled in from :default.
+    # @param map_id [Integer]
+    # @param key [Symbol, String, nil] The dig spot's own table name, if any.
+    # @return [Hash] { spheres:, items:, weights:, statues: }
+    def table_for(map_id, key = nil)
+      default = MINING_TABLES[:default]
+      table = nil
+      table = MINING_TABLES[key.to_sym] if key && !key.to_s.empty?
+      table ||= MINING_TABLES[map_id]
+      table = MINING_TABLES[table] if table.is_a?(Symbol)
+      return default.merge(table || {})
+    end
+
+    # @brief The treasures that can be buried in a wall.
     # @param bonus [Boolean] Bonus digs make rare treasures more likely.
+    # @param table [Hash] From #table_for; defaults to :default.
     # @return [Array<Array>] Treasures in UndergroundMiningScene's format.
-    def treasure_pool(bonus = false)
-      pool = SPHERE_TREASURES.map do |s|
+    def treasure_pool(bonus = false, table = nil)
+      table ||= table_for(nil)
+      weights = table[:weights] || {}
+      pool = (table[:spheres] || SPHERE_TREASURES).map do |s|
         x, y = SPHERES[s[:color]][s[:large] ? :large : :small]
         size = s[:large] ? 3 : 2
         [{ sphere: s[:color], units: s[:units] }, s[:weight], x, y, size, size, [1] * (size * size)]
       end
       MiningGameScene::ITEMS.each do |entry|
         next unless GameData::Item.exists?(entry[0])
+        next unless table[:items] == :all || Array(table[:items]).include?(entry[0])
         pool.push(entry.dup)
+      end
+      pool.each do |t|
+        id = t[0].is_a?(Hash) ? t[0][:sphere] : t[0]
+        t[1] = [(t[1] * weights[id]).round, 1].max if weights[id]
       end
       if bonus
         pool.each do |t|
@@ -238,32 +260,40 @@ module Underground
     # @brief Rolls for a statue behind a cleared wall.
     # @param bonus [Boolean]
     # @param rng [Random]
+    # @param pool [Array<Symbol>, nil] Statue IDs findable here; nil for all.
     # @return [Symbol, nil] Statue ID found, or nil.
-    def roll_statue(bonus = false, rng = Random)
+    def roll_statue(bonus = false, rng = Random, pool = nil)
       tiers = unlocked_statue_tiers
       return nil if tiers.empty?
       chance = bonus ? UndergroundSettings::BONUS_STATUE_FIND_CHANCE : UndergroundSettings::STATUE_FIND_CHANCE
       return nil if rng.rand(100) >= chance
+      ids = pool || STATUES.keys
+      by_tier = tiers.to_h { |tier| [tier, ids.select { |id| STATUES.dig(id, :tier) == tier }] }
+      by_tier.delete_if { |_tier, list| list.empty? }
+      return nil if by_tier.empty?
       tier = :common
-      tier = :rare if tiers.include?(:rare) && rng.rand(100) < UndergroundSettings::RARE_STATUE_SHARE
-      tier = tiers.first unless tiers.include?(tier)
-      choices = STATUES.keys.select { |id| STATUES[id][:tier] == tier }
-      return choices.empty? ? nil : choices[rng.rand(choices.length)]
+      tier = :rare if by_tier.key?(:rare) && rng.rand(100) < UndergroundSettings::RARE_STATUE_SHARE
+      tier = by_tier.keys.first unless by_tier.key?(tier)
+      choices = by_tier[tier]
+      return choices[rng.rand(choices.length)]
     end
 
     # @brief Runs one dig: the minigame, its rewards, and a possible statue find.
-    def start
+    # @param map_id [Integer, nil] The dig spot's map; defaults to the current map.
+    # @param key [Symbol, String, nil] The dig spot's own table name, if any.
+    def start(map_id = nil, key = nil)
+      table = table_for(map_id || $game_map.map_id, key)
       d = Underground.data
       bonus = d.bonus_digs > 0
       if bonus
         d.bonus_digs -= 1
         pbMessage(_INTL("It's a bonus dig! Rare treasures are easier to find. ({1} left)", d.bonus_digs))
       end
-      scene = UndergroundMiningScene.new(treasure_pool(bonus), bonus)
+      scene = UndergroundMiningScene.new(treasure_pool(bonus, table), bonus)
       pbFadeOutIn { MiningGame.new(scene).pbStartScreen }
       d.stats[:digs] += 1
       return unless scene.cleared?
-      statue = roll_statue(bonus)
+      statue = roll_statue(bonus, Random, table[:statues])
       return unless statue
       Underground.grant_statue(statue)
       d.stats[:statues_dug] += 1

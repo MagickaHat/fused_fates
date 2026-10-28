@@ -49,8 +49,17 @@ module UndergroundSettings
   EVENT_GOOD_SLOT    = "GoodSlot"
   EVENT_RIVAL_FLAG   = "RivalFlag"
 
+  # Walls where the player can dig their Secret Base. Each needs two pages:
+  #   Page 1 - a plain wall, Action Button, script: pbUndergroundSecretBase
+  #   Page 2 - condition: Self Switch BASE_ENTRANCE_SWITCH is ON, the open
+  #            entrance graphic, same script
+  EVENT_BASE_WALL    = "BaseWall"
+
   # @brief Self switch used to hide a placeholder event.
   HIDE_SWITCH = "A"
+
+  # @brief Self switch that turns a BaseWall into the open base entrance.
+  BASE_ENTRANCE_SWITCH = "B"
 
   #-----------------------------------------------------------------------------
   # Digging
@@ -130,6 +139,10 @@ module UndergroundSettings
   #-----------------------------------------------------------------------------
   # @brief How many different wares a trader offers each day.
   TRADER_STOCK_SIZE = 4
+
+  # @brief Percent of a ware's price a trader pays to buy it back. Each
+  # sphere color is rounded down, but never below 1.
+  SELL_BACK_RATE = 50
 
   #-----------------------------------------------------------------------------
   # Mission gates

@@ -135,3 +135,17 @@ MenuHandlers.add(:debug_menu, :underground_grow, {
     pbMessage(_INTL("Every buried sphere is fully grown."))
   }
 })
+
+MenuHandlers.add(:debug_menu, :underground_clear_base, {
+  "name"        => _INTL("Clear base location"),
+  "parent"      => :underground_menu,
+  "description" => _INTL("Fill in the Secret Base entrance so a new wall can be picked. Decorations are kept."),
+  "effect"      => proc {
+    d = Underground.data
+    loc = d.base_location
+    next pbMessage(_INTL("No base has been dug yet.")) unless loc
+    Underground::SecretBase.set_entrance(loc[:map_id], loc[:event_id], false)
+    d.base_location = nil
+    pbMessage(_INTL("The base entrance was filled in."))
+  }
+})

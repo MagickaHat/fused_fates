@@ -9,7 +9,8 @@ module Underground
   #==================================================================
   # module Spheres
   #==================================================================
-  # @brief Growing spheres in planters, and trading spheres for goods and statues.
+  # @brief Growing spheres in planters, and trading spheres for goods and
+  # statues (and selling them back).
   #
   # A buried sphere is a single sphere of some size (its unit count). It
   # grows by one every SPHERE_GROWTH_STEPS steps taken in the Underground,
@@ -167,12 +168,100 @@ module Underground
       return true
     end
 
-    # @brief The trader menu.
+    # @brief What a trader pays to buy a ware back: SELL_BACK_RATE percent of
+    # its price, rounded down per color but never below 1.
+    # @param trader_id [Symbol]
+    # @param ware [Symbol]
+    # @return [Hash] { color => units }
+    def sell_price(trader_id, ware)
+      rate = UndergroundSettings::SELL_BACK_RATE
+      return price(trader_id, ware).to_h { |color, units| [color, [units * rate / 100, 1].max] }
+    end
+
+    # @brief Wares a trader is willing to buy back.
+    # @param trader_id [Symbol]
+    # @return [Array<Symbol>]
+    def buys(trader_id)
+      trader = TRADERS[trader_id] || {}
+      return trader[:buys] || trader[:wares] || []
+    end
+
+    # @brief Wares in storage that a trader will buy. Placed statues and goods
+    # must be taken back into storage first.
+    # @param trader_id [Symbol]
+    # @return [Array<Symbol>]
+    def sellable(trader_id)
+      d = Underground.data
+      return buys(trader_id).select do |id|
+        store = STATUES.key?(id) ? d.statues : d.goods
+        store[id] > 0
+      end
+    end
+
+    # @brief Sells one ware from storage to a trader.
+    # @param trader_id [Symbol]
+    # @param ware [Symbol]
+    # @return [Boolean] false if the trader doesn't buy it or none are in storage.
+    def sell(trader_id, ware)
+      return false unless sellable(trader_id).include?(ware)
+      d = Underground.data
+      store = STATUES.key?(ware) ? d.statues : d.goods
+      store[ware] -= 1
+      store.delete(ware) if store[ware] <= 0
+      sell_price(trader_id, ware).each { |color, units| Underground.add_spheres(color, units) }
+      d.stats[:sold] += 1
+      return true
+    end
+
+    # @brief The trader menu: trade spheres for wares, or sell wares back.
     # @param trader_id [Symbol]
     def trader_menu(trader_id)
       trader = TRADERS[trader_id]
       return unless trader
       pbMessage(_INTL("{1}: Got spheres? I've got things to trade.", _INTL(trader[:name])))
+      loop do
+        choice = pbMessage(_INTL("What'll it be?"), [_INTL("Trade spheres"), _INTL("Sell"), _INTL("Cancel")], -1)
+        case choice
+        when 0 then buy_menu(trader_id)
+        when 1 then sell_menu(trader_id)
+        else        break
+        end
+      end
+      pbMessage(_INTL("{1}: Come back tomorrow for new stock!", _INTL(trader[:name])))
+    end
+
+    # @brief Lets the player sell wares from storage to a trader.
+    # @param trader_id [Symbol]
+    def sell_menu(trader_id)
+      trader = TRADERS[trader_id]
+      loop do
+        ids = sellable(trader_id)
+        if ids.empty?
+          pbMessage(_INTL("{1}: You don't have anything I'd buy. (Placed items need to be taken back first.)",
+                          _INTL(trader[:name])))
+          break
+        end
+        cmds = ids.map do |id|
+          store = STATUES.key?(id) ? Underground.data.statues : Underground.data.goods
+          _INTL("{1} x{2} - {3}", Underground.ware_name(id), store[id],
+                Underground.price_text(sell_price(trader_id, id)))
+        end
+        cmds.push(_INTL("Cancel"))
+        choice = pbMessage(_INTL("What will you sell?"), cmds, -1)
+        break if choice < 0 || choice >= ids.length
+        ware = ids[choice]
+        pay = sell_price(trader_id, ware)
+        next unless pbConfirmMessage(_INTL("Sell the {1} for {2}?", Underground.ware_name(ware),
+                                           Underground.price_text(pay)))
+        sell(trader_id, ware)
+        pbMessage(_INTL("You got {1}!", Underground.price_text(pay)))
+      end
+    end
+
+    # @brief Lets the player trade spheres for today's stock.
+    # @param trader_id [Symbol]
+    def buy_menu(trader_id)
+      trader = TRADERS[trader_id]
       loop do
         wares = stock(trader_id)
         if wares.empty?
@@ -202,7 +291,6 @@ module Underground
         buy(trader_id, ware)
         pbMessage(_INTL("You got the {1}! It went into storage.", Underground.ware_name(ware)))
       end
-      pbMessage(_INTL("{1}: Come back tomorrow for new stock!", _INTL(trader[:name])))
     end
   end
 end

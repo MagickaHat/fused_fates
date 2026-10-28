@@ -11,8 +11,11 @@ module Underground
   #==================================================================
   # @brief The player's Secret Base and the rival diggers' bases.
   #
-  # The base is one of the BASE_MAPS rooms, picked by base size. Statues go
-  # on "BaseSlot:N" pedestal events and goods in "GoodSlot:N" events; slots
+  # Like DPPT, the player picks where to dig their base: any "BaseWall"
+  # event in the tunnels can become the entrance, and digging at another
+  # wall moves the base there (decorations come along). Whichever wall it
+  # is, the room inside is one of the BASE_MAPS rooms, picked by base size.
+  # Statues go on "BaseSlot:N" pedestal events and goods in "GoodSlot:N" events; slots
   # numbered above the size's limit stay locked until the base grows. Placed
   # statues show their Pokémon's overworld sprite, and goods show their
   # :charset (or the slot event's own graphic if it has none).
@@ -165,6 +168,56 @@ module Underground
     end
 
     #----------------------------------------------------------------
+    # Location
+    #----------------------------------------------------------------
+    # @brief Whether a BaseWall event is the current base entrance.
+    # @param event [Game_Event]
+    # @return [Boolean]
+    def entrance?(event)
+      loc = Underground.data.base_location
+      return !loc.nil? && loc[:map_id] == event.map_id && loc[:event_id] == event.id
+    end
+
+    # @brief Opens or closes a BaseWall's entrance page.
+    # @param map_id [Integer]
+    # @param event_id [Integer]
+    # @param open [Boolean]
+    def set_entrance(map_id, event_id, open)
+      $game_self_switches[[map_id, event_id, UndergroundSettings::BASE_ENTRANCE_SWITCH]] = open
+      $game_map.need_refresh = true if $game_map
+    end
+
+    # @brief Digs the base at a wall, filling in the old entrance if there was one.
+    # The layout isn't touched, so the decorations move with the base.
+    # @param event [Game_Event] The BaseWall event.
+    # @param exit_pos [Array] [map_id, x, y, direction] to put the player on when leaving.
+    def dig_base_at(event, exit_pos)
+      d = Underground.data
+      old = d.base_location
+      set_entrance(old[:map_id], old[:event_id], false) if old
+      d.base_location = { map_id: event.map_id, event_id: event.id, exit: exit_pos }
+      set_entrance(event.map_id, event.id, true)
+      d.stats[:bases_dug] += 1
+    end
+
+    # @brief Matches every BaseWall on the current map to the base location.
+    def refresh_entrances
+      Underground.events_named(UndergroundSettings::EVENT_BASE_WALL).each do |ev|
+        key = [ev.map_id, ev.id, UndergroundSettings::BASE_ENTRANCE_SWITCH]
+        open = entrance?(ev)
+        next if !!$game_self_switches[key] == open
+        set_entrance(ev.map_id, ev.id, open)
+      end
+    end
+
+    # @brief Enters the base room for the current size.
+    def enter
+      size = Underground.data.base_size
+      x, y, dir = UndergroundSettings::BASE_ENTRY[size]
+      Underground::Transit.transfer([UndergroundSettings::BASE_MAPS[size], x, y, dir])
+    end
+
+    #----------------------------------------------------------------
     # Rivals
     #----------------------------------------------------------------
     # @brief Battles a rival digger, once per day.
@@ -224,23 +277,38 @@ module Underground
   end
 end
 
-# @brief Secret Base entrance in the tunnels: enters the base for its current size.
+# @brief BaseWall event: digs the Secret Base here, moves it here, or enters it
+# if this wall is already the entrance.
 def pbUndergroundSecretBase
+  ev = Underground.calling_event
+  return unless ev
   d = Underground.data
-  size = d.base_size
-  unless size
+  sb = Underground::SecretBase
+  unless d.base_size
     pbMessage(_INTL("A plain rock wall. Maybe someone could help you dig a base here."))
     return
   end
-  map_id = UndergroundSettings::BASE_MAPS[size]
-  x, y, dir = UndergroundSettings::BASE_ENTRY[size]
-  d.base_return = [$game_map.map_id, $game_player.x, $game_player.y, 2]
-  Underground::Transit.transfer([map_id, x, y, dir])
+  if sb.entrance?(ev)
+    sb.enter
+    return
+  end
+  moving = !d.base_location.nil?
+  if moving
+    return unless pbConfirmMessage(_INTL("Move your Secret Base here? The old entrance will be filled in. Your decorations come with you."))
+  else
+    return unless pbConfirmMessage(_INTL("This wall looks soft enough. Dig your Secret Base here?"))
+  end
+  exit_pos = [$game_map.map_id, $game_player.x, $game_player.y, 10 - $game_player.direction]
+  sb.dig_base_at(ev, exit_pos)
+  pbSEPlay("Mining collapse")
+  pbMessage(moving ? _INTL("You moved your Secret Base here!") : _INTL("You dug out a Secret Base!"))
+  return unless pbConfirmMessage(_INTL("Go inside?"))
+  sb.enter
 end
 
-# @brief Secret Base exit: returns to where the player entered from.
+# @brief Secret Base exit: returns to the tile in front of the entrance.
 def pbUndergroundLeaveBase
-  dest = Underground.data.base_return
+  dest = Underground.data.base_location&.dig(:exit)
   if dest.nil?
     pbMessage(_INTL("The way out is blocked."))
     return
@@ -283,6 +351,7 @@ EventHandlers.add(:on_enter_map, :underground_secret_base,
   proc { |_old_map_id|
     next unless Underground.in_underground?
     Underground::SecretBase.refresh_flags
+    Underground::SecretBase.refresh_entrances
     Underground.refresh_graphics if Underground::SecretBase.base_map?($game_map.map_id)
   }
 )

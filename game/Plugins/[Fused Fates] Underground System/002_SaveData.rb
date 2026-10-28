@@ -32,7 +32,11 @@ class UndergroundSaveData
   attr_accessor :base_size
   # @brief Items placed in the base: { kind: :statue/:good, slot:, id: }.
   attr_accessor :base_layout
-  # @brief [map_id, x, y, direction] the player left from to enter their base.
+  # @brief Where the base was dug: { map_id:, event_id:, exit: [map_id, x, y, direction] },
+  # or nil before a wall has been chosen.
+  attr_accessor :base_location
+  # @brief No longer used (bases now return to their entrance). Kept so older
+  # saves load.
   attr_accessor :base_return
   # @brief Diglett bonus meter progress.
   attr_accessor :diglett_meter
@@ -56,6 +60,7 @@ class UndergroundSaveData
     @goods           = Hash.new(0)
     @base_size       = nil
     @base_layout     = []
+    @base_location   = nil
     @base_return     = nil
     @diglett_meter   = 0
     @bonus_digs      = 0
