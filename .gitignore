@@ -1,3 +1,6 @@
+# Plugin scripts
+PluginScripts.rxdata
+
 # Common code editor folders & files
 .vscode/
 *.code-workspace
