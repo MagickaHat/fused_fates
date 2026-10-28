@@ -1,0 +1,4 @@
+Name = Pokémon Fused Fates Character Customization System
+Version = 1.0
+Essentials = 21.1
+Credits = MagickaHat
