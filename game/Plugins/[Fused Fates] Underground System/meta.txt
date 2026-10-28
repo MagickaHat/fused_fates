@@ -1,0 +1,6 @@
+Name = Pokémon Fused Fates Underground System
+Version = 1.0
+Essentials = 21.1
+Requires = Pokémon Fused Fates Utilities,1.0
+Requires = Pokémon Fused Fates Fusion System,1.1
+Credits = MagickaHat
