@@ -9,12 +9,13 @@
 # on disk: RPG::Cache.load_bitmap is hooked so that loading one returns a generated bitmap.
 # This lets every engine sprite class (party icons, PC icons, summary, battlers, overworld
 # characters) display fusions with its own animation and disposal logic, and means each
-# fusion graphic is generated once and then reused from a small LRU cache.
+# fusion graphic is generated once and then reused from a small LRU cache (BitmapLRU from the
+# Utilities plugin).
 module FusionSprites
   VIRTUAL_TAG  = "__fusion__/"
   VIRTUAL_ROOT = "Graphics/" + VIRTUAL_TAG
 
-  @cache         = {}   # Virtual path => BitmapWrapper (oldest first)
+  @cache         = BitmapLRU.new { FusionSettings::SPRITE_CACHE_SIZE }   # Virtual path => BitmapWrapper
   @custom_lookup = {}   # Candidate file path => resolved path, or false if missing
   @generators    = {}   # Kind => proc { |params| BitmapWrapper or nil }
 
@@ -64,40 +65,29 @@ module FusionSprites
   # @param path [String] a virtual path
   # @return [BitmapWrapper, nil]
   def self.load_virtual(path)
-    bmp = @cache.delete(path)
-    bmp = nil if bmp&.disposed?
-    if !bmp
+    return @cache.fetch(path) do
       params = parse(path)
       generator = params && @generators[params[0]]
-      return nil if !generator
-      begin
-        bmp = generator.call(*params[1..-1])
-      rescue StandardError => e
-        Console.echo_warn("Fusion graphic #{path} could not be generated: #{e.message}") if $DEBUG
-        bmp = nil
-      end
-      return nil if !bmp
+      next nil if !generator
+      next DevLog.guard("Fusion graphic #{path} could not be generated") { generator.call(*params[1..-1]) }
     end
-    @cache[path] = bmp   # Re-inserting marks it as the most recently used
-    trim_cache
-    bmp.addRef
-    return bmp
   end
 
   # Releases the oldest cached bitmaps beyond FusionSettings::SPRITE_CACHE_SIZE
   def self.trim_cache
-    while @cache.length > FusionSettings::SPRITE_CACHE_SIZE
-      _path, old = @cache.shift
-      old.dispose if old && !old.disposed?
-    end
+    @cache.trim
   end
 
   # Releases every generated bitmap and forgets which custom files exist
   # (e.g. after adding custom sprites while the game is running)
   def self.clear_cache
-    @cache.each_value { |bmp| bmp.dispose if !bmp.disposed? }
     @cache.clear
     @custom_lookup.clear
+  end
+
+  # @return [Hash] :size, :capacity, :hits and :misses of the generated graphic cache
+  def self.cache_stats
+    return @cache.stats
   end
 
   # @param path [String] file path without extension
@@ -151,45 +141,16 @@ module FusionSprites
   # Colour helpers
   #----------------------------------------------------------------
   # Converts a Color object (RGB) into a Hue angle (0-360)
+  # @see ColorMath.hue_of
   def self.rgb_to_hue(color)
-    r, g, b = color.red, color.green, color.blue
-    max, min = [r, g, b].max, [r, g, b].min
-    delta = max - min
-    return 0 if delta == 0 # It's a shade of gray
-
-    hue = if max == r
-            60.0 * (((g - b) / delta) % 6)
-          elsif max == g
-            60.0 * (((b - r) / delta) + 2)
-          else
-            60.0 * (((r - g) / delta) + 4)
-          end
-    return (hue < 0 ? hue + 360 : hue).round
+    return ColorMath.hue_of(color)
   end
 
   # Samples a 10x10 grid of a bitmap region to find the median hue
+  # @see SpriteUtils.dominant_hue
   # @return [Integer] hue angle (0-360)
   def self.get_dominant_hue(bitmap, rect)
-    hues = []
-    step_x = [rect.width / 10, 1].max
-    step_y = [rect.height / 10, 1].max
-
-    (rect.y...(rect.y + rect.height)).step(step_y) do |y|
-      (rect.x...(rect.x + rect.width)).step(step_x) do |x|
-        color = bitmap.get_pixel(x, y)
-        next if color.alpha < 255 # Ignore transparent background
-
-        max, min = [color.red, color.green, color.blue].max, [color.red, color.green, color.blue].min
-        # Ignore outlines (blacks), highlights (whites), and neutral grays
-        next if (max - min) < 20 || max < 40 || max > 240
-
-        hues << rgb_to_hue(color)
-      end
-    end
-
-    return 0 if hues.empty?
-    hues.sort!
-    return hues[hues.size / 2] # Return median hue to avoid stray pixel outliers
+    return SpriteUtils.dominant_hue(bitmap, rect)
   end
 
   # Shifts the colours of the head region towards the body region's dominant hue
@@ -236,20 +197,20 @@ FusionSprites.register_generator(:battler) do |head, head_form, body, body_form,
   # Create a unified canvas matching the max dimensions
   width  = [head_bmp.width, body_bmp.width].max
   height = [head_bmp.height, body_bmp.height].max
-  result = BitmapWrapper.new(width, height)
+  canvas = Compositor.new(width, height)
 
   # Draw the bottom half of the body sprite
   body_slice_height = body_bmp.height / 2
   body_rect = Rect.new(0, body_slice_height, body_bmp.width, body_bmp.height - body_slice_height)
   body_x = (width - body_bmp.width) / 2
   body_y = ((height - body_bmp.height) / 2) + body_slice_height
-  result.blt(body_x, body_y, body_bmp, body_rect)
+  canvas.add_layer(body_bmp, body_x, body_y, src_rect: body_rect)
 
   # Copy the top half of the head sprite and harmonize it with the body's colours
-  head_slice = Bitmap.new(head_bmp.width, head_bmp.height / 2)
-  head_slice.blt(0, 0, head_bmp, Rect.new(0, 0, head_bmp.width, head_slice.height))
+  head_slice = SpriteUtils.slice(head_bmp, Rect.new(0, 0, head_bmp.width, head_bmp.height / 2))
   FusionSprites.harmonize_hue(head_slice, head_slice.rect, body_bmp, body_rect)
-  result.blt((width - head_slice.width) / 2, (height - body_bmp.height) / 2, head_slice, head_slice.rect)
+  canvas.add_layer(head_slice, (width - head_slice.width) / 2, (height - body_bmp.height) / 2)
+  result = canvas.flatten
   head_slice.dispose
 
   # Procedural Shiny Harmonization

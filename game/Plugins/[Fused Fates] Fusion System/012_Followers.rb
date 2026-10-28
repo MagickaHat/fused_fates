@@ -97,8 +97,8 @@ FusionSprites.register_generator(:follower) do |head, head_form, body, body_form
   head_h = (head_ch * ratio).round
   body_h = body_ch - (body_ch * ratio).round
 
-  result     = BitmapWrapper.new(cell_w * 4, cell_h * 4)
-  head_layer = Bitmap.new(result.width, result.height)
+  canvas     = Compositor.new(cell_w * 4, cell_h * 4)
+  head_layer = Bitmap.new(canvas.width, canvas.height)
   4.times do |row|
     4.times do |col|
       cell_x = col * cell_w
@@ -107,7 +107,7 @@ FusionSprites.register_generator(:follower) do |head, head_form, body, body_form
       # Bottom of the body cell, bottom-aligned and centred in the result cell
       body_x = cell_x + ((cell_w - body_cw) / 2)
       body_y = cell_y + cell_h - body_h
-      result.blt(body_x, body_y, body_bmp, Rect.new(col * body_cw, (row * body_ch) + body_ch - body_h, body_cw, body_h))
+      canvas.add_layer(body_bmp, body_x, body_y, src_rect: Rect.new(col * body_cw, (row * body_ch) + body_ch - body_h, body_cw, body_h))
 
       # Top of the head cell, resting directly on the body part
       head_x = cell_x + ((cell_w - head_cw) / 2)
@@ -121,7 +121,8 @@ FusionSprites.register_generator(:follower) do |head, head_form, body, body_form
     FusionSprites.harmonize_hue(head_layer, Rect.new(0, 0, cell_w, cell_h),
                                 body_bmp, Rect.new(0, body_ch - body_h, body_cw, body_h))
   end
-  result.blt(0, 0, head_layer, head_layer.rect)
+  canvas.add_layer(head_layer)
+  result = canvas.flatten
   head_layer.dispose
 
   # Generate shiny colours procedurally if either component has no shiny follower sprite
