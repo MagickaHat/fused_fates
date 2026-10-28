@@ -1,5 +1,5 @@
 # Plugin scripts
-PluginScripts.rxdata
+game/data/PluginScripts.rxdata
 
 # Common code editor folders & files
 .vscode/
