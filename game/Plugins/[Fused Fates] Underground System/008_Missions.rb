@@ -30,7 +30,7 @@ module Underground
       check:  proc { |d| d.stats[:hideaway_catches] >= 1 },
       reward: proc { |d|
         d.base_size = :small
-        FFUnderground.grant_statue(:STATUEPIKACHU)
+        Underground.grant_statue(:STATUEPIKACHU)
       }
     },
     { # 3
@@ -52,7 +52,7 @@ module Underground
       intro:  "Bury a sphere in your planter and let it grow.",
       done:   "Look how big it got! Take this... it's a strange one.",
       check:  proc { |d| d.stats[:spheres_grown] >= 1 },
-      reward: proc { |_d| FFUnderground.grant_statue(:STATUEFUSEDSHINXGIBLE) }
+      reward: proc { |_d| Underground.grant_statue(:STATUEFUSEDSHINXGIBLE) }
     },
     { # 6 - rare wall statues unlock from here
       intro:  "The leader of the diggers wants to meet you at their base.",
@@ -60,7 +60,7 @@ module Underground
       check:  proc { |d| d.stats[:rival_leader] >= 1 },
       reward: proc { |d|
         d.base_size = :large
-        FFUnderground.grant_statue(:STATUEFUSEDBUNEARYRIOLU)
+        Underground.grant_statue(:STATUEFUSEDBUNEARYRIOLU)
         [:veilstone, :deep].each do |line|
           d.repaired_lines.push(line) unless d.repaired_lines.include?(line)
         end

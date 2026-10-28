@@ -116,3 +116,23 @@ Pokemon = CHARIZARD,63
     Item = SITRUSBERRY
 Pokemon = BLASTOISE,63
     Item = SITRUSBERRY
+#-------------------------------
+[HIKER,Digger Ford]
+LoseText = You dig as well as you battle!
+Pokemon = GEODUDE,22
+Pokemon = MACHOP,22
+Pokemon = NOSEPASS,24
+#-------------------------------
+[RUINMANIAC,Digger Ruth]
+LoseText = My flag... fine, it's yours for today.
+Pokemon = BRONZOR,23
+Pokemon = SABLEYE,24
+Pokemon = DIGLETT,24
+#-------------------------------
+[HIKER,Digger Boss]
+LoseText = Ha! You've got the makings of a real digger.
+Pokemon = ONIX,34
+    FusionBody = DIGLETT
+Pokemon = GABITE,35
+Pokemon = LUCARIO,36
+    FusionBody = LOPUNNY

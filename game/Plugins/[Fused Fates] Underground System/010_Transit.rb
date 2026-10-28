@@ -106,24 +106,39 @@ module Underground
       repaired = Underground.data.repaired_lines
       lines = STATIONS[from_id][:lines] & repaired
       return STATIONS.keys.select do |id|
-        next false if id == from_id || !discovered?(id)
+        next false if id == from_id || !discovered?(id) || !set?(STATIONS[id][:platform])
         next (STATIONS[id][:lines] & lines).any?
       end
     end
 
+    # @brief Whether a position has been filled in (map ID 0 means unset).
+    # @param dest [Array, nil] [map_id, x, y, direction]
+    # @return [Boolean]
+    def set?(dest)
+      return !dest.nil? && dest[0].to_i > 0
+    end
+
     # @brief Moves the player, using the same pattern as v21.1's Fly.
     # @param dest [Array] [map_id, x, y, direction]
+    # @return [Boolean] false if the position hasn't been set up.
     def transfer(dest)
+      unless set?(dest)
+        DevLog.warn("Underground: tried to transfer to an unset position #{dest.inspect}")
+        pbMessage(_INTL("This way hasn't been dug out yet."))
+        return false
+      end
       map_id, x, y, dir = dest
       pbFadeOutIn do
         $game_temp.player_new_map_id    = map_id
         $game_temp.player_new_x         = x
         $game_temp.player_new_y         = y
-        $game_temp.player_new_direction = dir
+        $game_temp.player_new_direction = (dir.to_i > 0) ? dir : 2
+        pbDismountBike
         $scene.transfer_player
         $game_map.autoplay
         $game_map.refresh
       end
+      return true
     end
   end
 end
