@@ -1,0 +1,34 @@
+# Automatically detect text files and normalize line endings to LF
+* text=auto
+
+# Source Code & Scripts
+*.rb text diff=ruby
+*.js text diff=javascript
+*.txt text
+*.json text
+*.csv text
+*.xml text
+*.yml text
+*.yaml text
+
+# Documentation & Markdown
+*.md text
+
+# Image Assets (Binary Handling)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.bmp binary
+
+# Audio & Music Assets (Binary Handling)
+*.mp3 binary
+*.ogg binary
+*.wav binary
+*.mid binary
+
+# Map & Data Files 
+*.rxdata binary
+*.dat binary
+*.rvdata binary
+*.rvdata2 binary
