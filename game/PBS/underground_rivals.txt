@@ -1,0 +1,17 @@
+# Underground rival diggers, who keep bases (and flags) of their own.
+#   Name    - shown in messages
+#   Trainer - trainer type,name,version from trainers.txt
+#   Leader  - true for the digger leader (mission 6); the leader has no flag
+#-------------------------------
+[digger_ford]
+Name = Digger Ford
+Trainer = HIKER,Digger Ford,0
+#-------------------------------
+[digger_ruth]
+Name = Digger Ruth
+Trainer = RUINMANIAC,Digger Ruth,0
+#-------------------------------
+[digger_boss]
+Name = Digger Boss
+Trainer = HIKER,Digger Boss,0
+Leader = true

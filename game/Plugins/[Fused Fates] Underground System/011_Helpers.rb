@@ -19,19 +19,12 @@ module Underground
     return $underground
   end
 
-  # @brief A number unique to today's date, e.g. 20261028.
-  # @return [Integer]
-  def today_key
-    t = pbGetTimeNow
-    return (t.year * 10_000) + (t.month * 100) + t.day
-  end
-
   # @brief Every map that counts as part of the Underground.
   # @return [Array<Integer>]
   def maps
     return UndergroundSettings::TUNNEL_MAPS + UndergroundSettings::BASE_MAPS.values +
            UndergroundSettings::RIVAL_BASE_MAPS + UndergroundSettings::STATION_MAPS +
-           HIDEAWAYS.keys
+           GameData::UndergroundHideaway.keys
   end
 
   # @brief Whether a map is part of the Underground.
@@ -41,29 +34,6 @@ module Underground
     map_id ||= $game_map&.map_id
     return false unless map_id
     return maps.include?(map_id)
-  end
-
-  # @brief An RNG that gives the same results for the same inputs, even after
-  # reloading. Used so daily picks don't reshuffle when the map is re-entered.
-  # @param parts [Array] Anything that identifies the roll (day, map, event...).
-  # @return [Random]
-  def seeded_rng(*parts)
-    return Random.new(Hex.crc32(parts.join(",")))
-  end
-
-  # @brief Picks a key from a { key => weight } hash.
-  # @param weights [Hash]
-  # @param rng [Random]
-  # @return [Object, nil] nil if every weight is zero.
-  def weighted_pick(weights, rng = Random)
-    total = weights.values.sum
-    return nil if total <= 0
-    roll = rng.rand * total
-    weights.each do |key, weight|
-      roll -= weight
-      return key if roll < 0
-    end
-    return weights.keys.last
   end
 
   #-----------------------------------------------------------------------------
@@ -183,53 +153,63 @@ module Underground
   # @param color [Symbol]
   # @return [String]
   def sphere_name(color)
-    return _INTL(SPHERES.dig(color, :name) || color.to_s.capitalize)
+    return GameData::UndergroundSphere.try_get(color)&.name || color.to_s.capitalize
   end
 
   # @brief Display name of a statue, built from its species.
   # @param id [Symbol]
   # @return [String]
   def statue_name(id)
-    s = STATUES[id]
-    return id.to_s unless s
-    name = GameData::Species.get(s[:species]).name
-    if s[:body]
-      body = GameData::Species.get(s[:body]).name
-      name = defined?(FusionHandlers) ? FusionHandlers.fusion_name(name, body) : "#{name}/#{body}"
-    end
-    return _INTL("{1} Statue", name)
+    return GameData::UndergroundStatue.try_get(id)&.name || id.to_s
   end
 
   # @brief Display name of a good.
   # @param id [Symbol]
   # @return [String]
   def good_name(id)
-    return _INTL(GOODS.dig(id, :name) || id.to_s)
+    return GameData::UndergroundGood.try_get(id)&.name || id.to_s
   end
 
   # @brief Display name of a statue or good.
   # @param id [Symbol]
   # @return [String]
   def ware_name(id)
-    return STATUES.key?(id) ? statue_name(id) : good_name(id)
+    return statue?(id) ? statue_name(id) : good_name(id)
+  end
+
+  #-----------------------------------------------------------------------------
+  # Wares
+  #-----------------------------------------------------------------------------
+  # @brief Whether an ID is a statue (and not a good).
+  # @param id [Symbol]
+  # @return [Boolean]
+  def statue?(id)
+    return GameData::UndergroundStatue.exists?(id)
+  end
+
+  # @brief The storage hash a statue or good is kept in.
+  # @param id [Symbol]
+  # @return [Hash] The save data's statues or goods.
+  def storage_for(id)
+    return statue?(id) ? data.statues : data.goods
   end
 
   #-----------------------------------------------------------------------------
   # Granting and spending
   #-----------------------------------------------------------------------------
   # @brief Adds statues to storage.
-  # @param id [Symbol] Key of STATUES.
+  # @param id [Symbol] A section of underground_statues.txt.
   # @param qty [Integer]
   def grant_statue(id, qty = 1)
-    return DevLog.warn("Underground: unknown statue #{id}") unless STATUES.key?(id)
+    return DevLog.warn("Underground: unknown statue #{id}") unless statue?(id)
     data.statues[id] += qty
   end
 
   # @brief Adds goods to storage.
-  # @param id [Symbol] Key of GOODS.
+  # @param id [Symbol] A section of underground_goods.txt.
   # @param qty [Integer]
   def grant_good(id, qty = 1)
-    return DevLog.warn("Underground: unknown good #{id}") unless GOODS.key?(id)
+    return DevLog.warn("Underground: unknown good #{id}") unless GameData::UndergroundGood.exists?(id)
     data.goods[id] += qty
   end
 
@@ -237,11 +217,11 @@ module Underground
   # @param id [Symbol]
   # @param qty [Integer]
   def grant_ware(id, qty = 1)
-    STATUES.key?(id) ? grant_statue(id, qty) : grant_good(id, qty)
+    statue?(id) ? grant_statue(id, qty) : grant_good(id, qty)
   end
 
   # @brief Adds sphere units.
-  # @param color [Symbol] Key of SPHERES.
+  # @param color [Symbol] A section of underground_spheres.txt.
   # @param units [Integer]
   def add_spheres(color, units)
     data.spheres[color] += units

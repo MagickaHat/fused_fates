@@ -1,0 +1,37 @@
+# Underground hideaways. Section names are map IDs; each HideawayMon event on
+# that map gets one Pokémon a day.
+#   Name      - shown in the Underground menu
+#   Encounter - species,weight,min level,max level (one line per species)
+# The example map IDs below don't exist yet: replace them with your own.
+#-------------------------------
+[101]
+Name = Grassland Cave
+Encounter = SHINX,30,14,20
+Encounter = BUNEARY,30,14,20
+Encounter = PIKACHU,20,14,20
+Encounter = STUNKY,20,14,20
+Encounter = RIOLU,5,16,22
+#-------------------------------
+[102]
+Name = Rocky Cave
+Encounter = GEODUDE,30,18,24
+Encounter = MACHOP,25,18,24
+Encounter = NOSEPASS,20,18,24
+Encounter = ONIX,15,20,26
+Encounter = CRANIDOS,5,20,26
+Encounter = SHIELDON,5,20,26
+#-------------------------------
+[103]
+Name = Dark Cave
+Encounter = ZUBAT,30,22,28
+Encounter = BRONZOR,25,22,28
+Encounter = SABLEYE,20,22,28
+Encounter = DIGLETT,20,22,28
+Encounter = CARBINK,5,24,30
+#-------------------------------
+[104]
+Name = Deep Cave
+Encounter = GIBLE,25,30,36
+Encounter = LARVITAR,25,30,36
+Encounter = BAGON,25,30,36
+Encounter = BELDUM,25,30,36

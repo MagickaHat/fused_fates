@@ -25,10 +25,7 @@ module Underground
     # @param placed [Array<Symbol>] Placed statue IDs.
     # @return [Float]
     def statue_multiplier(species, placed)
-      matches = placed.count do |id|
-        s = STATUES[id]
-        s && (s[:species] == species || s[:body] == species)
-      end
+      matches = placed.count { |id| GameData::UndergroundStatue.try_get(id)&.shows?(species) }
       mult = 1.0 + (matches * UndergroundSettings::STATUE_BONUS_PER_STATUE)
       return [mult, UndergroundSettings::STATUE_BONUS_CAP].min
     end
@@ -39,9 +36,9 @@ module Underground
     # @return [Array<Symbol>] Body species of those statues.
     def fused_partners(species, placed)
       return placed.filter_map do |id|
-        s = STATUES[id]
-        next nil unless s && s[:tier] == :fused && s[:species] == species
-        s[:body]
+        s = GameData::UndergroundStatue.try_get(id)
+        next nil unless s && s.tier == :fused && s.species == species
+        s.body
       end
     end
 
@@ -59,17 +56,17 @@ module Underground
     # @return [Hash, nil] { species:, level:, partner: }, or nil if the map
     # has no hideaway data.
     def roll_spawn(map_id, event_id)
-      table = HIDEAWAYS.dig(map_id, :encounters)
+      table = GameData::UndergroundHideaway.try_get(map_id)&.encounters
       return nil if table.nil? || table.empty?
       d = Underground.data
-      rng = Underground.seeded_rng(d.day_key, map_id, event_id, "hideaway")
+      rng = DailyRefresh.seeded_rng(d.day_key, map_id, event_id, "hideaway")
       placed = d.placed_statues
       weights = {}
       table.each_with_index do |(species, weight, _min, _max), i|
         next unless GameData::Species.exists?(species)
         weights[i] = weight * statue_multiplier(species, placed)
       end
-      index = Underground.weighted_pick(weights, rng)
+      index = DailyRefresh.weighted_pick(weights, rng)
       return nil if index.nil?
       species, _weight, min, max = table[index]
       spawn = { species: species, level: min + rng.rand(max - min + 1), partner: nil }
@@ -119,7 +116,7 @@ module Underground
     # @param event [Game_Event]
     # @return [String, nil]
     def graphic(event)
-      return nil unless HIDEAWAYS.key?(event.map_id)
+      return nil unless GameData::UndergroundHideaway.exists?(event.map_id)
       spawn = spawn_for(event.map_id, event.id)
       return nil unless spawn
       return Underground.pokemon_charset(spawn[:species], spawn[:partner])
@@ -128,7 +125,7 @@ module Underground
     # @brief Hides the HideawayMon events whose Pokémon is gone for today.
     def refresh
       map_id = $game_map.map_id
-      return unless HIDEAWAYS.key?(map_id)
+      return unless GameData::UndergroundHideaway.exists?(map_id)
       Underground.events_named(UndergroundSettings::EVENT_HIDEAWAY_MON).each do |ev|
         gone = cleared?(map_id, ev.id) || spawn_for(map_id, ev.id).nil?
         Underground.set_hidden(ev, gone)

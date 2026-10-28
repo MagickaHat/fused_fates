@@ -1,0 +1,38 @@
+# Underground stations. Use the section name in pbUndergroundEnter,
+# pbUndergroundExit and pbUndergroundCart.
+# Positions are map ID,x,y,direction (2 = down, 4 = left, 6 = right, 8 = up);
+# map ID 0 means the position isn't set up yet.
+#   Name        - shown in menus and messages
+#   Lines       - lines this station's platform serves; a station on two lines
+#                 is an interchange
+#   Underground - where the player arrives after taking the ladder down
+#   Surface     - where the player arrives after climbing out
+#   Platform    - where the player arrives by cart
+#-------------------------------
+[jubilife]
+Name = Jubilife Station
+Lines = oreburgh
+Underground = 0,0,0,0
+Surface = 0,0,0,0
+Platform = 0,0,0,0
+#-------------------------------
+[oreburgh]
+Name = Oreburgh Station
+Lines = oreburgh
+Underground = 0,0,0,0
+Surface = 0,0,0,0
+Platform = 0,0,0,0
+#-------------------------------
+[hearthome]
+Name = Hearthome Station
+Lines = oreburgh,deep
+Underground = 0,0,0,0
+Surface = 0,0,0,0
+Platform = 0,0,0,0
+#-------------------------------
+[veilstone]
+Name = Veilstone Station
+Lines = veilstone
+Underground = 0,0,0,0
+Surface = 0,0,0,0
+Platform = 0,0,0,0

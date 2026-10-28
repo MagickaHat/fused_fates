@@ -1,0 +1,30 @@
+# Underground sphere colors, in the order they are listed in menus.
+#   Name      - shown in menus and messages
+#   SmallIcon - x,y of the 2x2 sphere cell on Graphics/UI/Mining/items
+#   LargeIcon - x,y of the 3x3 sphere cell on Graphics/UI/Mining/items
+# Section names are save data keys: renaming one loses the units players own.
+#-------------------------------
+[red]
+Name = Red Sphere
+SmallIcon = 2,0
+LargeIcon = 13,0
+#-------------------------------
+[blue]
+Name = Blue Sphere
+SmallIcon = 4,0
+LargeIcon = 16,0
+#-------------------------------
+[green]
+Name = Green Sphere
+SmallIcon = 0,0
+LargeIcon = 10,0
+#-------------------------------
+[pale]
+Name = Pale Sphere
+SmallIcon = 8,0
+LargeIcon = 22,0
+#-------------------------------
+[prism]
+Name = Prism Sphere
+SmallIcon = 6,0
+LargeIcon = 19,0

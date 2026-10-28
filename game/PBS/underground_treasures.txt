@@ -1,0 +1,45 @@
+# Underground tunnel treasure tables.
+#
+# A dig spot uses the table named after the colon in its event name
+# ("DigSpot:volcanic") first, then the table whose Maps lists its map, then
+# [default]. Any field a table leaves out is taken from [default].
+#   Maps    - tunnel map IDs that use this table
+#   Sphere  - color,large,weight,min units,max units (one line per sphere)
+#             large is true for the 3x3 graphic
+#   Items   - items that can be buried; only items in the base game's mining
+#             table have graphics. Leave it out of [default] to allow all.
+#   Weight  - item ID or sphere color,weight multiplier (one line each)
+#   Statues - statues that can be found behind walls here; left out, every
+#             statue of an unlocked tier can be found
+#-------------------------------
+[default]
+Sphere = red,false,120,1,4
+Sphere = blue,false,120,1,4
+Sphere = green,false,120,1,4
+Sphere = pale,false,50,1,3
+Sphere = prism,false,30,1,3
+Sphere = red,true,40,5,10
+Sphere = blue,true,40,5,10
+Sphere = green,true,40,5,10
+Sphere = pale,true,15,4,8
+Sphere = prism,true,8,4,8
+#-------------------------------
+[volcanic]
+# Example: hot, rocky tunnels with fire and weather stones
+Maps = 2
+Items = FIRESTONE,SUNSTONE,HEATROCK,HARDSTONE,REDSHARD,STARPIECE,FLAMEPLATE,EARTHPLATE,HEARTSCALE
+Weight = red,2.0
+Weight = FIRESTONE,3.0
+Weight = HEATROCK,2.0
+Statues = STATUEGEODUDE,STATUEMACHOP,STATUEONIX,STATUELARVITAR,STATUEBAGON
+#-------------------------------
+[fossil]
+# Example: old seams full of fossils and plates
+Maps = 3
+Items = DOMEFOSSIL,HELIXFOSSIL,OLDAMBER,ROOTFOSSIL,CLAWFOSSIL,SKULLFOSSIL,ARMORFOSSIL,RAREBONE,ODDKEYSTONE,HARDSTONE,STONEPLATE,IRONPLATE,DRACOPLATE
+Weight = pale,2.0
+Weight = DOMEFOSSIL,2.0
+Weight = HELIXFOSSIL,2.0
+Weight = SKULLFOSSIL,2.0
+Weight = ARMORFOSSIL,2.0
+Statues = STATUECRANIDOS,STATUESHIELDON,STATUEDIGLETT,STATUENOSEPASS,STATUECARBINK

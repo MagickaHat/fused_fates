@@ -23,7 +23,7 @@ module Underground
     # @param event_ids [Array<Integer>] Every DigSpot event ID on the map.
     # @return [Array<Integer>]
     def active_ids(map_id, event_ids)
-      rng = Underground.seeded_rng(Underground.data.day_key, map_id, "dig")
+      rng = DailyRefresh.seeded_rng(Underground.data.day_key, map_id, "dig")
       return event_ids.sort.shuffle(random: rng).first(UndergroundSettings::DIG_SPOTS_PER_MAP)
     end
 
@@ -60,7 +60,7 @@ end
 
 # @brief Dig spot event: starts mining and uses the spot up for today.
 # Call it from a DigSpot event's page 1. Name the event "DigSpot:name" to use
-# MINING_TABLES[:name] instead of the map's table.
+# the [name] table in underground_treasures.txt instead of the map's table.
 def pbUndergroundDig
   ev = Underground.calling_event
   return unless ev

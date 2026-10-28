@@ -63,10 +63,10 @@ module Underground
       entry = Underground.data.layout_at(kind, slot)
       return nil unless entry
       if kind == :statue
-        s = STATUES[entry[:id]]
-        return s ? Underground.pokemon_charset(s[:species], s[:body]) : nil
+        s = GameData::UndergroundStatue.try_get(entry[:id])
+        return s ? Underground.pokemon_charset(s.species, s.body) : nil
       end
-      return GOODS.dig(entry[:id], :charset)
+      return GameData::UndergroundGood.try_get(entry[:id])&.charset
     end
 
     # @brief Takes whatever is in a slot back into storage.
@@ -127,7 +127,7 @@ module Underground
       end
       entry = Underground.data.layout_at(kind, slot)
       if entry
-        good_use = (kind == :good) ? GOODS.dig(entry[:id], :use) : nil
+        good_use = (kind == :good) ? GameData::UndergroundGood.try_get(entry[:id])&.use : nil
         cmds = []
         cmds.push(_INTL("Use")) if good_use
         cmds += [_INTL("Swap"), _INTL("Take back"), _INTL("Cancel")]
@@ -221,48 +221,48 @@ module Underground
     # Rivals
     #----------------------------------------------------------------
     # @brief Battles a rival digger, once per day.
-    # @param rival_id [Symbol] Key of RIVALS.
+    # @param rival_id [Symbol] A section of underground_rivals.txt.
     # @return [Boolean] Whether the player has beaten them today.
     def battle_rival(rival_id)
-      rival = RIVALS[rival_id]
+      rival = GameData::UndergroundRival.try_get(rival_id)
       return false unless rival
       d = Underground.data
       if d.rivals_beaten.include?(rival_id)
-        pbMessage(_INTL("{1}: You got me already today. Come back tomorrow!", rival[:name]))
+        pbMessage(_INTL("{1}: You got me already today. Come back tomorrow!", rival.name))
         return true
       end
-      if rival[:leader] && d.mission_stage < UndergroundSettings::LEADER_STAGE
-        pbMessage(_INTL("{1}: Come back when you've made a name for yourself down here.", rival[:name]))
+      if rival.leader? && d.mission_stage < UndergroundSettings::LEADER_STAGE
+        pbMessage(_INTL("{1}: Come back when you've made a name for yourself down here.", rival.name))
         return false
       end
-      type, name, version = rival[:trainer]
-      unless GameData::Trainer.exists?(type, name, version || 0)
+      type, name, version = rival.trainer
+      unless GameData::Trainer.exists?(type, name, version)
         DevLog.warn("Underground: rival #{rival_id} has no trainer #{type}, #{name}, #{version} in trainers.txt")
-        pbMessage(_INTL("{1} isn't ready to battle yet.", rival[:name]))
+        pbMessage(_INTL("{1} isn't ready to battle yet.", rival.name))
         return false
       end
-      return false unless TrainerBattle.start_core(type, name, version || 0) == 1
+      return false unless TrainerBattle.start_core(type, name, version) == 1
       d.rivals_beaten.push(rival_id)
       d.stats[:rival_wins] += 1
-      d.stats[:rival_leader] += 1 if rival[:leader]
+      d.stats[:rival_leader] += 1 if rival.leader?
       return true
     end
 
     # @brief Takes a rival's flag, once per day, after beating them today.
-    # @param rival_id [Symbol] Key of RIVALS.
+    # @param rival_id [Symbol] A section of underground_rivals.txt.
     # @return [Boolean] Whether a flag was taken.
     def take_flag(rival_id)
-      rival = RIVALS[rival_id]
-      return false unless rival && !rival[:leader]
+      rival = GameData::UndergroundRival.try_get(rival_id)
+      return false unless rival && !rival.leader?
       d = Underground.data
       return false if d.flags_taken.include?(rival_id)
       unless d.rivals_beaten.include?(rival_id)
-        pbMessage(_INTL("{1} is guarding this flag. Beat them in a battle first!", rival[:name]))
+        pbMessage(_INTL("{1} is guarding this flag. Beat them in a battle first!", rival.name))
         return false
       end
       d.flags_taken.push(rival_id)
       d.stats[:flags] += 1
-      pbMessage(_INTL("You took {1}'s flag!", rival[:name]) + "\\me[Item get]")
+      pbMessage(_INTL("You took {1}'s flag!", rival.name) + "\\me[Item get]")
       return true
     end
 
@@ -331,7 +331,7 @@ def pbUndergroundGoodSlot
 end
 
 # @brief Rival digger event: battles them once per day.
-# @param rival_id [Symbol] Key of Underground::RIVALS.
+# @param rival_id [Symbol] A section of underground_rivals.txt.
 # @return [Boolean] Whether the player has beaten them today.
 def pbUndergroundRival(rival_id)
   return Underground::SecretBase.battle_rival(rival_id)

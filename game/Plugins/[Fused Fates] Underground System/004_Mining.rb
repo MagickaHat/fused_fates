@@ -208,17 +208,12 @@ module Underground
     module_function
 
     # @brief The treasure table settings for a dig spot, with anything it
-    # leaves out filled in from :default.
+    # leaves out filled in from [default].
     # @param map_id [Integer]
     # @param key [Symbol, String, nil] The dig spot's own table name, if any.
     # @return [Hash] { spheres:, items:, weights:, statues: }
     def table_for(map_id, key = nil)
-      default = MINING_TABLES[:default]
-      table = nil
-      table = MINING_TABLES[key.to_sym] if key && !key.to_s.empty?
-      table ||= MINING_TABLES[map_id]
-      table = MINING_TABLES[table] if table.is_a?(Symbol)
-      return default.merge(table || {})
+      return GameData::UndergroundTreasureTable.settings_for(map_id, key)
     end
 
     # @brief The treasures that can be buried in a wall.
@@ -228,8 +223,8 @@ module Underground
     def treasure_pool(bonus = false, table = nil)
       table ||= table_for(nil)
       weights = table[:weights] || {}
-      pool = (table[:spheres] || SPHERE_TREASURES).map do |s|
-        x, y = SPHERES[s[:color]][s[:large] ? :large : :small]
+      pool = table[:spheres].map do |s|
+        x, y = GameData::UndergroundSphere.get(s[:color]).icon(s[:large])
         size = s[:large] ? 3 : 2
         [{ sphere: s[:color], units: s[:units] }, s[:weight], x, y, size, size, [1] * (size * size)]
       end
@@ -267,8 +262,8 @@ module Underground
       return nil if tiers.empty?
       chance = bonus ? UndergroundSettings::BONUS_STATUE_FIND_CHANCE : UndergroundSettings::STATUE_FIND_CHANCE
       return nil if rng.rand(100) >= chance
-      ids = pool || STATUES.keys
-      by_tier = tiers.to_h { |tier| [tier, ids.select { |id| STATUES.dig(id, :tier) == tier }] }
+      ids = pool || GameData::UndergroundStatue.keys
+      by_tier = tiers.to_h { |tier| [tier, ids.select { |id| GameData::UndergroundStatue.try_get(id)&.tier == tier }] }
       by_tier.delete_if { |_tier, list| list.empty? }
       return nil if by_tier.empty?
       tier = :common

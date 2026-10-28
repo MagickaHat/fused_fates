@@ -8,10 +8,10 @@
 # @class UndergroundSaveData
 # @brief Everything about the Underground that must survive saving.
 # Daily state (dug spots, hideaway spawns) is tagged with a date key
-# and cleared by #refresh_day! when the date changes.
+# and cleared by #refresh_day! (from DailyRefreshable) when the date changes.
 class UndergroundSaveData
-  # @brief Date key the daily lists below belong to.
-  attr_accessor :day_key
+  include DailyRefreshable
+
   # @brief [map_id, event_id] pairs of dig spots dug today.
   attr_accessor :dug_spots
   # @brief [map_id, event_id] pairs of Digletts found today.
@@ -104,11 +104,8 @@ class UndergroundSaveData
   #-----------------------------------------------------------------------------
   # Daily state
   #-----------------------------------------------------------------------------
-  # @brief Clears all daily state if the date has changed since it was set.
-  def refresh_day!
-    key = Underground.today_key
-    return if key == @day_key
-    @day_key = key
+  # @brief Clears all daily state. Called by #refresh_day! when the date changes.
+  def on_new_day
     @dug_spots.clear
     @diglett_found.clear
     @hideaway_spawns.clear

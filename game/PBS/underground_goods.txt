@@ -1,0 +1,47 @@
+# Underground goods: furniture for the Secret Base's goods slots.
+#   Name        - shown in menus
+#   Description - shown when the good is chosen
+#   Charset     - character graphic shown on the slot (relative to
+#                 Graphics/Characters); left out, the slot event keeps its
+#                 own graphic. Add charsets here once the art exists.
+#   Use         - what interacting with the placed good does: planter (grow
+#                 spheres) or pc (Pokémon storage); left out, nothing
+# Section names are save data keys: renaming one loses the goods players own.
+#-------------------------------
+[GOODDESK]
+Name = Desk
+Description = A sturdy wooden desk.
+#-------------------------------
+[GOODCHAIR]
+Name = Chair
+Description = A plain wooden chair.
+#-------------------------------
+[GOODBOOKSHELF]
+Name = Bookshelf
+Description = Full of digging guides.
+#-------------------------------
+[GOODCUSHION]
+Name = Cushion
+Description = A soft floor cushion.
+#-------------------------------
+[GOODPLANT]
+Name = Potted Plant
+Description = A leafy plant in a clay pot.
+#-------------------------------
+[GOODLAMP]
+Name = Cave Lamp
+Description = Lights up a dim corner.
+#-------------------------------
+[GOODRUG]
+Name = Rug
+Description = A woven rug for the floor.
+#-------------------------------
+[GOODPLANTER]
+Name = Planter
+Description = Bury spheres here and they grow as you walk.
+Use = planter
+#-------------------------------
+[GOODPC]
+Name = Base PC
+Description = Reaches your Pokémon storage from your base.
+Use = pc

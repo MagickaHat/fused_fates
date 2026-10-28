@@ -1,0 +1,19 @@
+# Underground cave-ins. Name a cave-in event "CaveIn:id" (using a section name
+# below); it disappears once every condition given is met.
+#   Badges  - minimum badge count
+#   Stage   - minimum Underground Man mission stage
+#   Switch  - game switch that must be ON
+#   Message - shown while the way is blocked
+#-------------------------------
+[oreburgh_north]
+Badges = 1
+Message = Loose rock blocks the way north.
+#-------------------------------
+[coronet_deep]
+Stage = 7
+Switch = 0
+Message = The tunnel ends in solid bedrock. Something deeper might break through.
+#-------------------------------
+[veilstone_east]
+Badges = 3
+Message = A cave-in blocks the tunnel east.

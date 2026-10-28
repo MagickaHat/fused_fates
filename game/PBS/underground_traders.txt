@@ -1,0 +1,21 @@
+# Underground traders. Use the section name in pbUndergroundTrader(:id).
+#   Name  - shown when talking to them
+#   Wares - statues and goods they can stock; TRADER_STOCK_SIZE of these are
+#           picked each day
+#   Price - ware,sphere color,units (one line per color) to override a
+#           ware's price
+#   Buys  - what they buy back; left out, the same as Wares
+# Statues without a Price use STATUE_PRICES by tier and goods use GOOD_PRICE
+# (both in the Underground settings).
+#-------------------------------
+[furniture]
+Name = Furniture Trader
+Wares = GOODDESK,GOODCHAIR,GOODBOOKSHELF,GOODCUSHION,GOODPLANT,GOODLAMP,GOODRUG,GOODPLANTER,GOODPC
+Price = GOODPLANTER,green,20
+Price = GOODPLANTER,pale,4
+Price = GOODPC,blue,30
+Price = GOODPC,prism,5
+#-------------------------------
+[statues]
+Name = Statue Trader
+Wares = STATUEPIKACHU,STATUEGEODUDE,STATUEZUBAT,STATUEMACHOP,STATUEBRONZOR,STATUEDIGLETT,STATUESHINX,STATUEBUNEARY,STATUEONIX,STATUEGIBLE,STATUERIOLU,STATUELARVITAR,STATUEFUSEDGEODUDEZUBAT,STATUEFUSEDONIXDIGLETT,STATUEFUSEDBAGONBELDUM,STATUEFUSEDSABLEYECARBINK

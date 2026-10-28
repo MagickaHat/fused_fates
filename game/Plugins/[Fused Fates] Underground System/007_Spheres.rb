@@ -25,7 +25,7 @@ module Underground
     # planter placed in the base.
     # @return [Integer]
     def capacity
-      planters = Underground.data.placed_goods.count { |id| GOODS.dig(id, :use) == :planter }
+      planters = Underground.data.placed_goods.count { |id| GameData::UndergroundGood.try_get(id)&.use == :planter }
       return planters * UndergroundSettings::PLANTER_CAPACITY
     end
 
@@ -96,7 +96,7 @@ module Underground
     # @brief Lets the player choose a sphere color and size to bury.
     def bury_menu
       d = Underground.data
-      colors = SPHERES.keys.select { |c| d.spheres[c] > 0 }
+      colors = GameData::UndergroundSphere.keys.select { |c| d.spheres[c] > 0 }
       if colors.empty?
         pbMessage(_INTL("You don't have any spheres to bury."))
         return
@@ -124,9 +124,10 @@ module Underground
     # @return [Array<Symbol>]
     def available_wares(trader_id)
       fused_ok = Underground.data.mission_stage >= UndergroundSettings::FUSED_TRADER_STAGE
-      return (TRADERS.dig(trader_id, :wares) || []).select do |id|
-        next GOODS.key?(id) unless STATUES.key?(id)
-        next fused_ok || STATUES[id][:tier] != :fused
+      wares = GameData::UndergroundTrader.try_get(trader_id)&.wares || []
+      return wares.select do |id|
+        next GameData::UndergroundGood.exists?(id) unless Underground.statue?(id)
+        next fused_ok || GameData::UndergroundStatue.get(id).tier != :fused
       end
     end
 
@@ -136,7 +137,7 @@ module Underground
     def stock(trader_id)
       d = Underground.data
       d.trader_stock[trader_id] ||= begin
-        rng = Underground.seeded_rng(d.day_key, trader_id, d.mission_stage, "trader")
+        rng = DailyRefresh.seeded_rng(d.day_key, trader_id, d.mission_stage, "trader")
         wares = available_wares(trader_id).shuffle(random: rng).first(UndergroundSettings::TRADER_STOCK_SIZE)
         wares.to_h { |id| [id, false] }
       end
@@ -148,10 +149,10 @@ module Underground
     # @param ware [Symbol]
     # @return [Hash] { color => units }
     def price(trader_id, ware)
-      custom = TRADERS.dig(trader_id, :prices, ware)
+      custom = GameData::UndergroundTrader.try_get(trader_id)&.prices&.[](ware)
       return custom if custom
-      return STATUE_PRICES[STATUES[ware][:tier]] if STATUES.key?(ware)
-      return GOOD_PRICE
+      return UndergroundSettings::STATUE_PRICES[GameData::UndergroundStatue.get(ware).tier] if Underground.statue?(ware)
+      return UndergroundSettings::GOOD_PRICE
     end
 
     # @brief Buys a ware from a trader.
@@ -182,8 +183,7 @@ module Underground
     # @param trader_id [Symbol]
     # @return [Array<Symbol>]
     def buys(trader_id)
-      trader = TRADERS[trader_id] || {}
-      return trader[:buys] || trader[:wares] || []
+      return GameData::UndergroundTrader.try_get(trader_id)&.buys || []
     end
 
     # @brief Wares in storage that a trader will buy. Placed statues and goods
@@ -191,11 +191,7 @@ module Underground
     # @param trader_id [Symbol]
     # @return [Array<Symbol>]
     def sellable(trader_id)
-      d = Underground.data
-      return buys(trader_id).select do |id|
-        store = STATUES.key?(id) ? d.statues : d.goods
-        store[id] > 0
-      end
+      return buys(trader_id).select { |id| Underground.storage_for(id)[id] > 0 }
     end
 
     # @brief Sells one ware from storage to a trader.
@@ -205,7 +201,7 @@ module Underground
     def sell(trader_id, ware)
       return false unless sellable(trader_id).include?(ware)
       d = Underground.data
-      store = STATUES.key?(ware) ? d.statues : d.goods
+      store = Underground.storage_for(ware)
       store[ware] -= 1
       store.delete(ware) if store[ware] <= 0
       sell_price(trader_id, ware).each { |color, units| Underground.add_spheres(color, units) }
@@ -216,9 +212,9 @@ module Underground
     # @brief The trader menu: trade spheres for wares, or sell wares back.
     # @param trader_id [Symbol]
     def trader_menu(trader_id)
-      trader = TRADERS[trader_id]
+      trader = GameData::UndergroundTrader.try_get(trader_id)
       return unless trader
-      pbMessage(_INTL("{1}: Got spheres? I've got things to trade.", _INTL(trader[:name])))
+      pbMessage(_INTL("{1}: Got spheres? I've got things to trade.", trader.name))
       loop do
         choice = pbMessage(_INTL("What'll it be?"), [_INTL("Trade spheres"), _INTL("Sell"), _INTL("Cancel")], -1)
         case choice
@@ -227,23 +223,22 @@ module Underground
         else        break
         end
       end
-      pbMessage(_INTL("{1}: Come back tomorrow for new stock!", _INTL(trader[:name])))
+      pbMessage(_INTL("{1}: Come back tomorrow for new stock!", trader.name))
     end
 
     # @brief Lets the player sell wares from storage to a trader.
     # @param trader_id [Symbol]
     def sell_menu(trader_id)
-      trader = TRADERS[trader_id]
+      trader = GameData::UndergroundTrader.get(trader_id)
       loop do
         ids = sellable(trader_id)
         if ids.empty?
           pbMessage(_INTL("{1}: You don't have anything I'd buy. (Placed items need to be taken back first.)",
-                          _INTL(trader[:name])))
+                          trader.name))
           break
         end
         cmds = ids.map do |id|
-          store = STATUES.key?(id) ? Underground.data.statues : Underground.data.goods
-          _INTL("{1} x{2} - {3}", Underground.ware_name(id), store[id],
+          _INTL("{1} x{2} - {3}", Underground.ware_name(id), Underground.storage_for(id)[id],
                 Underground.price_text(sell_price(trader_id, id)))
         end
         cmds.push(_INTL("Cancel"))
@@ -261,11 +256,11 @@ module Underground
     # @brief Lets the player trade spheres for today's stock.
     # @param trader_id [Symbol]
     def buy_menu(trader_id)
-      trader = TRADERS[trader_id]
+      trader = GameData::UndergroundTrader.get(trader_id)
       loop do
         wares = stock(trader_id)
         if wares.empty?
-          pbMessage(_INTL("{1}: I've got nothing for you today.", _INTL(trader[:name])))
+          pbMessage(_INTL("{1}: I've got nothing for you today.", trader.name))
           break
         end
         ids = wares.keys
@@ -305,7 +300,7 @@ def pbUndergroundPlanter
 end
 
 # @brief Trader event.
-# @param trader_id [Symbol] Key of Underground::TRADERS.
+# @param trader_id [Symbol] A section of underground_traders.txt.
 def pbUndergroundTrader(trader_id)
   Underground::Spheres.trader_menu(trader_id)
 end

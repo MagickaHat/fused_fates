@@ -93,17 +93,17 @@ class UndergroundMenu_Scene
     d = Underground.data
     case TABS[@tab]
     when :spheres
-      return Underground::SPHERES.keys.map do |c|
+      return GameData::UndergroundSphere.keys.map do |c|
         [_INTL("{1} x{2}", Underground.sphere_name(c), d.spheres[c]),
          [_INTL("Units owned: {1}", d.spheres[c]), _INTL("Buried: {1}", d.buried.count { |e| e[:color] == c })], nil]
       end
     when :statues
       ids = (d.statues.select { |_id, n| n > 0 }.keys + d.placed_statues).uniq
       return ids.map do |id|
-        s = Underground::STATUES[id] || {}
+        tier = GameData::UndergroundStatue.try_get(id)&.tier
         placed = d.placed_statues.count(id)
         [_INTL("{1} x{2}", Underground.statue_name(id), d.statues[id] + placed),
-         [_INTL("Tier: {1}", s[:tier].to_s.capitalize), _INTL("In storage: {1}", d.statues[id]),
+         [_INTL("Tier: {1}", tier.to_s.capitalize), _INTL("In storage: {1}", d.statues[id]),
           _INTL("On pedestals: {1}", placed)], id]
       end
     when :goods
@@ -111,7 +111,7 @@ class UndergroundMenu_Scene
       return ids.map do |id|
         placed = d.placed_goods.count(id)
         [_INTL("{1} x{2}", Underground.good_name(id), d.goods[id] + placed),
-         [_INTL(Underground::GOODS.dig(id, :description) || ""), _INTL("In storage: {1}", d.goods[id]),
+         [GameData::UndergroundGood.try_get(id)&.description || "", _INTL("In storage: {1}", d.goods[id]),
           _INTL("Placed: {1}", placed)], nil]
       end
     when :status
@@ -127,12 +127,12 @@ class UndergroundMenu_Scene
     mission = Underground::MISSIONS[d.mission_stage]
     base = d.base_size ? _INTL(d.base_size.to_s.capitalize) : _INTL("None yet")
     location = d.base_location ? pbGetMapNameFromId(d.base_location[:map_id]) : _INTL("Not dug yet")
-    lines = Underground::LINES.keys.map do |id|
-      _INTL("{1}: {2}", _INTL(Underground::LINES[id][:name]),
+    lines = GameData::UndergroundLine.keys.map do |id|
+      _INTL("{1}: {2}", GameData::UndergroundLine.get(id).name,
             d.repaired_lines.include?(id) ? _INTL("Running") : _INTL("Broken"))
     end
-    stations = Underground::STATIONS.keys.select { |id| d.discovered_stations.include?(id) }
-                                    .map { |id| _INTL(Underground::STATIONS[id][:name]) }
+    stations = GameData::UndergroundStation.keys.select { |id| d.discovered_stations.include?(id) }
+                                           .map { |id| GameData::UndergroundStation.get(id).name }
     return [
       [_INTL("Diglett meter"), [_INTL("{1}/{2}", d.diglett_meter, UndergroundSettings::DIGLETTS_PER_BONUS),
                                 _INTL("Bonus digs left: {1}", d.bonus_digs)], nil],
@@ -189,9 +189,9 @@ class UndergroundMenu_Scene
     icon.visible = false
     return unless row
     y = TAB_HEIGHT + 20
-    if row[2]
-      s = Underground::STATUES[row[2]]
-      icon.pokemon = Underground::Hideaways.build_pokemon({ species: s[:species], level: 1, partner: s[:body] })
+    s = row[2] && GameData::UndergroundStatue.try_get(row[2])
+    if s
+      icon.pokemon = Underground::Hideaways.build_pokemon({ species: s.species, level: 1, partner: s.body })
       icon.visible = true
       y += 80
     end

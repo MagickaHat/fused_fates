@@ -1,0 +1,15 @@
+# Underground mine cart lines. A line's carts run once it has been repaired.
+#   Name - shown in the Underground menu
+# Section names are save data keys and are used by the missions.
+#-------------------------------
+[oreburgh]
+# West of Mt. Coronet
+Name = Oreburgh Line
+#-------------------------------
+[veilstone]
+# East of Mt. Coronet
+Name = Veilstone Line
+#-------------------------------
+[deep]
+# Under Mt. Coronet
+Name = Deep Line

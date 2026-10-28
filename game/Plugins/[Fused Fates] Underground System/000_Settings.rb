@@ -24,13 +24,13 @@ module UndergroundSettings
   # [x, y, direction] (2 = down, 4 = left, 6 = right, 8 = up).
   BASE_ENTRY = { small: [7, 10, 8], medium: [9, 12, 8], large: [11, 14, 8] }
 
-  # @brief Rival digger base maps (see RIVALS in 001_Data.rb).
+  # @brief Rival digger base maps (rivals are in PBS/underground_rivals.txt).
   RIVAL_BASE_MAPS = []
 
   # @brief Station maps (platforms and ladders) that are part of the Underground.
   STATION_MAPS = []
 
-  # Hideaway map IDs are the keys of HIDEAWAYS in 001_Data.rb.
+  # Hideaway map IDs are the section names in PBS/underground_hideaways.txt.
 
   #-----------------------------------------------------------------------------
   # Placeholder event names (set these as event names in RMXP)
@@ -143,6 +143,18 @@ module UndergroundSettings
   # @brief Percent of a ware's price a trader pays to buy it back. Each
   # sphere color is rounded down, but never below 1.
   SELL_BACK_RATE = 50
+
+  # @brief Statue prices by tier, as { sphere color => units }, for statues
+  # without a Price in PBS/underground_traders.txt.
+  STATUE_PRICES = {
+    common: { red: 15, blue: 5 },
+    rare:   { blue: 25, pale: 8 },
+    fused:  { prism: 20, pale: 15 }
+  }
+
+  # @brief Goods price, as { sphere color => units }, for goods without a
+  # Price in PBS/underground_traders.txt.
+  GOOD_PRICE = { red: 10, green: 10 }
 
   #-----------------------------------------------------------------------------
   # Mission gates

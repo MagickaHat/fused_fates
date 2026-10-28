@@ -1,0 +1,119 @@
+# Underground statues: shown on Secret Base pedestals, they draw their
+# species to the hideaways.
+#   Species - the Pokémon shown, and the one whose hideaway spawns it boosts
+#   Body    - fused statues only: the body species (Species is the head)
+#   Tier    - common or rare can be dug from walls (see STATUE_TIER_STAGE in
+#             the Underground settings); fused are only given by missions
+#             and traders
+# Names are built from the species: "Pikachu Statue", "Shinxible Statue"...
+# Section names are save data keys: renaming one loses the statues players own.
+#-------------------------------
+[STATUEPIKACHU]
+Species = PIKACHU
+Tier = common
+#-------------------------------
+[STATUEGEODUDE]
+Species = GEODUDE
+Tier = common
+#-------------------------------
+[STATUEZUBAT]
+Species = ZUBAT
+Tier = common
+#-------------------------------
+[STATUEMACHOP]
+Species = MACHOP
+Tier = common
+#-------------------------------
+[STATUEBRONZOR]
+Species = BRONZOR
+Tier = common
+#-------------------------------
+[STATUEDIGLETT]
+Species = DIGLETT
+Tier = common
+#-------------------------------
+[STATUESHINX]
+Species = SHINX
+Tier = common
+#-------------------------------
+[STATUEBUNEARY]
+Species = BUNEARY
+Tier = common
+#-------------------------------
+[STATUENOSEPASS]
+Species = NOSEPASS
+Tier = common
+#-------------------------------
+[STATUESTUNKY]
+Species = STUNKY
+Tier = common
+#-------------------------------
+[STATUEONIX]
+Species = ONIX
+Tier = rare
+#-------------------------------
+[STATUEGIBLE]
+Species = GIBLE
+Tier = rare
+#-------------------------------
+[STATUERIOLU]
+Species = RIOLU
+Tier = rare
+#-------------------------------
+[STATUELARVITAR]
+Species = LARVITAR
+Tier = rare
+#-------------------------------
+[STATUEBAGON]
+Species = BAGON
+Tier = rare
+#-------------------------------
+[STATUEBELDUM]
+Species = BELDUM
+Tier = rare
+#-------------------------------
+[STATUECRANIDOS]
+Species = CRANIDOS
+Tier = rare
+#-------------------------------
+[STATUESHIELDON]
+Species = SHIELDON
+Tier = rare
+#-------------------------------
+[STATUESABLEYE]
+Species = SABLEYE
+Tier = rare
+#-------------------------------
+[STATUECARBINK]
+Species = CARBINK
+Tier = rare
+#-------------------------------
+[STATUEFUSEDSHINXGIBLE]
+Species = SHINX
+Body = GIBLE
+Tier = fused
+#-------------------------------
+[STATUEFUSEDBUNEARYRIOLU]
+Species = BUNEARY
+Body = RIOLU
+Tier = fused
+#-------------------------------
+[STATUEFUSEDGEODUDEZUBAT]
+Species = GEODUDE
+Body = ZUBAT
+Tier = fused
+#-------------------------------
+[STATUEFUSEDONIXDIGLETT]
+Species = ONIX
+Body = DIGLETT
+Tier = fused
+#-------------------------------
+[STATUEFUSEDBAGONBELDUM]
+Species = BAGON
+Body = BELDUM
+Tier = fused
+#-------------------------------
+[STATUEFUSEDSABLEYECARBINK]
+Species = SABLEYE
+Body = CARBINK
+Tier = fused
