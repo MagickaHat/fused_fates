@@ -274,6 +274,8 @@ module ScreenMouse
   module_function
 
   # @brief Wraps instance methods of a class so they run with an adapter active.
+  # The wrapper is defined again every time the plugin loads, so it survives F12 (which re-runs
+  # all scripts and restores the original methods); see MouseUI.save_original.
   # @param klass [Class]
   # @param adapter_class [Class] Created with the object whose method runs.
   # @param names [Array<Symbol>]
@@ -281,8 +283,7 @@ module ScreenMouse
     names.each do |name|
       next if !klass.method_defined?(name)
       original = :"__mouse_screen_#{name}"
-      next if klass.method_defined?(original)
-      klass.send(:alias_method, original, name)
+      MouseUI.save_original(klass, name, original, "006_ScreenAdapter.rb")
       klass.send(:define_method, name) do |*args, **kwargs, &block|
         next send(original, *args, **kwargs, &block) if !UtilitySettings::MOUSE_SCREENS
         next MouseUI.with(adapter_class.new(self)) { send(original, *args, **kwargs, &block) }

@@ -155,6 +155,21 @@ module MouseUI
     @stack.clear
   end
 
+  # @brief Saves a method's current version under another name before it is wrapped.
+  # F12 makes mkxp-z run every script again: Essentials restores its original methods, then the
+  # plugins run again. So the saved copy is refreshed whenever the current method is not already
+  # the mouse wrapper (re-saving the wrapper as its own original would make it call itself), and
+  # callers always define the wrapper again afterwards.
+  # @param klass [Class]
+  # @param name [Symbol] The method to wrap.
+  # @param original [Symbol] Name to save the current version under.
+  # @param file [String] File that defines the wrapper, e.g. "002_UIAdapter.rb".
+  def save_original(klass, name, original, file)
+    src = klass.instance_method(name).source_location&.first.to_s
+    return if klass.method_defined?(original) && src.end_with?(file)
+    klass.send(:alias_method, original, name)
+  end
+
   # @brief Gives a scene class an adapter for as long as it is open, by pushing one when any
   # start method runs and removing it when the finish method runs. Used for scenes whose input
   # loops other plugins replace, since start/end methods are rarely overridden.
@@ -166,8 +181,7 @@ module MouseUI
     start.each do |name|
       next if !klass.method_defined?(name)
       original = :"__mouse_attach_#{name}"
-      next if klass.method_defined?(original)
-      klass.send(:alias_method, original, name)
+      save_original(klass, name, original, "002_UIAdapter.rb")
       klass.send(:define_method, name) do |*args, **kwargs, &block|
         ret = send(original, *args, **kwargs, &block)
         if UtilitySettings::MOUSE_SCREENS && !@mouse_adapter
@@ -178,8 +192,7 @@ module MouseUI
     end
     return if !klass.method_defined?(finish)
     original = :"__mouse_attach_#{finish}"
-    return if klass.method_defined?(original)
-    klass.send(:alias_method, original, finish)
+    save_original(klass, finish, original, "002_UIAdapter.rb")
     klass.send(:define_method, finish) do |*args, **kwargs, &block|
       begin
         next send(original, *args, **kwargs, &block)
