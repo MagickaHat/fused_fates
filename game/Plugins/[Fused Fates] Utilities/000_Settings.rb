@@ -31,4 +31,13 @@ module UtilitySettings
 
   # Default largest RGB distance PaletteSwap.apply_nearest will snap a color across
   PALETTE_MATCH_TOLERANCE = 48
+
+  #----------------------------------------------------------------
+  # Mouse
+  #----------------------------------------------------------------
+  # Master switch for every mouse UI adapter; false makes the game keyboard-only again
+  MOUSE_ENABLED = true
+
+  # A left click anywhere in the game window advances dialogue (overworld and battle)
+  MOUSE_DIALOGUE = true
 end
