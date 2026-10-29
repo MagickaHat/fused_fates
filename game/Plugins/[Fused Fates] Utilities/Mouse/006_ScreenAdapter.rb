@@ -92,6 +92,17 @@ class ScreenAdapter < MenuAdapter
     return s
   end
 
+  # @brief The scene's sprites named prefix0, prefix1, ... in order, up to the first missing one.
+  # Iterate the result with a block so each hotspot's procs capture their own index (a while loop
+  # would make every proc share one variable and see only the last value).
+  # @param prefix [String] e.g. "panel"
+  # @return [Array<Array>] [[index, sprite], ...]
+  def numbered_sprites(prefix)
+    list = []
+    list.push([list.length, sprite("#{prefix}#{list.length}")]) while sprite("#{prefix}#{list.length}")
+    return list
+  end
+
   # @brief Runs the hotspots for this frame. Called once per frame by MouseUI.update.
   def update
     super

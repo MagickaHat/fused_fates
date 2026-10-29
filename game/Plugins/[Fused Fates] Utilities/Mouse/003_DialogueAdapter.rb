@@ -61,6 +61,11 @@ def pbChooseNumber(*args, &block)
   return DialogueMouse.back_only { __mouse_pbChooseNumber(*args, &block) }
 end
 
+# Plugin code is evaluated at the top level, which makes these redefinitions private. Essentials
+# calls some of them with an explicit receiver (e.g. Kernel.pbShowCommands), so keep them public
+# like the originals.
+Object.send(:public, :pbMessageDisplay, :pbMessageWaitForInput, :pbChooseNumber)
+
 #==================================================================
 # Battle messages
 #==================================================================

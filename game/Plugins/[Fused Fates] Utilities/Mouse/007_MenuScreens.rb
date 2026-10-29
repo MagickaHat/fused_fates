@@ -412,12 +412,10 @@ class ReadyMenuMouseAdapter < ScreenAdapter
     return [] if !index
     spots = []
     [["movebutton", 0, Input::LEFT], ["itembutton", 1, Input::RIGHT]].each do |name, side, key|
-      i = 0
-      while (btn = sprite("#{name}#{i}"))
-        n = i
+      numbered_sprites(name).each do |n, btn|
+        next if !btn.visible
         spots.push({ id: [side, n], rect: btn, hover: proc { select(n) if index[2] == side },
-                     goto: proc { (index[2] != side) ? key : (select(n) || nil) }, hover_nav: false }) if btn.visible
-        i += 1
+                     goto: proc { (index[2] != side) ? key : (select(n) || nil) }, hover_nav: false })
       end
     end
     return spots
@@ -449,14 +447,9 @@ ScreenMouse.wrap(PokemonReadyMenu_Scene, ReadyMenuMouseAdapter, :pbShowCommands)
 class PokegearMouseAdapter < ScreenAdapter
   # @return [Array<Hash>]
   def hotspots
-    spots = []
-    i = 0
-    while (btn = sprite("button#{i}"))
-      n = i
-      spots.push({ id: n, rect: part_rect(btn, 2), hover: proc { select(n) }, click: Input::USE })
-      i += 1
+    return numbered_sprites("button").map do |n, btn|
+      { id: n, rect: part_rect(btn, 2), hover: proc { select(n) }, click: Input::USE }
     end
-    return spots
   end
 
   # @param i [Integer]
@@ -485,16 +478,11 @@ class LoadMouseAdapter < ScreenAdapter
 
   # @return [Array<Hash>]
   def hotspots
-    spots = []
-    i = 0
-    while (panel = sprite("panel#{i}"))
-      n = i
+    return numbered_sprites("panel").map do |n, panel|
       height = panel.instance_variable_get(:@isContinue) ? CONTINUE_HEIGHT : PANEL_HEIGHT
       width = panel.bitmap ? panel.bitmap.width : 416
-      spots.push({ id: n, rect: [panel.x, panel.y, width, height], hover: proc { select(n) }, click: Input::USE })
-      i += 1
+      { id: n, rect: [panel.x, panel.y, width, height], hover: proc { select(n) }, click: Input::USE }
     end
-    return spots
   end
 
   # @param i [Integer]

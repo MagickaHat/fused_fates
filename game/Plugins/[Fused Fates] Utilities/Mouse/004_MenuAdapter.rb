@@ -388,6 +388,9 @@ def pbShowCommandsWithHelp(*args, &block)
   return MouseUI.with(MenuAdapter.new(new_windows_only: true)) { __mouse_pbShowCommandsWithHelp(*args, &block) }
 end
 
+# Keep these public like the originals; Essentials calls Kernel.pbShowCommands for message choices
+Object.send(:public, :pbShowCommands, :pbShowCommandsWithHelp)
+
 class Battle::Scene
   alias __mouse_pbShowCommands pbShowCommands unless method_defined?(:__mouse_pbShowCommands)
 
