@@ -1,0 +1,3096 @@
+# Contest data for each move, in the same order as moves.txt.
+#   Condition   - COOL, BEAUTY, CUTE, SMART or TOUGH: the condition the move
+#                 appeals to. Required.
+#   Effect      - a section of contest_effects.txt. Gives the move its
+#                 base appeal and its contest description.
+#   Appeal      - (optional) hearts of appeal, instead of the effect's
+#   Jam         - (Acting round, not used yet) hearts of jam
+#   Description - (optional) contest description shown on the summary's
+#                 CONTEST MOVES page instead of the effect's
+# Moves missing from this file use ContestSettings::DEFAULT_CONDITION.
+# Moves introduced before Gen 7 use the conditions from the games. Moves
+# marked "Best fit" never had a contest condition; theirs were chosen to
+# match the move, so review them.
+# Effects were picked by rule from each move's battle data (priority,
+# function code, power...), not copied from the games: tune them freely.
+#-------------------------------
+[MEGAHORN]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[ATTACKORDER]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[BUGBUZZ]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[FIRSTIMPRESSION]
+Condition = CUTE
+Effect = FIRST
+#-------------------------------
+# Best fit
+[POLLENPUFF]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[LEECHLIFE]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+# Best fit
+[LUNGE]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[XSCISSOR]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[SIGNALBEAM]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[SKITTERSMACK]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[UTURN]
+Condition = CUTE
+Effect = SHUFFLE
+#-------------------------------
+[STEAMROLLER]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[BUGBITE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[SILVERWIND]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[FELLSTINGER]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[STRUGGLEBUG]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FURYCUTTER]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[PINMISSILE]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[TWINEEDLE]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[INFESTATION]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[DEFENDORDER]
+Condition = SMART
+Effect = DOUBLENEXT
+#-------------------------------
+[HEALORDER]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+[POWDER]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[QUIVERDANCE]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[RAGEPOWDER]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[SPIDERWEB]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[STICKYWEB]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[STRINGSHOT]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[TAILGLOW]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[HYPERSPACEFURY]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[FOULPLAY]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[FIERYWRATH]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[DARKESTLARIAT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[NIGHTDAZE]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[CRUNCH]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[DARKPULSE]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[FALSESURRENDER]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[JAWLOCK]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[THROATCHOP]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[WICKEDBLOW]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[LASHOUT]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[NIGHTSLASH]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[SUCKERPUNCH]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[KNOCKOFF]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[ASSURANCE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[BITE]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[BRUTALSWING]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[FEINTATTACK]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[THIEF]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[SNARL]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[PAYBACK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[PURSUIT]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[BEATUP]
+Condition = SMART
+Effect = REPEATABLE
+#-------------------------------
+[FLING]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[POWERTRIP]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[PUNISHMENT]
+Condition = SMART
+Effect = VOLTAGEBONUS
+#-------------------------------
+[DARKVOID]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[EMBARGO]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[FAKETEARS]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FLATTER]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[HONECLAWS]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+[MEMENTO]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[NASTYPLOT]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[OBSTRUCT]
+Condition = TOUGH
+Effect = ORDERDOWN
+#-------------------------------
+[PARTINGSHOT]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[QUASH]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[SNATCH]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[SWITCHEROO]
+Condition = COOL
+Effect = LONEJUDGE
+#-------------------------------
+[TAUNT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[TOPSYTURVY]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[TORMENT]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[ETERNABEAM]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[DRAGONENERGY]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[ROAROFTIME]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[DRACOMETEOR]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[OUTRAGE]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+# Best fit
+[CLANGINGSCALES]
+Condition = TOUGH
+Effect = SAMEJUDGE
+#-------------------------------
+# Best fit
+[COREENFORCER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[DRAGONRUSH]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[DYNAMAXCANNON]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[SPACIALREND]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[DRAGONHAMMER]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[DRAGONPULSE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[DRAGONCLAW]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[BREAKINGSWIPE]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[DRAGONBREATH]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[DRAGONTAIL]
+Condition = TOUGH
+Effect = LAST
+#-------------------------------
+# Best fit
+[DRAGONDARTS]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[DUALCHOP]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[TWISTER]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[SCALESHOT]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[DRAGONRAGE]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+# Best fit
+[CLANGOROUSSOUL]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[DRAGONDANCE]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[BOLTSTRIKE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[VOLTTACKLE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[ZAPCANNON]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[AURAWHEEL]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[THUNDER]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[FUSIONBOLT]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[PLASMAFISTS]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[THUNDERBOLT]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[WILDCHARGE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[BOLTBEAK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[DISCHARGE]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[OVERDRIVE]
+Condition = COOL
+Effect = SAMEJUDGE
+#-------------------------------
+# Best fit
+[THUNDERCAGE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[ZINGZAP]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[THUNDERPUNCH]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[RISINGVOLTAGE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[VOLTSWITCH]
+Condition = COOL
+Effect = SHUFFLE
+#-------------------------------
+[PARABOLICCHARGE]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+[SPARK]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[THUNDERFANG]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[SHOCKWAVE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[ELECTROWEB]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[CHARGEBEAM]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[THUNDERSHOCK]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[NUZZLE]
+Condition = CUTE
+Effect = VOLTAGEUP
+#-------------------------------
+[ELECTROBALL]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[CHARGE]
+Condition = SMART
+Effect = DOUBLENEXT
+#-------------------------------
+[EERIEIMPULSE]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[ELECTRICTERRAIN]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[ELECTRIFY]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[IONDELUGE]
+Condition = BEAUTY
+Effect = FIRST
+#-------------------------------
+[MAGNETRISE]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[MAGNETICFLUX]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[THUNDERWAVE]
+Condition = COOL
+Effect = STEALVOLTAGE
+#-------------------------------
+[LIGHTOFRUIN]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[FLEURCANNON]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[MISTYEXPLOSION]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[MOONBLAST]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[PLAYROUGH]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[STRANGESTEAM]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[DAZZLINGGLEAM]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[SPIRITBREAK]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[DRAININGKISS]
+Condition = CUTE
+Effect = ORDERUP
+#-------------------------------
+[DISARMINGVOICE]
+Condition = CUTE
+Effect = SAMEJUDGE
+#-------------------------------
+[FAIRYWIND]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[NATURESMADNESS]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[AROMATICMIST]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[BABYDOLLEYES]
+Condition = CUTE
+Effect = FIRST
+#-------------------------------
+[CHARM]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[CRAFTYSHIELD]
+Condition = SMART
+Effect = ORDERDOWN
+#-------------------------------
+# Best fit
+[DECORATE]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[FAIRYLOCK]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[FLORALHEALING]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[FLOWERSHIELD]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[GEOMANCY]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[MISTYTERRAIN]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[MOONLIGHT]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[SWEETKISS]
+Condition = CUTE
+Effect = STEALVOLTAGE
+#-------------------------------
+[FOCUSPUNCH]
+Condition = TOUGH
+Effect = LAST
+#-------------------------------
+# Best fit
+[METEORASSAULT]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[HIGHJUMPKICK]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[CLOSECOMBAT]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[FOCUSBLAST]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SUPERPOWER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[CROSSCHOP]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[DYNAMICPUNCH]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[FLYINGPRESS]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[HAMMERARM]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[JUMPKICK]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[SACREDSWORD]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[THUNDEROUSKICK]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SECRETSWORD]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[SKYUPPERCUT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[AURASPHERE]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[BODYPRESS]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[SUBMISSION]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[BRICKBREAK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[DRAINPUNCH]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[VITALTHROW]
+Condition = COOL
+Effect = LAST
+#-------------------------------
+[WAKEUPSLAP]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[LOWSWEEP]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[CIRCLETHROW]
+Condition = COOL
+Effect = LAST
+#-------------------------------
+[FORCEPALM]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[REVENGE]
+Condition = SMART
+Effect = LAST
+#-------------------------------
+[ROLLINGKICK]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[STORMTHROW]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[KARATECHOP]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[MACHPUNCH]
+Condition = COOL
+Effect = FIRST
+#-------------------------------
+[POWERUPPUNCH]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[ROCKSMASH]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[VACUUMWAVE]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[DOUBLEKICK]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[ARMTHRUST]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[TRIPLEKICK]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[COUNTER]
+Condition = TOUGH
+Effect = LAST
+#-------------------------------
+[FINALGAMBIT]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[LOWKICK]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[REVERSAL]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[SEISMICTOSS]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[BULKUP]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[COACHING]
+Condition = COOL
+Effect = LONEJUDGE
+#-------------------------------
+[DETECT]
+Condition = COOL
+Effect = ORDERDOWN
+#-------------------------------
+[MATBLOCK]
+Condition = COOL
+Effect = ORDERDOWN
+#-------------------------------
+# Best fit
+[NORETREAT]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[OCTOLOCK]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[QUICKGUARD]
+Condition = COOL
+Effect = ORDERDOWN
+#-------------------------------
+[VCREATE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[BLASTBURN]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[ERUPTION]
+Condition = BEAUTY
+Effect = VOLTAGEBONUS
+#-------------------------------
+# Best fit
+[MINDBLOWN]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[SHELLTRAP]
+Condition = TOUGH
+Effect = LAST
+#-------------------------------
+[BLUEFLARE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[BURNUP]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[OVERHEAT]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[FLAREBLITZ]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[PYROBALL]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[FIREBLAST]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[FUSIONFLARE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[INFERNO]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[MAGMASTORM]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[SACREDFIRE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[SEARINGSHOT]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[HEATWAVE]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[FLAMETHROWER]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[BLAZEKICK]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[FIERYDANCE]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[FIRELASH]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FIREPLEDGE]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[LAVAPLUME]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[FIREPUNCH]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[MYSTICALFIRE]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[BURNINGJEALOUSY]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[FLAMEBURST]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[FIREFANG]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[FLAMEWHEEL]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[INCINERATE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[FLAMECHARGE]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[EMBER]
+Condition = CUTE
+Effect = VOLTAGEUP
+#-------------------------------
+[FIRESPIN]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[HEATCRASH]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[SUNNYDAY]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[WILLOWISP]
+Condition = BEAUTY
+Effect = STEALVOLTAGE
+#-------------------------------
+[SKYATTACK]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[BRAVEBIRD]
+Condition = CUTE
+Effect = APPEALING
+#-------------------------------
+[DRAGONASCENT]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[HURRICANE]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[AEROBLAST]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[BEAKBLAST]
+Condition = TOUGH
+Effect = LAST
+#-------------------------------
+[FLY]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[BOUNCE]
+Condition = CUTE
+Effect = APPEALING
+#-------------------------------
+[DRILLPECK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[OBLIVIONWING]
+Condition = COOL
+Effect = ORDERUP
+#-------------------------------
+[AIRSLASH]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[CHATTER]
+Condition = SMART
+Effect = SAMEJUDGE
+#-------------------------------
+[AERIALACE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[AIRCUTTER]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[PLUCK]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[SKYDROP]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[WINGATTACK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[ACROBATICS]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[DUALWINGBEAT]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[GUST]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[PECK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[DEFOG]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FEATHERDANCE]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[MIRRORMOVE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[ROOST]
+Condition = COOL
+Effect = ORDERUP
+#-------------------------------
+[TAILWIND]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[ASTRALBARRAGE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[SHADOWFORCE]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[POLTERGEIST]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[MOONGEISTBEAM]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[PHANTOMFORCE]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[SPECTRALTHIEF]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[SHADOWBONE]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SHADOWBALL]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[SPIRITSHACKLE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[SHADOWCLAW]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[HEX]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[OMINOUSWIND]
+Condition = SMART
+Effect = DOUBLENEXT
+#-------------------------------
+[SHADOWPUNCH]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[SHADOWSNEAK]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[ASTONISH]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[LICK]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[NIGHTSHADE]
+Condition = SMART
+Effect = VOLTAGEBONUS
+#-------------------------------
+[CONFUSERAY]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[CURSE]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[DESTINYBOND]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[GRUDGE]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[NIGHTMARE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[SPITE]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[TRICKORTREAT]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[FRENZYPLANT]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[LEAFSTORM]
+Condition = CUTE
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[SOLARBLADE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[PETALDANCE]
+Condition = BEAUTY
+Effect = REPEATABLE
+#-------------------------------
+[POWERWHIP]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[SEEDFLARE]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SOLARBEAM]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[WOODHAMMER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[ENERGYBALL]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[LEAFBLADE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[PETALBLIZZARD]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[APPLEACID]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[DRUMBEATING]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[GRASSPLEDGE]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[GRAVAPPLE]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SEEDBOMB]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[GIGADRAIN]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+[HORNLEECH]
+Condition = TOUGH
+Effect = ORDERUP
+#-------------------------------
+# Best fit
+[GRASSYGLIDE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[TROPKICK]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[LEAFTORNADO]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[MAGICALLEAF]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[NEEDLEARM]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[RAZORLEAF]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[VINEWHIP]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[BRANCHPOKE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[LEAFAGE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[MEGADRAIN]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+# Best fit
+[SNAPTRAP]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[BULLETSEED]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[ABSORB]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+[GRASSKNOT]
+Condition = SMART
+Effect = VOLTAGEBONUS
+#-------------------------------
+[AROMATHERAPY]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[COTTONGUARD]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+[COTTONSPORE]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FORESTSCURSE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[GRASSWHISTLE]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[GRASSYTERRAIN]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[INGRAIN]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[JUNGLEHEALING]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[LEECHSEED]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[SLEEPPOWDER]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[SPIKYSHIELD]
+Condition = TOUGH
+Effect = ORDERDOWN
+#-------------------------------
+[SPORE]
+Condition = BEAUTY
+Effect = STEALVOLTAGE
+#-------------------------------
+# Best fit
+[STRENGTHSAP]
+Condition = CUTE
+Effect = ORDERUP
+#-------------------------------
+[STUNSPORE]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[SYNTHESIS]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+[WORRYSEED]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[PRECIPICEBLADES]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[EARTHQUAKE]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[HIGHHORSEPOWER]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[EARTHPOWER]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[LANDSWRATH]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[THOUSANDARROWS]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[THOUSANDWAVES]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[DIG]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[DRILLRUN]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[STOMPINGTANTRUM]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[SCORCHINGSANDS]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[BONECLUB]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[MUDBOMB]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[BULLDOZE]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[MUDSHOT]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[BONEMERANG]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[SANDTOMB]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[BONERUSH]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[MUDSLAP]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FISSURE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[MAGNITUDE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[MUDSPORT]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[ROTOTILLER]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[SANDATTACK]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[SHOREUP]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[SPIKES]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[FREEZESHOCK]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[ICEBURN]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[GLACIALLANCE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[BLIZZARD]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[ICEHAMMER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[ICEBEAM]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[ICICLECRASH]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[ICEPUNCH]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[FREEZEDRY]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[AURORABEAM]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[GLACIATE]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[ICEFANG]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[AVALANCHE]
+Condition = BEAUTY
+Effect = LAST
+#-------------------------------
+[FROSTBREATH]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[ICYWIND]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[ICESHARD]
+Condition = BEAUTY
+Effect = FIRST
+#-------------------------------
+[POWDERSNOW]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[ICEBALL]
+Condition = BEAUTY
+Effect = REPEATABLE
+#-------------------------------
+[ICICLESPEAR]
+Condition = BEAUTY
+Effect = REPEATABLE
+#-------------------------------
+# Best fit
+[TRIPLEAXEL]
+Condition = BEAUTY
+Effect = REPEATABLE
+#-------------------------------
+[SHEERCOLD]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[AURORAVEIL]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[HAIL]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[HAZE]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[MIST]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[EXPLOSION]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[SELFDESTRUCT]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[GIGAIMPACT]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[HYPERBEAM]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[BOOMBURST]
+Condition = TOUGH
+Effect = SAMEJUDGE
+#-------------------------------
+[LASTRESORT]
+Condition = CUTE
+Effect = APPEALING
+#-------------------------------
+[SKULLBASH]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[DOUBLEEDGE]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[HEADCHARGE]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[MEGAKICK]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[MULTIATTACK]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[TECHNOBLAST]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[THRASH]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[EGGBOMB]
+Condition = CUTE
+Effect = APPEALING
+#-------------------------------
+[JUDGMENT]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[HYPERVOICE]
+Condition = COOL
+Effect = SAMEJUDGE
+#-------------------------------
+# Best fit
+[REVELATIONDANCE]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[ROCKCLIMB]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[TAKEDOWN]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[UPROAR]
+Condition = CUTE
+Effect = REPEATABLE
+#-------------------------------
+[BODYSLAM]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[EXTREMESPEED]
+Condition = COOL
+Effect = FIRST
+#-------------------------------
+[HYPERFANG]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[MEGAPUNCH]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[RAZORWIND]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[SLAM]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[STRENGTH]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[TRIATTACK]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[CRUSHCLAW]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[RELICSONG]
+Condition = BEAUTY
+Effect = SAMEJUDGE
+#-------------------------------
+[CHIPAWAY]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[DIZZYPUNCH]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[FACADE]
+Condition = CUTE
+Effect = VOLTAGEUP
+#-------------------------------
+[HEADBUTT]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[RETALIATE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[SECRETPOWER]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[SLASH]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[SMELLINGSALTS]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[HORNATTACK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[STOMP]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[COVET]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[HIDDENPOWER]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[ROUND]
+Condition = BEAUTY
+Effect = SAMEJUDGE
+#-------------------------------
+[SWIFT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[VISEGRIP]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[CUT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[RAPIDSPIN]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[SNORE]
+Condition = CUTE
+Effect = SAMEJUDGE
+#-------------------------------
+# Best fit
+[TERRAINPULSE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[WEATHERBALL]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[ECHOEDVOICE]
+Condition = BEAUTY
+Effect = VOLTAGEBONUS
+#-------------------------------
+[FAKEOUT]
+Condition = CUTE
+Effect = FIRST
+#-------------------------------
+[FALSESWIPE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[HOLDBACK]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[PAYDAY]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[POUND]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[QUICKATTACK]
+Condition = COOL
+Effect = FIRST
+#-------------------------------
+[SCRATCH]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[TACKLE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[DOUBLEHIT]
+Condition = SMART
+Effect = REPEATABLE
+#-------------------------------
+[FEINT]
+Condition = BEAUTY
+Effect = FIRST
+#-------------------------------
+[TAILSLAP]
+Condition = CUTE
+Effect = REPEATABLE
+#-------------------------------
+[RAGE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[SPIKECANNON]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[COMETPUNCH]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[FURYSWIPES]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[BARRAGE]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[BIND]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[DOUBLESLAP]
+Condition = CUTE
+Effect = REPEATABLE
+#-------------------------------
+[FURYATTACK]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[WRAP]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[CONSTRICT]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[BIDE]
+Condition = TOUGH
+Effect = FIRST
+#-------------------------------
+[CRUSHGRIP]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[ENDEAVOR]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FLAIL]
+Condition = CUTE
+Effect = VOLTAGEBONUS
+#-------------------------------
+[FRUSTRATION]
+Condition = CUTE
+Effect = VOLTAGEBONUS
+#-------------------------------
+[GUILLOTINE]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[HORNDRILL]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[NATURALGIFT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[PRESENT]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[RETURN]
+Condition = CUTE
+Effect = VOLTAGEBONUS
+#-------------------------------
+[SONICBOOM]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[SPITUP]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[SUPERFANG]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[TRUMPCARD]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[WRINGOUT]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[ACUPRESSURE]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[AFTERYOU]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[ASSIST]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[ATTRACT]
+Condition = CUTE
+Effect = STEALVOLTAGE
+#-------------------------------
+[BATONPASS]
+Condition = CUTE
+Effect = SHUFFLE
+#-------------------------------
+[BELLYDRUM]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[BESTOW]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[BLOCK]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[CAMOUFLAGE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[CAPTIVATE]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[CELEBRATE]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[CONFIDE]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[CONVERSION]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[CONVERSION2]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[COPYCAT]
+Condition = COOL
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[COURTCHANGE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[DEFENSECURL]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+[DISABLE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[DOUBLETEAM]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[ENCORE]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[ENDURE]
+Condition = TOUGH
+Effect = FIRST
+#-------------------------------
+[ENTRAINMENT]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[FLASH]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[FOCUSENERGY]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[FOLLOWME]
+Condition = CUTE
+Effect = FIRST
+#-------------------------------
+[FORESIGHT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[GLARE]
+Condition = TOUGH
+Effect = STEALVOLTAGE
+#-------------------------------
+[GROWL]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[GROWTH]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[HAPPYHOUR]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[HARDEN]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[HEALBELL]
+Condition = BEAUTY
+Effect = SAMEJUDGE
+#-------------------------------
+[HELPINGHAND]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[HOLDHANDS]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[HOWL]
+Condition = COOL
+Effect = SAMEJUDGE
+#-------------------------------
+# Best fit
+[LASERFOCUS]
+Condition = COOL
+Effect = LONEJUDGE
+#-------------------------------
+[LEER]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[LOCKON]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[LOVELYKISS]
+Condition = BEAUTY
+Effect = STEALVOLTAGE
+#-------------------------------
+[LUCKYCHANT]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[MEFIRST]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[MEANLOOK]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[METRONOME]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[MILKDRINK]
+Condition = CUTE
+Effect = ORDERUP
+#-------------------------------
+[MIMIC]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[MINDREADER]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[MINIMIZE]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+[MORNINGSUN]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[NATUREPOWER]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[NOBLEROAR]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[ODORSLEUTH]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[PAINSPLIT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[PERISHSONG]
+Condition = BEAUTY
+Effect = SAMEJUDGE
+#-------------------------------
+[PLAYNICE]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[PROTECT]
+Condition = CUTE
+Effect = ORDERDOWN
+#-------------------------------
+[PSYCHUP]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[RECOVER]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+[RECYCLE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[REFLECTTYPE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[REFRESH]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[ROAR]
+Condition = COOL
+Effect = LAST
+#-------------------------------
+[SAFEGUARD]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[SCARYFACE]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SCREECH]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SHARPEN]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+[SHELLSMASH]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[SIMPLEBEAM]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[SING]
+Condition = CUTE
+Effect = STEALVOLTAGE
+#-------------------------------
+[SKETCH]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[SLACKOFF]
+Condition = CUTE
+Effect = ORDERUP
+#-------------------------------
+[SLEEPTALK]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[SMOKESCREEN]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SOFTBOILED]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[SPLASH]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[SPOTLIGHT]
+Condition = CUTE
+Effect = FIRST
+#-------------------------------
+[STOCKPILE]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[STUFFCHEEKS]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[SUBSTITUTE]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[SUPERSONIC]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[SWAGGER]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[SWALLOW]
+Condition = TOUGH
+Effect = ORDERUP
+#-------------------------------
+[SWEETSCENT]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SWORDSDANCE]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[TAILWHIP]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[TEARFULLOOK]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[TEATIME]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[TEETERDANCE]
+Condition = CUTE
+Effect = STEALVOLTAGE
+#-------------------------------
+[TICKLE]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[TRANSFORM]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[WHIRLWIND]
+Condition = SMART
+Effect = LAST
+#-------------------------------
+[WISH]
+Condition = CUTE
+Effect = ORDERUP
+#-------------------------------
+[WORKUP]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[YAWN]
+Condition = CUTE
+Effect = STEALVOLTAGE
+#-------------------------------
+[BELCH]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[GUNKSHOT]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[SLUDGEWAVE]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[SHELLSIDEARM]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[SLUDGEBOMB]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[POISONJAB]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[CROSSPOISON]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[SLUDGE]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[VENOSHOCK]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[CLEARSMOG]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[POISONFANG]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[POISONTAIL]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[ACID]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[ACIDSPRAY]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SMOG]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[POISONSTING]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[ACIDARMOR]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[BANEFULBUNKER]
+Condition = TOUGH
+Effect = ORDERDOWN
+#-------------------------------
+[COIL]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[CORROSIVEGAS]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[GASTROACID]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[POISONGAS]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[POISONPOWDER]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+# Best fit
+[PURIFY]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[TOXIC]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[TOXICSPIKES]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[TOXICTHREAD]
+Condition = TOUGH
+Effect = STEALVOLTAGE
+#-------------------------------
+[VENOMDRENCH]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[PRISMATICLASER]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[PSYCHOBOOST]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[FUTURESIGHT]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[SYNCHRONOISE]
+Condition = SMART
+Effect = APPEALING
+#-------------------------------
+[DREAMEATER]
+Condition = SMART
+Effect = ORDERUP
+#-------------------------------
+# Best fit
+[PHOTONGEYSER]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[PSYSTRIKE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[FREEZINGGLARE]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[PSYCHIC]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[PSYCHICFANGS]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[EERIESPELL]
+Condition = SMART
+Effect = SAMEJUDGE
+#-------------------------------
+# Best fit
+[EXPANDINGFORCE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[EXTRASENSORY]
+Condition = COOL
+Effect = VOLTAGEUP
+#-------------------------------
+[HYPERSPACEHOLE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[PSYSHOCK]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[ZENHEADBUTT]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[LUSTERPURGE]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[MISTBALL]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[PSYCHOCUT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[PSYBEAM]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[HEARTSTAMP]
+Condition = CUTE
+Effect = VOLTAGEUP
+#-------------------------------
+[CONFUSION]
+Condition = SMART
+Effect = VOLTAGEUP
+#-------------------------------
+[STOREDPOWER]
+Condition = SMART
+Effect = VOLTAGEBONUS
+#-------------------------------
+[MIRRORCOAT]
+Condition = BEAUTY
+Effect = LAST
+#-------------------------------
+[PSYWAVE]
+Condition = SMART
+Effect = VOLTAGEBONUS
+#-------------------------------
+[AGILITY]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[ALLYSWITCH]
+Condition = SMART
+Effect = FIRST
+#-------------------------------
+[AMNESIA]
+Condition = CUTE
+Effect = DOUBLENEXT
+#-------------------------------
+[BARRIER]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[CALMMIND]
+Condition = SMART
+Effect = DOUBLENEXT
+#-------------------------------
+[COSMICPOWER]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[GRAVITY]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[GUARDSPLIT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[GUARDSWAP]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[HEALBLOCK]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[HEALPULSE]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[HEALINGWISH]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[HEARTSWAP]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[HYPNOSIS]
+Condition = SMART
+Effect = STEALVOLTAGE
+#-------------------------------
+[IMPRISON]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[INSTRUCT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[KINESIS]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[LIGHTSCREEN]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[LUNARDANCE]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[MAGICCOAT]
+Condition = BEAUTY
+Effect = FIRST
+#-------------------------------
+# Best fit
+[MAGICPOWDER]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[MAGICROOM]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[MEDITATE]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[MIRACLEEYE]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[POWERSPLIT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[POWERSWAP]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+[POWERTRICK]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[PSYCHICTERRAIN]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[PSYCHOSHIFT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[REFLECT]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[REST]
+Condition = CUTE
+Effect = ORDERUP
+#-------------------------------
+[ROLEPLAY]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[SKILLSWAP]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[SPEEDSWAP]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[TELEKINESIS]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[TELEPORT]
+Condition = COOL
+Effect = LAST
+#-------------------------------
+[TRICK]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[TRICKROOM]
+Condition = CUTE
+Effect = LAST
+#-------------------------------
+[WONDERROOM]
+Condition = SMART
+Effect = LAST
+#-------------------------------
+[HEADSMASH]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[ROCKWRECKER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[METEORBEAM]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[DIAMONDSTORM]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+[STONEEDGE]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[POWERGEM]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[ROCKSLIDE]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+[ANCIENTPOWER]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[ROCKTOMB]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[ROCKTHROW]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[SMACKDOWN]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[ACCELEROCK]
+Condition = COOL
+Effect = FIRST
+#-------------------------------
+[ROLLOUT]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[ROCKBLAST]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[ROCKPOLISH]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[SANDSTORM]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[STEALTHROCK]
+Condition = COOL
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[TARSHOT]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[WIDEGUARD]
+Condition = TOUGH
+Effect = ORDERDOWN
+#-------------------------------
+[DOOMDESIRE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[STEELBEAM]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[STEELROLLER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[BEHEMOTHBASH]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+# Best fit
+[BEHEMOTHBLADE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[IRONTAIL]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[SUNSTEELSTRIKE]
+Condition = COOL
+Effect = APPEALING
+#-------------------------------
+[METEORMASH]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[ANCHORSHOT]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[FLASHCANNON]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[IRONHEAD]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[SMARTSTRIKE]
+Condition = SMART
+Effect = LATERBETTER
+#-------------------------------
+[STEELWING]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[DOUBLEIRONBASH]
+Condition = TOUGH
+Effect = REPEATABLE
+#-------------------------------
+[MIRRORSHOT]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[MAGNETBOMB]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[GEARGRIND]
+Condition = SMART
+Effect = REPEATABLE
+#-------------------------------
+[METALCLAW]
+Condition = COOL
+Effect = DOUBLENEXT
+#-------------------------------
+[BULLETPUNCH]
+Condition = TOUGH
+Effect = FIRST
+#-------------------------------
+[GYROBALL]
+Condition = COOL
+Effect = VOLTAGEBONUS
+#-------------------------------
+[HEAVYSLAM]
+Condition = TOUGH
+Effect = VOLTAGEBONUS
+#-------------------------------
+[METALBURST]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[AUTOTOMIZE]
+Condition = BEAUTY
+Effect = DOUBLENEXT
+#-------------------------------
+# Best fit
+[GEARUP]
+Condition = SMART
+Effect = LONEJUDGE
+#-------------------------------
+[IRONDEFENSE]
+Condition = TOUGH
+Effect = DOUBLENEXT
+#-------------------------------
+[KINGSSHIELD]
+Condition = COOL
+Effect = ORDERDOWN
+#-------------------------------
+[METALSOUND]
+Condition = SMART
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[SHIFTGEAR]
+Condition = SMART
+Effect = DOUBLENEXT
+#-------------------------------
+[HYDROCANNON]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[WATERSPOUT]
+Condition = BEAUTY
+Effect = VOLTAGEBONUS
+#-------------------------------
+[HYDROPUMP]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[ORIGINPULSE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[STEAMERUPTION]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[CRABHAMMER]
+Condition = TOUGH
+Effect = APPEALING
+#-------------------------------
+[AQUATAIL]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[MUDDYWATER]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[SPARKLINGARIA]
+Condition = BEAUTY
+Effect = SAMEJUDGE
+#-------------------------------
+[SURF]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[FISHIOUSREND]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[LIQUIDATION]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[DIVE]
+Condition = BEAUTY
+Effect = APPEALING
+#-------------------------------
+[SCALD]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[SNIPESHOT]
+Condition = COOL
+Effect = LATERBETTER
+#-------------------------------
+[WATERPLEDGE]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+[WATERFALL]
+Condition = TOUGH
+Effect = VOLTAGEUP
+#-------------------------------
+# Best fit
+[RAZORSHELL]
+Condition = COOL
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[BRINE]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[BUBBLEBEAM]
+Condition = BEAUTY
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[OCTAZOOKA]
+Condition = TOUGH
+Effect = VOLTAGEBLOCK
+#-------------------------------
+# Best fit
+[FLIPTURN]
+Condition = CUTE
+Effect = SHUFFLE
+#-------------------------------
+[WATERPULSE]
+Condition = BEAUTY
+Effect = VOLTAGEUP
+#-------------------------------
+[AQUAJET]
+Condition = COOL
+Effect = FIRST
+#-------------------------------
+[BUBBLE]
+Condition = CUTE
+Effect = VOLTAGEBLOCK
+#-------------------------------
+[WATERGUN]
+Condition = CUTE
+Effect = LATERBETTER
+#-------------------------------
+[CLAMP]
+Condition = TOUGH
+Effect = LATERBETTER
+#-------------------------------
+[WHIRLPOOL]
+Condition = BEAUTY
+Effect = LATERBETTER
+#-------------------------------
+# Best fit
+[SURGINGSTRIKES]
+Condition = COOL
+Effect = REPEATABLE
+#-------------------------------
+[WATERSHURIKEN]
+Condition = COOL
+Effect = FIRST
+#-------------------------------
+[AQUARING]
+Condition = BEAUTY
+Effect = LONEJUDGE
+#-------------------------------
+# Best fit
+[LIFEDEW]
+Condition = BEAUTY
+Effect = ORDERUP
+#-------------------------------
+[RAINDANCE]
+Condition = TOUGH
+Effect = LONEJUDGE
+#-------------------------------
+[SOAK]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[WATERSPORT]
+Condition = CUTE
+Effect = LONEJUDGE
+#-------------------------------
+[WITHDRAW]
+Condition = CUTE
+Effect = DOUBLENEXT
