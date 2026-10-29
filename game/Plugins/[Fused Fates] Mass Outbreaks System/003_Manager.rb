@@ -22,11 +22,11 @@ module MassOutbreaks
   end
 
   # @brief Key identifying the current day.
-  # @return [Integer] The day variable if configured, otherwise YYYYMMDD.
+  # @return [Integer] The day variable if configured, otherwise YYYYMMDD
+  #   (DailyRefresh.today_key).
   def self.current_day_key
     return $game_variables[DAY_VARIABLE] if DAY_VARIABLE > 0
-    t = pbGetTimeNow
-    return (t.year * 10_000) + (t.month * 100) + t.day
+    return DailyRefresh.today_key
   end
 
   # @brief Current hour, counted from a fixed point. Used by :rotating mode.
@@ -68,11 +68,11 @@ module MassOutbreaks
     return if state[:day] == day
     state[:day]    = day
     state[:active] = []
-    rng = Random.new(day ^ $player.id)
+    rng = DailyRefresh.seeded_rng("mass_outbreaks", day, $player.id)
     add_outbreaks(DAILY_COUNT, rng, nil)
   end
 
-  # @brief :rotating_mode. Expire old outbreaks and top up to a target.
+  # @brief :rotating mode. Expire old outbreaks and top up to a target.
   # Runs at most once per hour tick. The RNG is seeded from the tick and
   # trainer ID, so reloading within the same hour gives the same result.
   def self.refresh_rotating
@@ -81,7 +81,7 @@ module MassOutbreaks
     state[:tick] = now
     # Records without :expires came from :daily mode or an older version.
     state[:active].reject! { |rec| !rec[:expires] || rec[:expires] <= now }
-    rng = Random.new(now ^ $player.id)
+    rng = DailyRefresh.seeded_rng("mass_outbreaks", now, $player.id)
     target = rng.rand(ACTIVE_RANGE)
     add_outbreaks(target - state[:active].length, rng, now)
   end
@@ -89,27 +89,38 @@ module MassOutbreaks
   # @brief Start new outbreaks alongside the ones already active.
   # @param amount [Integer] How many to try to add (may add fewer).
   # @param rng [Random] RNG to draw from.
-  # @param now [Inetger, nil] Current hour tick, or nil for :daily outbreaks.
+  # @param now [Integer, nil] Current hour tick, or nil for :daily outbreaks.
   # @return [Integer] How many were added.
   def self.add_outbreaks(amount, rng, now)
     added = 0
     amount.times do
       others = state[:active].filter_map { |rec| entry(rec[:id]) }
-      canidates = pool.values.select { |e| eligible?(e) && fits_with?(e, others) }
-      break if canidates.empty?
-      e = weighted_pick(canidates, rng)
-      expires = now ? now + roll_duration(e, rng) : nil
-      state[:active].push({ id: e[:id], count: 0, expires: expires })
+      candidates = pool.values.select { |e| eligible?(e) && fits_with?(e, others) }
+      break if candidates.empty?
+      e = weighted_pick(candidates, rng)
+      start_record(e, rng, now)
       added += 1
     end
     return added
+  end
+
+  # @brief Add a saved record for a new outbreak.
+  # @param e [Hash] Pool entry.
+  # @param rng [Random] RNG used for the duration.
+  # @param now [Integer, nil] Current hour tick, or nil for :daily outbreaks.
+  # @return [Hash] The new record.
+  def self.start_record(e, rng, now)
+    expires = now ? now + roll_duration(e, rng) : nil
+    rec = { id: e[:id], count: 0, expires: expires }
+    state[:active].push(rec)
+    return rec
   end
 
   # @brief Whether an entry can run alongside the given outbreaks.
   # Rejects a second outbreak on the same map and category (so the hooks
   # never have to choose), a second outbreak of the same species, and any
   # outbreak that would go over MAX_PER_ZONE.
-  # @param e [Hash] Canidate entry.
+  # @param e [Hash] Candidate entry.
   # @param others [Array<Hash>] Entries already active.
   # @return [Boolean]
   def self.fits_with?(e, others)
@@ -145,6 +156,36 @@ module MassOutbreaks
     else
       add_outbreaks(DAILY_COUNT, rng, nil)
     end
+  end
+
+  # @brief Start one specific outbreak now, ignoring badges, switches and
+  # weights. Used by the debug menu.
+  # Any active outbreak that would clash with it (same map and category,
+  # same species, or a full zone) is ended first.
+  # @param id [Symbol] Entry ID.
+  # @return [Boolean] False if the entry doesn't exist or isn't enabled.
+  def self.force_start(id)
+    e = entry(id)
+    return false if !e || !enabled?
+    refresh
+    state[:active].reject! { |rec| !entry(rec[:id]) || rec[:id] == e[:id] }
+    loop do
+      others = state[:active].map { |rec| entry(rec[:id]) }
+      break if fits_with?(e, others)
+      # Remove a direct clash first, otherwise one outbreak from the full zone
+      clash = state[:active].find { |rec| !fits_with?(e, [entry(rec[:id])]) } ||
+              state[:active].find { |rec| entry(rec[:id])[:zone] == e[:zone] }
+      state[:active].delete(clash)
+    end
+    start_record(e, Random.new, (MODE == :rotating) ? current_tick : nil)
+    return true
+  end
+
+  # @brief End every active outbreak. They are rolled again at the next
+  # day (:daily) or hour (:rotating). Used by the debug menu.
+  def self.clear
+    refresh
+    state[:active] = []
   end
 
   # @brief Whether an entry can be rolled with the player's current progress.
@@ -203,64 +244,54 @@ module MassOutbreaks
 
   # @brief Saved record for an active outbreak.
   # @param id [Symbol] Entry ID.
-  # @return [Hash, nil] { id:, count: }, or nil if not active.
+  # @return [Hash, nil] { id:, count:, expires: }, or nil if not active.
   def self.record(id)
     return state[:active].find { |rec| rec[:id] == id }
   end
 
-# @brief Whether a wild Pokémon belongs to an outbreak entry.
+  # @brief Whether a wild Pokémon belongs to an outbreak entry.
   # @param pkmn [Pokemon] The Pokémon to check.
   # @param entry [Hash] Pool entry.
   # @return [Boolean]
-  #
   def self.matches?(pkmn, entry)
     return pkmn.species == entry[:species]
   end
- 
-  #----------------------------------------------------------------------------
+
+  #----------------------------------------------------------------
   # Counter and tiers
-  #----------------------------------------------------------------------------
- 
-  ##
+  #----------------------------------------------------------------
   # @brief Tier list used by an entry.
   # @param id [Symbol] Entry ID.
   # @return [Array<Hash>] The entry's :perks, or TIERS.
-  #
   def self.tiers_for(id)
     e = entry(id)
     return (e && e[:perks]) || TIERS
   end
- 
-  ##
+
   # @brief Tier reached at a given count.
   # @param id [Symbol] Entry ID.
   # @param count [Integer, nil] Count to check (default: current counter).
   # @return [Hash] The tier hash.
-  #
   def self.tier_for(id, count = nil)
     rec = record(id)
     count ||= rec ? rec[:count] : 0
     tiers = tiers_for(id)
     return tiers.find { |t| count >= t[:count] } || tiers.last
   end
- 
-  ##
+
   # @brief Counter value needed for the next tier.
   # @param id [Symbol] Entry ID.
   # @return [Integer, nil] Next threshold, or nil if already at the top tier.
-  #
   def self.next_threshold(id)
     rec = record(id)
     count = rec ? rec[:count] : 0
     return tiers_for(id).map { |t| t[:count] }.select { |c| c > count }.min
   end
- 
-  ##
+
   # @brief Add to an outbreak's counter.
   # @param id [Symbol] Entry ID.
   # @param amount [Integer] Amount to add.
   # @return [Boolean] True if this reached a new tier.
-  #
   def self.add_to_counter(id, amount = 1)
     rec = record(id)
     return false if !rec
@@ -268,15 +299,11 @@ module MassOutbreaks
     rec[:count] += amount
     return !tier_for(id).equal?(old_tier)
   end
- 
-  ##
+
   # @brief Whether the battle being set up or fought came from an outbreak.
-  #
   # Other plugins (such as the fusion system) can check this to leave
   # outbreak Pokémon alone or to react to them.
-  #
   # @return [Boolean]
-  #
   def self.outbreak_battle?
     return !$game_temp.mass_outbreak_id.nil?
   end

@@ -61,7 +61,7 @@ module MassOutbreaksSettings
   # @brief Default perk tiers, ordered from highest count to lowest.
   # The first tier whose :count the counter has reached is used. Every other
   # key is a perk name registered in 005_Perks.rb; its value is passed to that
-  # perk. Built-in perks:
+  # perk. Pool entries can override this list with :perks. Built-in perks:
   #   - :shiny_rolls    extra shiny rolls on top of the normal one
   #   - :hidden_ability percent chance of a Hidden Ability
   #   - :egg_move       percent chance of knowing one egg move

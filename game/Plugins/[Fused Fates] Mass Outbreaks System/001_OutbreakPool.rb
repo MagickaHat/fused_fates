@@ -5,7 +5,12 @@
 #==================================================================
 # module MassOutbreaks
 #==================================================================
+# @brief Pool of outbreaks that can be rolled, plus everything else in the
+# system (see 003_Manager.rb onwards). Settings are included so they can be
+# used unqualified, e.g. MassOutbreaks::TIERS.
 module MassOutbreaks
+  include MassOutbreaksSettings
+
   @@pool = {}
 
   # @brief Register an outbreak that can be rolled.
@@ -24,7 +29,8 @@ module MassOutbreaks
   #   - :zone     [Symbol]  Region zone, limited by MAX_PER_ZONE (default nil).
   #   - :hours    [Range, Integer] Duration in :rotating mode (default
   #                         DURATION_HOURS).
-  #   - :perks    [Array]   Tier list overriding MassOutbreaks::TIERS.
+  #   - :perks    [Array]   Tier list overriding MassOutbreaks::TIERS, in the
+  #                         same format.
   # @raise [ArgumentError] If the ID is reused or a required key is missing.
   def self.register(id, **options)
     raise ArgumentError, "Mass outbreak #{id} registered twice" if @@pool[id]
@@ -64,4 +70,40 @@ module MassOutbreaks
   #----------------------------------------------------------------
   # Outbreak entries
   #----------------------------------------------------------------
+  # Register entries here (or from another plugin) with MassOutbreaks.register.
+  # The map IDs below are only examples; replace them with real routes.
+  #
+  #   # A grass outbreak that can show up from the start.
+  #   MassOutbreaks.register(:route1_doduo,
+  #     map:     5,
+  #     species: :DODUO,
+  #     levels:  4..7,
+  #     zone:    :south
+  #   )
+  #
+  #   # A surfing outbreak that needs 3 badges and is twice as likely to roll.
+  #   MassOutbreaks.register(:route4_psyduck,
+  #     map:      12,
+  #     species:  :PSYDUCK,
+  #     levels:   18..22,
+  #     category: :water,
+  #     weight:   20,
+  #     badges:   3,
+  #     zone:     :east
+  #   )
+  #
+  #   # A fishing outbreak of an alternate form that always lasts 4 hours in
+  #   # :rotating mode and has its own, easier tiers.
+  #   MassOutbreaks.register(:lake_shellos_east,
+  #     map:      20,
+  #     species:  :SHELLOS,
+  #     form:     1,
+  #     levels:   25..30,
+  #     category: :fishing,
+  #     hours:    4,
+  #     perks:    [
+  #       { count: 20, shiny_rolls: 1, hidden_ability: 10 },
+  #       { count: 0,  shiny_rolls: 0, hidden_ability: 0 }
+  #     ]
+  #   )
 end

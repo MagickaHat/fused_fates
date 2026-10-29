@@ -2,7 +2,11 @@
 # Pokémon Fused Fates Mass Outbreaks System - 002_State.rb
 #================================================================================================
 # @brief Where outbreak data lives between maps, battles, and save files.
-# Saved state is a plain Hash of Integers and Symbols with no custom classes.
+# Saved state is a plain Hash of Integers and Symbols with no custom classes:
+#   { mode: Symbol, day: Integer, tick: Integer,
+#     active: [{ id: Symbol, count: Integer, expires: Integer or nil }, ...] }
+# :day is used by :daily mode and :tick by :rotating mode. :expires is the
+# hour tick an outbreak ends on, or nil for :daily outbreaks.
 
 #==================================================================
 # class PokemonGlobalMetadata
@@ -28,4 +32,9 @@ class Game_Temp
   # Set when an encounter is replaced and cleared after the battle or on a
   # map change. Never saved.
   attr_accessor :mass_outbreak_id
+
+  # @brief Whether the outbreak roll has already happened for the encounter
+  # being set up. Stops the second Pokémon of a double encounter from rolling
+  # again. Reset at the start of every encounter. Never saved.
+  attr_accessor :mass_outbreak_rolled
 end
