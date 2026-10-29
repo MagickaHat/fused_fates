@@ -5,8 +5,10 @@
 #   - Page 6, CONDITION: the condition pentagon, each condition's value, sheen
 #     and the flavors the Pokémon's nature likes and dislikes.
 #   - The MOVES page switches to CONTEST MOVES with
-#     ContestSettings::CONTEST_MOVES_TOGGLE, showing each move's condition
-#     (and appeal, jam and contest description once those exist).
+#     ContestSettings::CONTEST_MOVES_TOGGLE, showing each move's condition,
+#     appeal, contest effect and contest description.
+# Each can be hidden behind a game switch: see CONDITION_PAGE_SWITCH and
+# CONTEST_MOVES_SWITCH in ContestSettings.
 
 #==================================================================
 # module ContestUI
@@ -93,9 +95,6 @@ end
 # class PokemonSummary_Scene
 #==================================================================
 class PokemonSummary_Scene
-  # @brief Number of summary pages, including the Condition page.
-  CONTEST_PAGE_COUNT = 6
-
   # @brief Index of the Condition page.
   CONDITION_PAGE = 6
 
@@ -103,10 +102,30 @@ class PokemonSummary_Scene
   alias_method :__contests_drawPageFourSelecting, :drawPageFourSelecting unless method_defined?(:__contests_drawPageFourSelecting)
   alias_method :__contests_drawSelectedMove, :drawSelectedMove unless method_defined?(:__contests_drawSelectedMove)
 
-  # @brief Whether the Moves page shows contest information.
+  # @brief Whether the Condition page can be viewed (its game switch is on).
+  # @return [Boolean]
+  def condition_page_enabled?
+    return ContestSettings.switch_on?(ContestSettings::CONDITION_PAGE_SWITCH)
+  end
+
+  # @brief Whether the Moves page can switch to contest information (its
+  # game switch is on).
+  # @return [Boolean]
+  def contest_moves_enabled?
+    return ContestSettings.switch_on?(ContestSettings::CONTEST_MOVES_SWITCH)
+  end
+
+  # @brief Number of summary pages: 6 with the Condition page, 5 without.
+  # @return [Integer]
+  def summary_page_count
+    return condition_page_enabled? ? CONDITION_PAGE : CONDITION_PAGE - 1
+  end
+
+  # @brief Whether the Moves page shows contest information. Always false
+  # while contest moves are disabled.
   # @return [Boolean]
   def contest_moves?
-    return @contest_moves || false
+    return contest_moves_enabled? && (@contest_moves || false)
   end
 
   # @brief Background of the Condition page.
@@ -294,8 +313,9 @@ class PokemonSummary_Scene
     end
   end
 
-  # @brief Draws the selected move's details: battle details normally,
-  # condition, appeal, jam and contest description in contest mode.
+  # @brief Draws the selected move's details: battle details normally;
+  # condition, appeal, jam, contest effect and contest description in
+  # contest mode.
   # @param move_to_learn [Pokemon::Move, nil]
   # @param selected_move [Pokemon::Move]
   def drawSelectedMove(move_to_learn, selected_move)
@@ -322,12 +342,19 @@ class PokemonSummary_Scene
     ]
     pbDrawTextPositions(overlay, textpos)
     ContestUI.draw_condition_label(overlay, selected_move.contest_condition, 166, 124)
+    # Contest effect and description, falling back to the battle description
+    effect = data&.effect_data
     description = data&.description || selected_move.description
-    drawTextEx(overlay, 4, 224, 230, 5, description, base, shadow)
+    if effect
+      pbDrawTextPositions(overlay, [[effect.name, 4, 224, :left, base, shadow]])
+      drawTextEx(overlay, 4, 256, 230, 4, description, base, shadow)
+    else
+      drawTextEx(overlay, 4, 224, 230, 5, description, base, shadow)
+    end
   end
 
-  # @brief Runs the summary screen. Replaces the base method so there is a
-  # sixth page and the Moves page can switch to contest information.
+  # @brief Runs the summary screen. Replaces the base method so there can be
+  # a sixth page and the Moves page can switch to contest information.
   # @return [Integer] The party index being viewed when the screen closed.
   def pbScene
     @pokemon.play_cry
@@ -336,7 +363,8 @@ class PokemonSummary_Scene
       Input.update
       pbUpdate
       dorefresh = false
-      if Input.trigger?(ContestSettings::CONTEST_MOVES_TOGGLE) && @page == 4 && !@pokemon.egg?
+      if Input.trigger?(ContestSettings::CONTEST_MOVES_TOGGLE) && @page == 4 && !@pokemon.egg? &&
+         contest_moves_enabled?
         pbPlayCursorSE
         @contest_moves = !contest_moves?
         dorefresh = true
@@ -377,7 +405,7 @@ class PokemonSummary_Scene
         end
       elsif Input.trigger?(Input::LEFT) && !@pokemon.egg?
         oldpage = @page
-        @page = (@page - 1).clamp(1, CONTEST_PAGE_COUNT)
+        @page = (@page - 1).clamp(1, summary_page_count)
         if @page != oldpage   # Move to next page
           pbSEPlay("GUI summary change page")
           @ribbonOffset = 0
@@ -385,7 +413,7 @@ class PokemonSummary_Scene
         end
       elsif Input.trigger?(Input::RIGHT) && !@pokemon.egg?
         oldpage = @page
-        @page = (@page + 1).clamp(1, CONTEST_PAGE_COUNT)
+        @page = (@page + 1).clamp(1, summary_page_count)
         if @page != oldpage   # Move to next page
           pbSEPlay("GUI summary change page")
           @ribbonOffset = 0

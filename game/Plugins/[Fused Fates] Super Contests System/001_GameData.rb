@@ -128,14 +128,70 @@ module GameData
   end
 
   #==================================================================
+  # class ContestEffect
+  #==================================================================
+  # @brief A contest effect, compiled from PBS/contest_effects.txt. Each move
+  # has one, which gives the move its base appeal and its description on the
+  # summary's CONTEST MOVES page.
+  #
+  # Effects only describe themselves for now. Flags is read and stored so the
+  # Acting round can give effects their mechanics once it is built.
+  class ContestEffect
+    attr_reader :id, :real_name, :real_description, :appeal, :flags
+
+    DATA = {}
+    DATA_FILENAME     = "contest_effects.dat"
+    PBS_BASE_FILENAME = "contest_effects"
+    SCHEMA = {
+      "SectionName" => [:id,               "m"],
+      "Name"        => [:real_name,        "s"],
+      "Description" => [:real_description, "q"],
+      "Appeal"      => [:appeal,           "u"],
+      "Flags"       => [:flags,            "*s"]
+    }
+
+    extend ClassMethodsSymbols
+    include InstanceMethods
+
+    # @brief Builds a contest effect from compiled PBS data.
+    # @param hash [Hash] Values keyed by schema attribute.
+    def initialize(hash)
+      @id               = hash[:id]
+      @real_name        = hash[:real_name] || @id.to_s
+      @real_description = hash[:real_description] || ""
+      @appeal           = hash[:appeal] || 0
+      @flags            = hash[:flags] || []
+    end
+
+    # @brief The effect's name as shown to the player.
+    # @return [String]
+    def name
+      return _INTL(@real_name)
+    end
+
+    # @brief The effect's description as shown to the player.
+    # @return [String]
+    def description
+      return _INTL(@real_description)
+    end
+
+    # @brief Whether the effect has a flag.
+    # @param flag [String]
+    # @return [Boolean]
+    def has_flag?(flag)
+      return @flags.any? { |f| f.downcase == flag.downcase }
+    end
+  end
+
+  #==================================================================
   # class ContestMove
   #==================================================================
   # @brief A move's contest data, compiled from PBS/contest_moves.txt.
   #
-  # Only the condition is used for now. Appeal, Jam and Effect are read and
-  # stored so the Acting round can use them once it is built.
+  # The condition and effect are used now. Appeal and Description override
+  # the effect's own, and Jam is stored for the Acting round.
   class ContestMove
-    attr_reader :id, :condition, :appeal, :jam, :effect, :real_description
+    attr_reader :id, :condition, :jam, :effect, :real_description
 
     DATA = {}
     DATA_FILENAME     = "contest_moves.dat"
@@ -143,9 +199,9 @@ module GameData
     SCHEMA = {
       "SectionName" => [:id,               "e", :Move],
       "Condition"   => [:condition,        "e", :ContestCondition],
+      "Effect"      => [:effect,           "e", :ContestEffect],
       "Appeal"      => [:appeal,           "u"],
       "Jam"         => [:jam,              "u"],
-      "Effect"      => [:effect,           "s"],
       "Description" => [:real_description, "q"]
     }
 
@@ -157,17 +213,31 @@ module GameData
     def initialize(hash)
       @id               = hash[:id]
       @condition        = hash[:condition] || ContestSettings::DEFAULT_CONDITION
+      @effect           = hash[:effect]
       @appeal           = hash[:appeal]
       @jam              = hash[:jam]
-      @effect           = hash[:effect]
       @real_description = hash[:real_description]
     end
 
-    # @brief The move's contest description, if it has one.
-    # @return [String, nil]
+    # @brief The move's contest effect.
+    # @return [GameData::ContestEffect, nil] nil if it has none, or its effect
+    #   was removed from contest_effects.txt.
+    def effect_data
+      return GameData::ContestEffect.try_get(@effect)
+    end
+
+    # @brief The move's appeal: its own Appeal, or its effect's.
+    # @return [Integer, nil] nil if it has neither.
+    def appeal
+      return @appeal || effect_data&.appeal
+    end
+
+    # @brief The move's contest description: its own Description, or its
+    # effect's.
+    # @return [String, nil] nil if it has neither.
     def description
-      return nil if nil_or_empty?(@real_description)
-      return _INTL(@real_description)
+      return _INTL(@real_description) if !nil_or_empty?(@real_description)
+      return effect_data&.description
     end
 
     # @brief The condition a move appeals to, falling back to
@@ -446,9 +516,16 @@ module Compiler
   # @param text_files [Hash, nil] From get_all_pbs_files_to_compile.
   def compile_contest_data(text_files = nil)
     text_files ||= get_all_pbs_files_to_compile
-    compile_contest_moves(*text_files[:ContestMove][1])   # Depends on Move
+    compile_contest_effects(*text_files[:ContestEffect][1])
+    compile_contest_moves(*text_files[:ContestMove][1])   # Depends on Move, ContestEffect
     compile_berry_flavors(*text_files[:BerryFlavor][1])   # Depends on Item
     compile_poffin_types(*text_files[:PoffinType][1])
+  end
+
+  # @brief Compiles PBS/contest_effects.txt.
+  # @param paths [Array<String>]
+  def compile_contest_effects(*paths)
+    compile_PBS_file_generic(GameData::ContestEffect, *paths)
   end
 
   # @brief Compiles PBS/contest_moves.txt, checking every move has a condition.

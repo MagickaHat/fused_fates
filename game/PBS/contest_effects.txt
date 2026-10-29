@@ -1,0 +1,83 @@
+# Contest effects. Every move in contest_moves.txt has one (its Effect).
+#   Name        - short name, shown on the summary's CONTEST MOVES page
+#   Description - shown as the move's contest description, unless the move
+#                 has its own Description in contest_moves.txt
+#   Appeal      - base hearts of appeal, unless the move has its own Appeal
+#   Flags       - (Acting round, not used yet) tags for the effect's mechanics
+# Effects only describe themselves for now: the Acting round will give them
+# their mechanics. Section names are used in contest_moves.txt.
+#-------------------------------
+[APPEALING]
+Name = Highly Appealing
+Description = A highly appealing performance.
+Appeal = 3
+#-------------------------------
+[FIRST]
+Name = Opening Act
+Description = Earns +2 if the Pokémon performs first in the turn.
+Appeal = 1
+#-------------------------------
+[LAST]
+Name = Grand Finale
+Description = Earns +2 if the Pokémon performs last in the turn.
+Appeal = 1
+#-------------------------------
+[DOUBLENEXT]
+Name = Build-Up
+Description = Earns double the score on the next turn.
+Appeal = 1
+#-------------------------------
+[REPEATABLE]
+Name = Encore
+Description = Can be used repeatedly without losing points.
+Appeal = 2
+#-------------------------------
+[SAMEJUDGE]
+Name = Crowd Pleaser
+Description = Earns +15 if all the Pokémon choose the same Judge.
+Appeal = 0
+#-------------------------------
+[LONEJUDGE]
+Name = Solo Act
+Description = Earns +3 if no other Pokémon chose the same Judge.
+Appeal = 0
+#-------------------------------
+[VOLTAGEUP]
+Name = Spark
+Description = Earns +3 if the Judge's Voltage goes up.
+Appeal = 0
+#-------------------------------
+[VOLTAGEBONUS]
+Name = Rising Star
+Description = Earns more points the higher the Judge's Voltage.
+Appeal = 0
+#-------------------------------
+[VOLTAGEBLOCK]
+Name = Cool Down
+Description = Prevents the Voltage from going up in the same turn.
+Appeal = 1
+#-------------------------------
+[STEALVOLTAGE]
+Name = Upstage
+Description = Steals the Voltage of the Pokémon that just went.
+Appeal = 1
+#-------------------------------
+[ORDERUP]
+Name = Front Row
+Description = Makes the Pokémon perform first next turn.
+Appeal = 1
+#-------------------------------
+[ORDERDOWN]
+Name = Back Row
+Description = Makes the Pokémon perform last next turn.
+Appeal = 1
+#-------------------------------
+[SHUFFLE]
+Name = Scramble
+Description = Makes the order of contestants random next turn.
+Appeal = 1
+#-------------------------------
+[LATERBETTER]
+Name = Slow Burn
+Description = Earns more points the later the Pokémon performs.
+Appeal = 0

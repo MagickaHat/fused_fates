@@ -144,7 +144,7 @@ MenuHandlers.add(:debug_menu, :contests_clear_case, {
 MenuHandlers.add(:debug_menu, :contests_reload_pbs, {
   "name"        => _INTL("Reload contest PBS files"),
   "parent"      => :contests_menu,
-  "description" => _INTL("Recompile contest_moves.txt, berry_flavors.txt and poffins.txt so edits apply without restarting."),
+  "description" => _INTL("Recompile contest_effects.txt, contest_moves.txt, berry_flavors.txt and poffins.txt so edits apply without restarting."),
   "effect"      => proc {
     ok = DevLog.guard("Contests: compiling PBS files failed", false) do
       Compiler.compile_contest_data

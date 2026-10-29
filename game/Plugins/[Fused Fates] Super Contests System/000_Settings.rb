@@ -80,4 +80,22 @@ module ContestSettings
   # @brief Button that switches the summary's Moves page between battle and
   # contest information.
   CONTEST_MOVES_TOGGLE = Input::SPECIAL
+
+  # @brief Game switch that shows the summary's Condition page. 0 means
+  # always shown; otherwise the page only appears while the switch is ON.
+  CONDITION_PAGE_SWITCH = 0
+
+  # @brief Game switch that lets CONTEST_MOVES_TOGGLE switch the Moves page
+  # to contest information. 0 means always allowed; otherwise only while
+  # the switch is ON.
+  CONTEST_MOVES_SWITCH = 0
+
+  # @brief Whether a feature gated by a game switch is on.
+  # @param switch_id [Integer] 0 or less for "always on".
+  # @return [Boolean]
+  def self.switch_on?(switch_id)
+    return true if switch_id <= 0
+    return false if !$game_switches
+    return $game_switches[switch_id] ? true : false
+  end
 end
