@@ -1,0 +1,279 @@
+# Flavors and smoothness of every berry that can be cooked into poffins,
+# in the same order as items.txt. Berries not listed here can't be cooked.
+#   Flavor     - spicy,dry,sweet,bitter,sour
+#   Smoothness - roughly how much sheen poffins made with it add. Lower is
+#                better: a Pokemon can eat more of them before its sheen
+#                maxes out
+# Values are from Gen 4. Berries marked "Best fit" weren't in Gen 4, so
+# their values were chosen to match their later flavors; review them.
+#-------------------------------
+[CHERIBERRY]
+Flavor = 10,0,0,0,0
+Smoothness = 25
+#-------------------------------
+[CHESTOBERRY]
+Flavor = 0,10,0,0,0
+Smoothness = 25
+#-------------------------------
+[PECHABERRY]
+Flavor = 0,0,10,0,0
+Smoothness = 25
+#-------------------------------
+[RAWSTBERRY]
+Flavor = 0,0,0,10,0
+Smoothness = 25
+#-------------------------------
+[ASPEARBERRY]
+Flavor = 0,0,0,0,10
+Smoothness = 25
+#-------------------------------
+[LEPPABERRY]
+Flavor = 10,0,10,10,10
+Smoothness = 20
+#-------------------------------
+[ORANBERRY]
+Flavor = 10,10,0,10,10
+Smoothness = 20
+#-------------------------------
+[PERSIMBERRY]
+Flavor = 10,10,10,0,10
+Smoothness = 20
+#-------------------------------
+[LUMBERRY]
+Flavor = 10,10,10,10,0
+Smoothness = 20
+#-------------------------------
+[SITRUSBERRY]
+Flavor = 0,10,10,10,10
+Smoothness = 20
+#-------------------------------
+[FIGYBERRY]
+Flavor = 15,0,0,0,0
+Smoothness = 25
+#-------------------------------
+[WIKIBERRY]
+Flavor = 0,15,0,0,0
+Smoothness = 25
+#-------------------------------
+[MAGOBERRY]
+Flavor = 0,0,15,0,0
+Smoothness = 25
+#-------------------------------
+[AGUAVBERRY]
+Flavor = 0,0,0,15,0
+Smoothness = 25
+#-------------------------------
+[IAPAPABERRY]
+Flavor = 0,0,0,0,15
+Smoothness = 25
+#-------------------------------
+[RAZZBERRY]
+Flavor = 10,10,0,0,0
+Smoothness = 20
+#-------------------------------
+[BLUKBERRY]
+Flavor = 0,10,10,0,0
+Smoothness = 20
+#-------------------------------
+[NANABBERRY]
+Flavor = 0,0,10,10,0
+Smoothness = 20
+#-------------------------------
+[WEPEARBERRY]
+Flavor = 0,0,0,10,10
+Smoothness = 20
+#-------------------------------
+[PINAPBERRY]
+Flavor = 10,0,0,0,10
+Smoothness = 20
+#-------------------------------
+[POMEGBERRY]
+Flavor = 10,0,10,10,0
+Smoothness = 20
+#-------------------------------
+[KELPSYBERRY]
+Flavor = 0,10,0,10,10
+Smoothness = 20
+#-------------------------------
+[QUALOTBERRY]
+Flavor = 10,0,10,0,10
+Smoothness = 20
+#-------------------------------
+[HONDEWBERRY]
+Flavor = 10,10,0,10,0
+Smoothness = 20
+#-------------------------------
+[GREPABERRY]
+Flavor = 0,10,10,0,10
+Smoothness = 20
+#-------------------------------
+[TAMATOBERRY]
+Flavor = 20,10,0,0,0
+Smoothness = 30
+#-------------------------------
+[CORNNBERRY]
+Flavor = 0,20,10,0,0
+Smoothness = 30
+#-------------------------------
+[MAGOSTBERRY]
+Flavor = 0,0,20,10,0
+Smoothness = 30
+#-------------------------------
+[RABUTABERRY]
+Flavor = 0,0,0,20,10
+Smoothness = 30
+#-------------------------------
+[NOMELBERRY]
+Flavor = 10,0,0,0,20
+Smoothness = 30
+#-------------------------------
+[SPELONBERRY]
+Flavor = 30,10,0,0,0
+Smoothness = 35
+#-------------------------------
+[PAMTREBERRY]
+Flavor = 0,30,10,0,0
+Smoothness = 35
+#-------------------------------
+[WATMELBERRY]
+Flavor = 0,0,30,10,0
+Smoothness = 35
+#-------------------------------
+[DURINBERRY]
+Flavor = 0,0,0,30,10
+Smoothness = 35
+#-------------------------------
+[BELUEBERRY]
+Flavor = 10,0,0,0,30
+Smoothness = 35
+#-------------------------------
+[OCCABERRY]
+Flavor = 15,0,10,0,0
+Smoothness = 30
+#-------------------------------
+[PASSHOBERRY]
+Flavor = 0,15,0,10,0
+Smoothness = 30
+#-------------------------------
+[WACANBERRY]
+Flavor = 0,0,15,0,10
+Smoothness = 30
+#-------------------------------
+[RINDOBERRY]
+Flavor = 10,0,0,15,0
+Smoothness = 30
+#-------------------------------
+[YACHEBERRY]
+Flavor = 0,10,0,0,15
+Smoothness = 30
+#-------------------------------
+[CHOPLEBERRY]
+Flavor = 15,0,0,10,0
+Smoothness = 30
+#-------------------------------
+[KEBIABERRY]
+Flavor = 0,15,0,0,10
+Smoothness = 30
+#-------------------------------
+[SHUCABERRY]
+Flavor = 10,0,15,0,0
+Smoothness = 30
+#-------------------------------
+[COBABERRY]
+Flavor = 0,10,0,15,0
+Smoothness = 30
+#-------------------------------
+[PAYAPABERRY]
+Flavor = 0,0,10,0,15
+Smoothness = 30
+#-------------------------------
+[TANGABERRY]
+Flavor = 20,0,0,0,10
+Smoothness = 35
+#-------------------------------
+[CHARTIBERRY]
+Flavor = 10,20,0,0,0
+Smoothness = 35
+#-------------------------------
+[KASIBBERRY]
+Flavor = 0,10,20,0,0
+Smoothness = 35
+#-------------------------------
+[HABANBERRY]
+Flavor = 0,0,10,20,0
+Smoothness = 35
+#-------------------------------
+[COLBURBERRY]
+Flavor = 0,0,0,10,20
+Smoothness = 35
+#-------------------------------
+[BABIRIBERRY]
+Flavor = 25,10,0,0,0
+Smoothness = 35
+#-------------------------------
+# Best fit
+[ROSELIBERRY]
+Flavor = 0,0,25,10,0
+Smoothness = 35
+#-------------------------------
+[CHILANBERRY]
+Flavor = 0,25,10,0,0
+Smoothness = 35
+#-------------------------------
+[LIECHIBERRY]
+Flavor = 30,10,30,0,0
+Smoothness = 40
+#-------------------------------
+[GANLONBERRY]
+Flavor = 0,30,10,30,0
+Smoothness = 40
+#-------------------------------
+[SALACBERRY]
+Flavor = 0,0,30,10,30
+Smoothness = 40
+#-------------------------------
+[PETAYABERRY]
+Flavor = 30,0,0,30,10
+Smoothness = 40
+#-------------------------------
+[APICOTBERRY]
+Flavor = 10,30,0,0,30
+Smoothness = 40
+#-------------------------------
+[LANSATBERRY]
+Flavor = 30,10,30,10,30
+Smoothness = 50
+#-------------------------------
+[STARFBERRY]
+Flavor = 30,10,30,10,30
+Smoothness = 50
+#-------------------------------
+[ENIGMABERRY]
+Flavor = 40,10,0,0,0
+Smoothness = 60
+#-------------------------------
+[MICLEBERRY]
+Flavor = 0,40,10,0,0
+Smoothness = 60
+#-------------------------------
+[CUSTAPBERRY]
+Flavor = 0,0,40,10,0
+Smoothness = 60
+#-------------------------------
+[JABOCABERRY]
+Flavor = 0,0,0,40,10
+Smoothness = 60
+#-------------------------------
+[ROWAPBERRY]
+Flavor = 10,0,0,0,40
+Smoothness = 60
+#-------------------------------
+# Best fit
+[KEEBERRY]
+Flavor = 30,30,10,10,10
+Smoothness = 50
+#-------------------------------
+# Best fit
+[MARANGABERRY]
+Flavor = 10,10,30,30,10
+Smoothness = 50

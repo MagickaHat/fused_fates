@@ -1,0 +1,2353 @@
+# Contest data for each move, in the same order as moves.txt.
+#   Condition   - COOL, BEAUTY, CUTE, SMART or TOUGH: the condition the move
+#                 appeals to. Required.
+#   Appeal      - (Acting round, not used yet) hearts of appeal
+#   Jam         - (Acting round, not used yet) hearts of jam
+#   Effect      - (Acting round, not used yet) contest effect code
+#   Description - (optional) contest description shown on the summary's
+#                 CONTEST MOVES page instead of the battle description
+# Moves missing from this file use ContestSettings::DEFAULT_CONDITION.
+# Moves introduced before Gen 7 use the conditions from the games. Moves
+# marked "Best fit" never had a contest condition; theirs were chosen to
+# match the move, so review them.
+#-------------------------------
+[MEGAHORN]
+Condition = COOL
+#-------------------------------
+[ATTACKORDER]
+Condition = SMART
+#-------------------------------
+[BUGBUZZ]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[FIRSTIMPRESSION]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[POLLENPUFF]
+Condition = CUTE
+#-------------------------------
+[LEECHLIFE]
+Condition = SMART
+#-------------------------------
+# Best fit
+[LUNGE]
+Condition = TOUGH
+#-------------------------------
+[XSCISSOR]
+Condition = COOL
+#-------------------------------
+[SIGNALBEAM]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[SKITTERSMACK]
+Condition = SMART
+#-------------------------------
+[UTURN]
+Condition = CUTE
+#-------------------------------
+[STEAMROLLER]
+Condition = TOUGH
+#-------------------------------
+[BUGBITE]
+Condition = TOUGH
+#-------------------------------
+[SILVERWIND]
+Condition = BEAUTY
+#-------------------------------
+[FELLSTINGER]
+Condition = COOL
+#-------------------------------
+[STRUGGLEBUG]
+Condition = SMART
+#-------------------------------
+[FURYCUTTER]
+Condition = COOL
+#-------------------------------
+[PINMISSILE]
+Condition = COOL
+#-------------------------------
+[TWINEEDLE]
+Condition = COOL
+#-------------------------------
+[INFESTATION]
+Condition = SMART
+#-------------------------------
+[DEFENDORDER]
+Condition = SMART
+#-------------------------------
+[HEALORDER]
+Condition = SMART
+#-------------------------------
+[POWDER]
+Condition = SMART
+#-------------------------------
+[QUIVERDANCE]
+Condition = BEAUTY
+#-------------------------------
+[RAGEPOWDER]
+Condition = SMART
+#-------------------------------
+[SPIDERWEB]
+Condition = SMART
+#-------------------------------
+[STICKYWEB]
+Condition = TOUGH
+#-------------------------------
+[STRINGSHOT]
+Condition = SMART
+#-------------------------------
+[TAILGLOW]
+Condition = BEAUTY
+#-------------------------------
+[HYPERSPACEFURY]
+Condition = TOUGH
+#-------------------------------
+[FOULPLAY]
+Condition = SMART
+#-------------------------------
+# Best fit
+[FIERYWRATH]
+Condition = COOL
+#-------------------------------
+# Best fit
+[DARKESTLARIAT]
+Condition = COOL
+#-------------------------------
+[NIGHTDAZE]
+Condition = COOL
+#-------------------------------
+[CRUNCH]
+Condition = TOUGH
+#-------------------------------
+[DARKPULSE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[FALSESURRENDER]
+Condition = SMART
+#-------------------------------
+# Best fit
+[JAWLOCK]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[THROATCHOP]
+Condition = COOL
+#-------------------------------
+# Best fit
+[WICKEDBLOW]
+Condition = COOL
+#-------------------------------
+# Best fit
+[LASHOUT]
+Condition = TOUGH
+#-------------------------------
+[NIGHTSLASH]
+Condition = COOL
+#-------------------------------
+[SUCKERPUNCH]
+Condition = SMART
+#-------------------------------
+[KNOCKOFF]
+Condition = SMART
+#-------------------------------
+[ASSURANCE]
+Condition = SMART
+#-------------------------------
+[BITE]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[BRUTALSWING]
+Condition = TOUGH
+#-------------------------------
+[FEINTATTACK]
+Condition = SMART
+#-------------------------------
+[THIEF]
+Condition = TOUGH
+#-------------------------------
+[SNARL]
+Condition = TOUGH
+#-------------------------------
+[PAYBACK]
+Condition = COOL
+#-------------------------------
+[PURSUIT]
+Condition = SMART
+#-------------------------------
+[BEATUP]
+Condition = SMART
+#-------------------------------
+[FLING]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[POWERTRIP]
+Condition = COOL
+#-------------------------------
+[PUNISHMENT]
+Condition = SMART
+#-------------------------------
+[DARKVOID]
+Condition = SMART
+#-------------------------------
+[EMBARGO]
+Condition = CUTE
+#-------------------------------
+[FAKETEARS]
+Condition = SMART
+#-------------------------------
+[FLATTER]
+Condition = SMART
+#-------------------------------
+[HONECLAWS]
+Condition = CUTE
+#-------------------------------
+[MEMENTO]
+Condition = TOUGH
+#-------------------------------
+[NASTYPLOT]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[OBSTRUCT]
+Condition = TOUGH
+#-------------------------------
+[PARTINGSHOT]
+Condition = CUTE
+#-------------------------------
+[QUASH]
+Condition = SMART
+#-------------------------------
+[SNATCH]
+Condition = SMART
+#-------------------------------
+[SWITCHEROO]
+Condition = COOL
+#-------------------------------
+[TAUNT]
+Condition = SMART
+#-------------------------------
+[TOPSYTURVY]
+Condition = CUTE
+#-------------------------------
+[TORMENT]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[ETERNABEAM]
+Condition = COOL
+#-------------------------------
+# Best fit
+[DRAGONENERGY]
+Condition = COOL
+#-------------------------------
+[ROAROFTIME]
+Condition = COOL
+#-------------------------------
+[DRACOMETEOR]
+Condition = BEAUTY
+#-------------------------------
+[OUTRAGE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[CLANGINGSCALES]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[COREENFORCER]
+Condition = TOUGH
+#-------------------------------
+[DRAGONRUSH]
+Condition = COOL
+#-------------------------------
+# Best fit
+[DYNAMAXCANNON]
+Condition = COOL
+#-------------------------------
+[SPACIALREND]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[DRAGONHAMMER]
+Condition = TOUGH
+#-------------------------------
+[DRAGONPULSE]
+Condition = SMART
+#-------------------------------
+[DRAGONCLAW]
+Condition = COOL
+#-------------------------------
+# Best fit
+[BREAKINGSWIPE]
+Condition = TOUGH
+#-------------------------------
+[DRAGONBREATH]
+Condition = COOL
+#-------------------------------
+[DRAGONTAIL]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[DRAGONDARTS]
+Condition = COOL
+#-------------------------------
+[DUALCHOP]
+Condition = TOUGH
+#-------------------------------
+[TWISTER]
+Condition = COOL
+#-------------------------------
+# Best fit
+[SCALESHOT]
+Condition = TOUGH
+#-------------------------------
+[DRAGONRAGE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[CLANGOROUSSOUL]
+Condition = TOUGH
+#-------------------------------
+[DRAGONDANCE]
+Condition = COOL
+#-------------------------------
+[BOLTSTRIKE]
+Condition = BEAUTY
+#-------------------------------
+[VOLTTACKLE]
+Condition = COOL
+#-------------------------------
+[ZAPCANNON]
+Condition = COOL
+#-------------------------------
+# Best fit
+[AURAWHEEL]
+Condition = COOL
+#-------------------------------
+[THUNDER]
+Condition = COOL
+#-------------------------------
+[FUSIONBOLT]
+Condition = COOL
+#-------------------------------
+# Best fit
+[PLASMAFISTS]
+Condition = COOL
+#-------------------------------
+[THUNDERBOLT]
+Condition = COOL
+#-------------------------------
+[WILDCHARGE]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[BOLTBEAK]
+Condition = COOL
+#-------------------------------
+[DISCHARGE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[OVERDRIVE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[THUNDERCAGE]
+Condition = SMART
+#-------------------------------
+# Best fit
+[ZINGZAP]
+Condition = COOL
+#-------------------------------
+[THUNDERPUNCH]
+Condition = COOL
+#-------------------------------
+# Best fit
+[RISINGVOLTAGE]
+Condition = COOL
+#-------------------------------
+[VOLTSWITCH]
+Condition = COOL
+#-------------------------------
+[PARABOLICCHARGE]
+Condition = SMART
+#-------------------------------
+[SPARK]
+Condition = COOL
+#-------------------------------
+[THUNDERFANG]
+Condition = SMART
+#-------------------------------
+[SHOCKWAVE]
+Condition = COOL
+#-------------------------------
+[ELECTROWEB]
+Condition = BEAUTY
+#-------------------------------
+[CHARGEBEAM]
+Condition = BEAUTY
+#-------------------------------
+[THUNDERSHOCK]
+Condition = COOL
+#-------------------------------
+[NUZZLE]
+Condition = CUTE
+#-------------------------------
+[ELECTROBALL]
+Condition = COOL
+#-------------------------------
+[CHARGE]
+Condition = SMART
+#-------------------------------
+[EERIEIMPULSE]
+Condition = SMART
+#-------------------------------
+[ELECTRICTERRAIN]
+Condition = SMART
+#-------------------------------
+[ELECTRIFY]
+Condition = SMART
+#-------------------------------
+[IONDELUGE]
+Condition = BEAUTY
+#-------------------------------
+[MAGNETRISE]
+Condition = CUTE
+#-------------------------------
+[MAGNETICFLUX]
+Condition = SMART
+#-------------------------------
+[THUNDERWAVE]
+Condition = COOL
+#-------------------------------
+[LIGHTOFRUIN]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[FLEURCANNON]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[MISTYEXPLOSION]
+Condition = BEAUTY
+#-------------------------------
+[MOONBLAST]
+Condition = BEAUTY
+#-------------------------------
+[PLAYROUGH]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[STRANGESTEAM]
+Condition = SMART
+#-------------------------------
+[DAZZLINGGLEAM]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[SPIRITBREAK]
+Condition = CUTE
+#-------------------------------
+[DRAININGKISS]
+Condition = CUTE
+#-------------------------------
+[DISARMINGVOICE]
+Condition = CUTE
+#-------------------------------
+[FAIRYWIND]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[NATURESMADNESS]
+Condition = TOUGH
+#-------------------------------
+[AROMATICMIST]
+Condition = BEAUTY
+#-------------------------------
+[BABYDOLLEYES]
+Condition = CUTE
+#-------------------------------
+[CHARM]
+Condition = CUTE
+#-------------------------------
+[CRAFTYSHIELD]
+Condition = SMART
+#-------------------------------
+# Best fit
+[DECORATE]
+Condition = CUTE
+#-------------------------------
+[FAIRYLOCK]
+Condition = SMART
+#-------------------------------
+# Best fit
+[FLORALHEALING]
+Condition = BEAUTY
+#-------------------------------
+[FLOWERSHIELD]
+Condition = BEAUTY
+#-------------------------------
+[GEOMANCY]
+Condition = BEAUTY
+#-------------------------------
+[MISTYTERRAIN]
+Condition = BEAUTY
+#-------------------------------
+[MOONLIGHT]
+Condition = BEAUTY
+#-------------------------------
+[SWEETKISS]
+Condition = CUTE
+#-------------------------------
+[FOCUSPUNCH]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[METEORASSAULT]
+Condition = COOL
+#-------------------------------
+[HIGHJUMPKICK]
+Condition = COOL
+#-------------------------------
+[CLOSECOMBAT]
+Condition = TOUGH
+#-------------------------------
+[FOCUSBLAST]
+Condition = COOL
+#-------------------------------
+[SUPERPOWER]
+Condition = TOUGH
+#-------------------------------
+[CROSSCHOP]
+Condition = COOL
+#-------------------------------
+[DYNAMICPUNCH]
+Condition = COOL
+#-------------------------------
+[FLYINGPRESS]
+Condition = TOUGH
+#-------------------------------
+[HAMMERARM]
+Condition = COOL
+#-------------------------------
+[JUMPKICK]
+Condition = COOL
+#-------------------------------
+[SACREDSWORD]
+Condition = COOL
+#-------------------------------
+# Best fit
+[THUNDEROUSKICK]
+Condition = COOL
+#-------------------------------
+[SECRETSWORD]
+Condition = BEAUTY
+#-------------------------------
+[SKYUPPERCUT]
+Condition = COOL
+#-------------------------------
+[AURASPHERE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[BODYPRESS]
+Condition = TOUGH
+#-------------------------------
+[SUBMISSION]
+Condition = COOL
+#-------------------------------
+[BRICKBREAK]
+Condition = COOL
+#-------------------------------
+[DRAINPUNCH]
+Condition = BEAUTY
+#-------------------------------
+[VITALTHROW]
+Condition = COOL
+#-------------------------------
+[WAKEUPSLAP]
+Condition = SMART
+#-------------------------------
+[LOWSWEEP]
+Condition = SMART
+#-------------------------------
+[CIRCLETHROW]
+Condition = COOL
+#-------------------------------
+[FORCEPALM]
+Condition = COOL
+#-------------------------------
+[REVENGE]
+Condition = SMART
+#-------------------------------
+[ROLLINGKICK]
+Condition = COOL
+#-------------------------------
+[STORMTHROW]
+Condition = COOL
+#-------------------------------
+[KARATECHOP]
+Condition = TOUGH
+#-------------------------------
+[MACHPUNCH]
+Condition = COOL
+#-------------------------------
+[POWERUPPUNCH]
+Condition = TOUGH
+#-------------------------------
+[ROCKSMASH]
+Condition = TOUGH
+#-------------------------------
+[VACUUMWAVE]
+Condition = SMART
+#-------------------------------
+[DOUBLEKICK]
+Condition = COOL
+#-------------------------------
+[ARMTHRUST]
+Condition = TOUGH
+#-------------------------------
+[TRIPLEKICK]
+Condition = COOL
+#-------------------------------
+[COUNTER]
+Condition = TOUGH
+#-------------------------------
+[FINALGAMBIT]
+Condition = TOUGH
+#-------------------------------
+[LOWKICK]
+Condition = TOUGH
+#-------------------------------
+[REVERSAL]
+Condition = COOL
+#-------------------------------
+[SEISMICTOSS]
+Condition = TOUGH
+#-------------------------------
+[BULKUP]
+Condition = COOL
+#-------------------------------
+# Best fit
+[COACHING]
+Condition = COOL
+#-------------------------------
+[DETECT]
+Condition = COOL
+#-------------------------------
+[MATBLOCK]
+Condition = COOL
+#-------------------------------
+# Best fit
+[NORETREAT]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[OCTOLOCK]
+Condition = TOUGH
+#-------------------------------
+[QUICKGUARD]
+Condition = COOL
+#-------------------------------
+[VCREATE]
+Condition = COOL
+#-------------------------------
+[BLASTBURN]
+Condition = BEAUTY
+#-------------------------------
+[ERUPTION]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[MINDBLOWN]
+Condition = COOL
+#-------------------------------
+# Best fit
+[SHELLTRAP]
+Condition = TOUGH
+#-------------------------------
+[BLUEFLARE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[BURNUP]
+Condition = TOUGH
+#-------------------------------
+[OVERHEAT]
+Condition = BEAUTY
+#-------------------------------
+[FLAREBLITZ]
+Condition = SMART
+#-------------------------------
+# Best fit
+[PYROBALL]
+Condition = TOUGH
+#-------------------------------
+[FIREBLAST]
+Condition = BEAUTY
+#-------------------------------
+[FUSIONFLARE]
+Condition = BEAUTY
+#-------------------------------
+[INFERNO]
+Condition = BEAUTY
+#-------------------------------
+[MAGMASTORM]
+Condition = TOUGH
+#-------------------------------
+[SACREDFIRE]
+Condition = BEAUTY
+#-------------------------------
+[SEARINGSHOT]
+Condition = COOL
+#-------------------------------
+[HEATWAVE]
+Condition = BEAUTY
+#-------------------------------
+[FLAMETHROWER]
+Condition = BEAUTY
+#-------------------------------
+[BLAZEKICK]
+Condition = BEAUTY
+#-------------------------------
+[FIERYDANCE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[FIRELASH]
+Condition = CUTE
+#-------------------------------
+[FIREPLEDGE]
+Condition = BEAUTY
+#-------------------------------
+[LAVAPLUME]
+Condition = TOUGH
+#-------------------------------
+[FIREPUNCH]
+Condition = BEAUTY
+#-------------------------------
+[MYSTICALFIRE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[BURNINGJEALOUSY]
+Condition = TOUGH
+#-------------------------------
+[FLAMEBURST]
+Condition = BEAUTY
+#-------------------------------
+[FIREFANG]
+Condition = BEAUTY
+#-------------------------------
+[FLAMEWHEEL]
+Condition = BEAUTY
+#-------------------------------
+[INCINERATE]
+Condition = TOUGH
+#-------------------------------
+[FLAMECHARGE]
+Condition = BEAUTY
+#-------------------------------
+[EMBER]
+Condition = CUTE
+#-------------------------------
+[FIRESPIN]
+Condition = BEAUTY
+#-------------------------------
+[HEATCRASH]
+Condition = TOUGH
+#-------------------------------
+[SUNNYDAY]
+Condition = BEAUTY
+#-------------------------------
+[WILLOWISP]
+Condition = BEAUTY
+#-------------------------------
+[SKYATTACK]
+Condition = COOL
+#-------------------------------
+[BRAVEBIRD]
+Condition = CUTE
+#-------------------------------
+[DRAGONASCENT]
+Condition = BEAUTY
+#-------------------------------
+[HURRICANE]
+Condition = TOUGH
+#-------------------------------
+[AEROBLAST]
+Condition = COOL
+#-------------------------------
+# Best fit
+[BEAKBLAST]
+Condition = TOUGH
+#-------------------------------
+[FLY]
+Condition = SMART
+#-------------------------------
+[BOUNCE]
+Condition = CUTE
+#-------------------------------
+[DRILLPECK]
+Condition = COOL
+#-------------------------------
+[OBLIVIONWING]
+Condition = COOL
+#-------------------------------
+[AIRSLASH]
+Condition = COOL
+#-------------------------------
+[CHATTER]
+Condition = SMART
+#-------------------------------
+[AERIALACE]
+Condition = COOL
+#-------------------------------
+[AIRCUTTER]
+Condition = COOL
+#-------------------------------
+[PLUCK]
+Condition = CUTE
+#-------------------------------
+[SKYDROP]
+Condition = TOUGH
+#-------------------------------
+[WINGATTACK]
+Condition = COOL
+#-------------------------------
+[ACROBATICS]
+Condition = COOL
+#-------------------------------
+# Best fit
+[DUALWINGBEAT]
+Condition = COOL
+#-------------------------------
+[GUST]
+Condition = SMART
+#-------------------------------
+[PECK]
+Condition = COOL
+#-------------------------------
+[DEFOG]
+Condition = COOL
+#-------------------------------
+[FEATHERDANCE]
+Condition = BEAUTY
+#-------------------------------
+[MIRRORMOVE]
+Condition = SMART
+#-------------------------------
+[ROOST]
+Condition = COOL
+#-------------------------------
+[TAILWIND]
+Condition = SMART
+#-------------------------------
+# Best fit
+[ASTRALBARRAGE]
+Condition = BEAUTY
+#-------------------------------
+[SHADOWFORCE]
+Condition = SMART
+#-------------------------------
+# Best fit
+[POLTERGEIST]
+Condition = SMART
+#-------------------------------
+# Best fit
+[MOONGEISTBEAM]
+Condition = BEAUTY
+#-------------------------------
+[PHANTOMFORCE]
+Condition = SMART
+#-------------------------------
+# Best fit
+[SPECTRALTHIEF]
+Condition = SMART
+#-------------------------------
+# Best fit
+[SHADOWBONE]
+Condition = COOL
+#-------------------------------
+[SHADOWBALL]
+Condition = SMART
+#-------------------------------
+# Best fit
+[SPIRITSHACKLE]
+Condition = COOL
+#-------------------------------
+[SHADOWCLAW]
+Condition = CUTE
+#-------------------------------
+[HEX]
+Condition = SMART
+#-------------------------------
+[OMINOUSWIND]
+Condition = SMART
+#-------------------------------
+[SHADOWPUNCH]
+Condition = SMART
+#-------------------------------
+[SHADOWSNEAK]
+Condition = SMART
+#-------------------------------
+[ASTONISH]
+Condition = SMART
+#-------------------------------
+[LICK]
+Condition = TOUGH
+#-------------------------------
+[NIGHTSHADE]
+Condition = SMART
+#-------------------------------
+[CONFUSERAY]
+Condition = SMART
+#-------------------------------
+[CURSE]
+Condition = TOUGH
+#-------------------------------
+[DESTINYBOND]
+Condition = SMART
+#-------------------------------
+[GRUDGE]
+Condition = TOUGH
+#-------------------------------
+[NIGHTMARE]
+Condition = SMART
+#-------------------------------
+[SPITE]
+Condition = TOUGH
+#-------------------------------
+[TRICKORTREAT]
+Condition = CUTE
+#-------------------------------
+[FRENZYPLANT]
+Condition = COOL
+#-------------------------------
+[LEAFSTORM]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[SOLARBLADE]
+Condition = COOL
+#-------------------------------
+[PETALDANCE]
+Condition = BEAUTY
+#-------------------------------
+[POWERWHIP]
+Condition = BEAUTY
+#-------------------------------
+[SEEDFLARE]
+Condition = COOL
+#-------------------------------
+[SOLARBEAM]
+Condition = COOL
+#-------------------------------
+[WOODHAMMER]
+Condition = TOUGH
+#-------------------------------
+[ENERGYBALL]
+Condition = BEAUTY
+#-------------------------------
+[LEAFBLADE]
+Condition = COOL
+#-------------------------------
+[PETALBLIZZARD]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[APPLEACID]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[DRUMBEATING]
+Condition = TOUGH
+#-------------------------------
+[GRASSPLEDGE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[GRAVAPPLE]
+Condition = TOUGH
+#-------------------------------
+[SEEDBOMB]
+Condition = SMART
+#-------------------------------
+[GIGADRAIN]
+Condition = SMART
+#-------------------------------
+[HORNLEECH]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[GRASSYGLIDE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[TROPKICK]
+Condition = CUTE
+#-------------------------------
+[LEAFTORNADO]
+Condition = COOL
+#-------------------------------
+[MAGICALLEAF]
+Condition = BEAUTY
+#-------------------------------
+[NEEDLEARM]
+Condition = SMART
+#-------------------------------
+[RAZORLEAF]
+Condition = COOL
+#-------------------------------
+[VINEWHIP]
+Condition = COOL
+#-------------------------------
+# Best fit
+[BRANCHPOKE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[LEAFAGE]
+Condition = TOUGH
+#-------------------------------
+[MEGADRAIN]
+Condition = SMART
+#-------------------------------
+# Best fit
+[SNAPTRAP]
+Condition = TOUGH
+#-------------------------------
+[BULLETSEED]
+Condition = COOL
+#-------------------------------
+[ABSORB]
+Condition = SMART
+#-------------------------------
+[GRASSKNOT]
+Condition = SMART
+#-------------------------------
+[AROMATHERAPY]
+Condition = SMART
+#-------------------------------
+[COTTONGUARD]
+Condition = CUTE
+#-------------------------------
+[COTTONSPORE]
+Condition = BEAUTY
+#-------------------------------
+[FORESTSCURSE]
+Condition = SMART
+#-------------------------------
+[GRASSWHISTLE]
+Condition = SMART
+#-------------------------------
+[GRASSYTERRAIN]
+Condition = BEAUTY
+#-------------------------------
+[INGRAIN]
+Condition = SMART
+#-------------------------------
+# Best fit
+[JUNGLEHEALING]
+Condition = BEAUTY
+#-------------------------------
+[LEECHSEED]
+Condition = SMART
+#-------------------------------
+[SLEEPPOWDER]
+Condition = SMART
+#-------------------------------
+[SPIKYSHIELD]
+Condition = TOUGH
+#-------------------------------
+[SPORE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[STRENGTHSAP]
+Condition = CUTE
+#-------------------------------
+[STUNSPORE]
+Condition = SMART
+#-------------------------------
+[SYNTHESIS]
+Condition = SMART
+#-------------------------------
+[WORRYSEED]
+Condition = BEAUTY
+#-------------------------------
+[PRECIPICEBLADES]
+Condition = COOL
+#-------------------------------
+[EARTHQUAKE]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[HIGHHORSEPOWER]
+Condition = TOUGH
+#-------------------------------
+[EARTHPOWER]
+Condition = SMART
+#-------------------------------
+[LANDSWRATH]
+Condition = BEAUTY
+#-------------------------------
+[THOUSANDARROWS]
+Condition = BEAUTY
+#-------------------------------
+[THOUSANDWAVES]
+Condition = TOUGH
+#-------------------------------
+[DIG]
+Condition = SMART
+#-------------------------------
+[DRILLRUN]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[STOMPINGTANTRUM]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[SCORCHINGSANDS]
+Condition = SMART
+#-------------------------------
+[BONECLUB]
+Condition = TOUGH
+#-------------------------------
+[MUDBOMB]
+Condition = SMART
+#-------------------------------
+[BULLDOZE]
+Condition = TOUGH
+#-------------------------------
+[MUDSHOT]
+Condition = TOUGH
+#-------------------------------
+[BONEMERANG]
+Condition = TOUGH
+#-------------------------------
+[SANDTOMB]
+Condition = SMART
+#-------------------------------
+[BONERUSH]
+Condition = TOUGH
+#-------------------------------
+[MUDSLAP]
+Condition = CUTE
+#-------------------------------
+[FISSURE]
+Condition = TOUGH
+#-------------------------------
+[MAGNITUDE]
+Condition = TOUGH
+#-------------------------------
+[MUDSPORT]
+Condition = CUTE
+#-------------------------------
+[ROTOTILLER]
+Condition = TOUGH
+#-------------------------------
+[SANDATTACK]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[SHOREUP]
+Condition = BEAUTY
+#-------------------------------
+[SPIKES]
+Condition = SMART
+#-------------------------------
+[FREEZESHOCK]
+Condition = BEAUTY
+#-------------------------------
+[ICEBURN]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[GLACIALLANCE]
+Condition = BEAUTY
+#-------------------------------
+[BLIZZARD]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[ICEHAMMER]
+Condition = TOUGH
+#-------------------------------
+[ICEBEAM]
+Condition = BEAUTY
+#-------------------------------
+[ICICLECRASH]
+Condition = BEAUTY
+#-------------------------------
+[ICEPUNCH]
+Condition = BEAUTY
+#-------------------------------
+[FREEZEDRY]
+Condition = BEAUTY
+#-------------------------------
+[AURORABEAM]
+Condition = BEAUTY
+#-------------------------------
+[GLACIATE]
+Condition = BEAUTY
+#-------------------------------
+[ICEFANG]
+Condition = COOL
+#-------------------------------
+[AVALANCHE]
+Condition = BEAUTY
+#-------------------------------
+[FROSTBREATH]
+Condition = BEAUTY
+#-------------------------------
+[ICYWIND]
+Condition = BEAUTY
+#-------------------------------
+[ICESHARD]
+Condition = BEAUTY
+#-------------------------------
+[POWDERSNOW]
+Condition = BEAUTY
+#-------------------------------
+[ICEBALL]
+Condition = BEAUTY
+#-------------------------------
+[ICICLESPEAR]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[TRIPLEAXEL]
+Condition = BEAUTY
+#-------------------------------
+[SHEERCOLD]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[AURORAVEIL]
+Condition = BEAUTY
+#-------------------------------
+[HAIL]
+Condition = BEAUTY
+#-------------------------------
+[HAZE]
+Condition = BEAUTY
+#-------------------------------
+[MIST]
+Condition = BEAUTY
+#-------------------------------
+[EXPLOSION]
+Condition = BEAUTY
+#-------------------------------
+[SELFDESTRUCT]
+Condition = BEAUTY
+#-------------------------------
+[GIGAIMPACT]
+Condition = BEAUTY
+#-------------------------------
+[HYPERBEAM]
+Condition = COOL
+#-------------------------------
+[BOOMBURST]
+Condition = TOUGH
+#-------------------------------
+[LASTRESORT]
+Condition = CUTE
+#-------------------------------
+[SKULLBASH]
+Condition = TOUGH
+#-------------------------------
+[DOUBLEEDGE]
+Condition = TOUGH
+#-------------------------------
+[HEADCHARGE]
+Condition = TOUGH
+#-------------------------------
+[MEGAKICK]
+Condition = COOL
+#-------------------------------
+# Best fit
+[MULTIATTACK]
+Condition = COOL
+#-------------------------------
+[TECHNOBLAST]
+Condition = COOL
+#-------------------------------
+[THRASH]
+Condition = TOUGH
+#-------------------------------
+[EGGBOMB]
+Condition = CUTE
+#-------------------------------
+[JUDGMENT]
+Condition = SMART
+#-------------------------------
+[HYPERVOICE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[REVELATIONDANCE]
+Condition = BEAUTY
+#-------------------------------
+[ROCKCLIMB]
+Condition = TOUGH
+#-------------------------------
+[TAKEDOWN]
+Condition = TOUGH
+#-------------------------------
+[UPROAR]
+Condition = CUTE
+#-------------------------------
+[BODYSLAM]
+Condition = TOUGH
+#-------------------------------
+[EXTREMESPEED]
+Condition = COOL
+#-------------------------------
+[HYPERFANG]
+Condition = COOL
+#-------------------------------
+[MEGAPUNCH]
+Condition = TOUGH
+#-------------------------------
+[RAZORWIND]
+Condition = COOL
+#-------------------------------
+[SLAM]
+Condition = TOUGH
+#-------------------------------
+[STRENGTH]
+Condition = TOUGH
+#-------------------------------
+[TRIATTACK]
+Condition = BEAUTY
+#-------------------------------
+[CRUSHCLAW]
+Condition = COOL
+#-------------------------------
+[RELICSONG]
+Condition = BEAUTY
+#-------------------------------
+[CHIPAWAY]
+Condition = TOUGH
+#-------------------------------
+[DIZZYPUNCH]
+Condition = COOL
+#-------------------------------
+[FACADE]
+Condition = CUTE
+#-------------------------------
+[HEADBUTT]
+Condition = TOUGH
+#-------------------------------
+[RETALIATE]
+Condition = COOL
+#-------------------------------
+[SECRETPOWER]
+Condition = SMART
+#-------------------------------
+[SLASH]
+Condition = COOL
+#-------------------------------
+[SMELLINGSALTS]
+Condition = SMART
+#-------------------------------
+[HORNATTACK]
+Condition = COOL
+#-------------------------------
+[STOMP]
+Condition = TOUGH
+#-------------------------------
+[COVET]
+Condition = CUTE
+#-------------------------------
+[HIDDENPOWER]
+Condition = SMART
+#-------------------------------
+[ROUND]
+Condition = BEAUTY
+#-------------------------------
+[SWIFT]
+Condition = COOL
+#-------------------------------
+[VISEGRIP]
+Condition = TOUGH
+#-------------------------------
+[CUT]
+Condition = COOL
+#-------------------------------
+[RAPIDSPIN]
+Condition = COOL
+#-------------------------------
+[SNORE]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[TERRAINPULSE]
+Condition = SMART
+#-------------------------------
+[WEATHERBALL]
+Condition = SMART
+#-------------------------------
+[ECHOEDVOICE]
+Condition = BEAUTY
+#-------------------------------
+[FAKEOUT]
+Condition = CUTE
+#-------------------------------
+[FALSESWIPE]
+Condition = COOL
+#-------------------------------
+[HOLDBACK]
+Condition = COOL
+#-------------------------------
+[PAYDAY]
+Condition = SMART
+#-------------------------------
+[POUND]
+Condition = TOUGH
+#-------------------------------
+[QUICKATTACK]
+Condition = COOL
+#-------------------------------
+[SCRATCH]
+Condition = TOUGH
+#-------------------------------
+[TACKLE]
+Condition = TOUGH
+#-------------------------------
+[DOUBLEHIT]
+Condition = SMART
+#-------------------------------
+[FEINT]
+Condition = BEAUTY
+#-------------------------------
+[TAILSLAP]
+Condition = CUTE
+#-------------------------------
+[RAGE]
+Condition = TOUGH
+#-------------------------------
+[SPIKECANNON]
+Condition = COOL
+#-------------------------------
+[COMETPUNCH]
+Condition = TOUGH
+#-------------------------------
+[FURYSWIPES]
+Condition = TOUGH
+#-------------------------------
+[BARRAGE]
+Condition = TOUGH
+#-------------------------------
+[BIND]
+Condition = TOUGH
+#-------------------------------
+[DOUBLESLAP]
+Condition = CUTE
+#-------------------------------
+[FURYATTACK]
+Condition = COOL
+#-------------------------------
+[WRAP]
+Condition = TOUGH
+#-------------------------------
+[CONSTRICT]
+Condition = TOUGH
+#-------------------------------
+[BIDE]
+Condition = TOUGH
+#-------------------------------
+[CRUSHGRIP]
+Condition = TOUGH
+#-------------------------------
+[ENDEAVOR]
+Condition = TOUGH
+#-------------------------------
+[FLAIL]
+Condition = CUTE
+#-------------------------------
+[FRUSTRATION]
+Condition = CUTE
+#-------------------------------
+[GUILLOTINE]
+Condition = COOL
+#-------------------------------
+[HORNDRILL]
+Condition = COOL
+#-------------------------------
+[NATURALGIFT]
+Condition = COOL
+#-------------------------------
+[PRESENT]
+Condition = CUTE
+#-------------------------------
+[RETURN]
+Condition = CUTE
+#-------------------------------
+[SONICBOOM]
+Condition = COOL
+#-------------------------------
+[SPITUP]
+Condition = TOUGH
+#-------------------------------
+[SUPERFANG]
+Condition = TOUGH
+#-------------------------------
+[TRUMPCARD]
+Condition = COOL
+#-------------------------------
+[WRINGOUT]
+Condition = TOUGH
+#-------------------------------
+[ACUPRESSURE]
+Condition = TOUGH
+#-------------------------------
+[AFTERYOU]
+Condition = CUTE
+#-------------------------------
+[ASSIST]
+Condition = CUTE
+#-------------------------------
+[ATTRACT]
+Condition = CUTE
+#-------------------------------
+[BATONPASS]
+Condition = CUTE
+#-------------------------------
+[BELLYDRUM]
+Condition = CUTE
+#-------------------------------
+[BESTOW]
+Condition = CUTE
+#-------------------------------
+[BLOCK]
+Condition = CUTE
+#-------------------------------
+[CAMOUFLAGE]
+Condition = SMART
+#-------------------------------
+[CAPTIVATE]
+Condition = BEAUTY
+#-------------------------------
+[CELEBRATE]
+Condition = CUTE
+#-------------------------------
+[CONFIDE]
+Condition = CUTE
+#-------------------------------
+[CONVERSION]
+Condition = BEAUTY
+#-------------------------------
+[CONVERSION2]
+Condition = BEAUTY
+#-------------------------------
+[COPYCAT]
+Condition = COOL
+#-------------------------------
+# Best fit
+[COURTCHANGE]
+Condition = SMART
+#-------------------------------
+[DEFENSECURL]
+Condition = CUTE
+#-------------------------------
+[DISABLE]
+Condition = SMART
+#-------------------------------
+[DOUBLETEAM]
+Condition = COOL
+#-------------------------------
+[ENCORE]
+Condition = CUTE
+#-------------------------------
+[ENDURE]
+Condition = TOUGH
+#-------------------------------
+[ENTRAINMENT]
+Condition = CUTE
+#-------------------------------
+[FLASH]
+Condition = BEAUTY
+#-------------------------------
+[FOCUSENERGY]
+Condition = COOL
+#-------------------------------
+[FOLLOWME]
+Condition = CUTE
+#-------------------------------
+[FORESIGHT]
+Condition = SMART
+#-------------------------------
+[GLARE]
+Condition = TOUGH
+#-------------------------------
+[GROWL]
+Condition = CUTE
+#-------------------------------
+[GROWTH]
+Condition = BEAUTY
+#-------------------------------
+[HAPPYHOUR]
+Condition = CUTE
+#-------------------------------
+[HARDEN]
+Condition = TOUGH
+#-------------------------------
+[HEALBELL]
+Condition = BEAUTY
+#-------------------------------
+[HELPINGHAND]
+Condition = SMART
+#-------------------------------
+[HOLDHANDS]
+Condition = CUTE
+#-------------------------------
+[HOWL]
+Condition = COOL
+#-------------------------------
+# Best fit
+[LASERFOCUS]
+Condition = COOL
+#-------------------------------
+[LEER]
+Condition = COOL
+#-------------------------------
+[LOCKON]
+Condition = SMART
+#-------------------------------
+[LOVELYKISS]
+Condition = BEAUTY
+#-------------------------------
+[LUCKYCHANT]
+Condition = CUTE
+#-------------------------------
+[MEFIRST]
+Condition = CUTE
+#-------------------------------
+[MEANLOOK]
+Condition = BEAUTY
+#-------------------------------
+[METRONOME]
+Condition = CUTE
+#-------------------------------
+[MILKDRINK]
+Condition = CUTE
+#-------------------------------
+[MIMIC]
+Condition = CUTE
+#-------------------------------
+[MINDREADER]
+Condition = SMART
+#-------------------------------
+[MINIMIZE]
+Condition = CUTE
+#-------------------------------
+[MORNINGSUN]
+Condition = BEAUTY
+#-------------------------------
+[NATUREPOWER]
+Condition = BEAUTY
+#-------------------------------
+[NOBLEROAR]
+Condition = TOUGH
+#-------------------------------
+[ODORSLEUTH]
+Condition = SMART
+#-------------------------------
+[PAINSPLIT]
+Condition = SMART
+#-------------------------------
+[PERISHSONG]
+Condition = BEAUTY
+#-------------------------------
+[PLAYNICE]
+Condition = CUTE
+#-------------------------------
+[PROTECT]
+Condition = CUTE
+#-------------------------------
+[PSYCHUP]
+Condition = SMART
+#-------------------------------
+[RECOVER]
+Condition = SMART
+#-------------------------------
+[RECYCLE]
+Condition = SMART
+#-------------------------------
+[REFLECTTYPE]
+Condition = SMART
+#-------------------------------
+[REFRESH]
+Condition = CUTE
+#-------------------------------
+[ROAR]
+Condition = COOL
+#-------------------------------
+[SAFEGUARD]
+Condition = BEAUTY
+#-------------------------------
+[SCARYFACE]
+Condition = TOUGH
+#-------------------------------
+[SCREECH]
+Condition = SMART
+#-------------------------------
+[SHARPEN]
+Condition = CUTE
+#-------------------------------
+[SHELLSMASH]
+Condition = TOUGH
+#-------------------------------
+[SIMPLEBEAM]
+Condition = CUTE
+#-------------------------------
+[SING]
+Condition = CUTE
+#-------------------------------
+[SKETCH]
+Condition = SMART
+#-------------------------------
+[SLACKOFF]
+Condition = CUTE
+#-------------------------------
+[SLEEPTALK]
+Condition = CUTE
+#-------------------------------
+[SMOKESCREEN]
+Condition = SMART
+#-------------------------------
+[SOFTBOILED]
+Condition = BEAUTY
+#-------------------------------
+[SPLASH]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[SPOTLIGHT]
+Condition = CUTE
+#-------------------------------
+[STOCKPILE]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[STUFFCHEEKS]
+Condition = CUTE
+#-------------------------------
+[SUBSTITUTE]
+Condition = SMART
+#-------------------------------
+[SUPERSONIC]
+Condition = SMART
+#-------------------------------
+[SWAGGER]
+Condition = CUTE
+#-------------------------------
+[SWALLOW]
+Condition = TOUGH
+#-------------------------------
+[SWEETSCENT]
+Condition = CUTE
+#-------------------------------
+[SWORDSDANCE]
+Condition = BEAUTY
+#-------------------------------
+[TAILWHIP]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[TEARFULLOOK]
+Condition = CUTE
+#-------------------------------
+# Best fit
+[TEATIME]
+Condition = CUTE
+#-------------------------------
+[TEETERDANCE]
+Condition = CUTE
+#-------------------------------
+[TICKLE]
+Condition = CUTE
+#-------------------------------
+[TRANSFORM]
+Condition = SMART
+#-------------------------------
+[WHIRLWIND]
+Condition = SMART
+#-------------------------------
+[WISH]
+Condition = CUTE
+#-------------------------------
+[WORKUP]
+Condition = TOUGH
+#-------------------------------
+[YAWN]
+Condition = CUTE
+#-------------------------------
+[BELCH]
+Condition = TOUGH
+#-------------------------------
+[GUNKSHOT]
+Condition = TOUGH
+#-------------------------------
+[SLUDGEWAVE]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[SHELLSIDEARM]
+Condition = TOUGH
+#-------------------------------
+[SLUDGEBOMB]
+Condition = TOUGH
+#-------------------------------
+[POISONJAB]
+Condition = SMART
+#-------------------------------
+[CROSSPOISON]
+Condition = COOL
+#-------------------------------
+[SLUDGE]
+Condition = TOUGH
+#-------------------------------
+[VENOSHOCK]
+Condition = BEAUTY
+#-------------------------------
+[CLEARSMOG]
+Condition = BEAUTY
+#-------------------------------
+[POISONFANG]
+Condition = SMART
+#-------------------------------
+[POISONTAIL]
+Condition = SMART
+#-------------------------------
+[ACID]
+Condition = SMART
+#-------------------------------
+[ACIDSPRAY]
+Condition = BEAUTY
+#-------------------------------
+[SMOG]
+Condition = TOUGH
+#-------------------------------
+[POISONSTING]
+Condition = SMART
+#-------------------------------
+[ACIDARMOR]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[BANEFULBUNKER]
+Condition = TOUGH
+#-------------------------------
+[COIL]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[CORROSIVEGAS]
+Condition = SMART
+#-------------------------------
+[GASTROACID]
+Condition = BEAUTY
+#-------------------------------
+[POISONGAS]
+Condition = SMART
+#-------------------------------
+[POISONPOWDER]
+Condition = SMART
+#-------------------------------
+# Best fit
+[PURIFY]
+Condition = BEAUTY
+#-------------------------------
+[TOXIC]
+Condition = SMART
+#-------------------------------
+[TOXICSPIKES]
+Condition = SMART
+#-------------------------------
+# Best fit
+[TOXICTHREAD]
+Condition = TOUGH
+#-------------------------------
+[VENOMDRENCH]
+Condition = SMART
+#-------------------------------
+# Best fit
+[PRISMATICLASER]
+Condition = SMART
+#-------------------------------
+[PSYCHOBOOST]
+Condition = SMART
+#-------------------------------
+[FUTURESIGHT]
+Condition = SMART
+#-------------------------------
+[SYNCHRONOISE]
+Condition = SMART
+#-------------------------------
+[DREAMEATER]
+Condition = SMART
+#-------------------------------
+# Best fit
+[PHOTONGEYSER]
+Condition = COOL
+#-------------------------------
+[PSYSTRIKE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[FREEZINGGLARE]
+Condition = COOL
+#-------------------------------
+[PSYCHIC]
+Condition = SMART
+#-------------------------------
+# Best fit
+[PSYCHICFANGS]
+Condition = COOL
+#-------------------------------
+# Best fit
+[EERIESPELL]
+Condition = SMART
+#-------------------------------
+# Best fit
+[EXPANDINGFORCE]
+Condition = SMART
+#-------------------------------
+[EXTRASENSORY]
+Condition = COOL
+#-------------------------------
+[HYPERSPACEHOLE]
+Condition = SMART
+#-------------------------------
+[PSYSHOCK]
+Condition = BEAUTY
+#-------------------------------
+[ZENHEADBUTT]
+Condition = BEAUTY
+#-------------------------------
+[LUSTERPURGE]
+Condition = SMART
+#-------------------------------
+[MISTBALL]
+Condition = SMART
+#-------------------------------
+[PSYCHOCUT]
+Condition = COOL
+#-------------------------------
+[PSYBEAM]
+Condition = BEAUTY
+#-------------------------------
+[HEARTSTAMP]
+Condition = CUTE
+#-------------------------------
+[CONFUSION]
+Condition = SMART
+#-------------------------------
+[STOREDPOWER]
+Condition = SMART
+#-------------------------------
+[MIRRORCOAT]
+Condition = BEAUTY
+#-------------------------------
+[PSYWAVE]
+Condition = SMART
+#-------------------------------
+[AGILITY]
+Condition = COOL
+#-------------------------------
+[ALLYSWITCH]
+Condition = SMART
+#-------------------------------
+[AMNESIA]
+Condition = CUTE
+#-------------------------------
+[BARRIER]
+Condition = COOL
+#-------------------------------
+[CALMMIND]
+Condition = SMART
+#-------------------------------
+[COSMICPOWER]
+Condition = COOL
+#-------------------------------
+[GRAVITY]
+Condition = BEAUTY
+#-------------------------------
+[GUARDSPLIT]
+Condition = SMART
+#-------------------------------
+[GUARDSWAP]
+Condition = CUTE
+#-------------------------------
+[HEALBLOCK]
+Condition = SMART
+#-------------------------------
+[HEALPULSE]
+Condition = BEAUTY
+#-------------------------------
+[HEALINGWISH]
+Condition = CUTE
+#-------------------------------
+[HEARTSWAP]
+Condition = SMART
+#-------------------------------
+[HYPNOSIS]
+Condition = SMART
+#-------------------------------
+[IMPRISON]
+Condition = SMART
+#-------------------------------
+# Best fit
+[INSTRUCT]
+Condition = SMART
+#-------------------------------
+[KINESIS]
+Condition = SMART
+#-------------------------------
+[LIGHTSCREEN]
+Condition = BEAUTY
+#-------------------------------
+[LUNARDANCE]
+Condition = BEAUTY
+#-------------------------------
+[MAGICCOAT]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[MAGICPOWDER]
+Condition = CUTE
+#-------------------------------
+[MAGICROOM]
+Condition = SMART
+#-------------------------------
+[MEDITATE]
+Condition = BEAUTY
+#-------------------------------
+[MIRACLEEYE]
+Condition = CUTE
+#-------------------------------
+[POWERSPLIT]
+Condition = SMART
+#-------------------------------
+[POWERSWAP]
+Condition = BEAUTY
+#-------------------------------
+[POWERTRICK]
+Condition = SMART
+#-------------------------------
+# Best fit
+[PSYCHICTERRAIN]
+Condition = SMART
+#-------------------------------
+[PSYCHOSHIFT]
+Condition = SMART
+#-------------------------------
+[REFLECT]
+Condition = SMART
+#-------------------------------
+[REST]
+Condition = CUTE
+#-------------------------------
+[ROLEPLAY]
+Condition = CUTE
+#-------------------------------
+[SKILLSWAP]
+Condition = SMART
+#-------------------------------
+# Best fit
+[SPEEDSWAP]
+Condition = SMART
+#-------------------------------
+[TELEKINESIS]
+Condition = SMART
+#-------------------------------
+[TELEPORT]
+Condition = COOL
+#-------------------------------
+[TRICK]
+Condition = SMART
+#-------------------------------
+[TRICKROOM]
+Condition = CUTE
+#-------------------------------
+[WONDERROOM]
+Condition = SMART
+#-------------------------------
+[HEADSMASH]
+Condition = TOUGH
+#-------------------------------
+[ROCKWRECKER]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[METEORBEAM]
+Condition = BEAUTY
+#-------------------------------
+[DIAMONDSTORM]
+Condition = BEAUTY
+#-------------------------------
+[STONEEDGE]
+Condition = TOUGH
+#-------------------------------
+[POWERGEM]
+Condition = BEAUTY
+#-------------------------------
+[ROCKSLIDE]
+Condition = TOUGH
+#-------------------------------
+[ANCIENTPOWER]
+Condition = TOUGH
+#-------------------------------
+[ROCKTOMB]
+Condition = SMART
+#-------------------------------
+[ROCKTHROW]
+Condition = TOUGH
+#-------------------------------
+[SMACKDOWN]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[ACCELEROCK]
+Condition = COOL
+#-------------------------------
+[ROLLOUT]
+Condition = TOUGH
+#-------------------------------
+[ROCKBLAST]
+Condition = TOUGH
+#-------------------------------
+[ROCKPOLISH]
+Condition = TOUGH
+#-------------------------------
+[SANDSTORM]
+Condition = TOUGH
+#-------------------------------
+[STEALTHROCK]
+Condition = COOL
+#-------------------------------
+# Best fit
+[TARSHOT]
+Condition = SMART
+#-------------------------------
+[WIDEGUARD]
+Condition = TOUGH
+#-------------------------------
+[DOOMDESIRE]
+Condition = COOL
+#-------------------------------
+# Best fit
+[STEELBEAM]
+Condition = COOL
+#-------------------------------
+# Best fit
+[STEELROLLER]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[BEHEMOTHBASH]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[BEHEMOTHBLADE]
+Condition = COOL
+#-------------------------------
+[IRONTAIL]
+Condition = COOL
+#-------------------------------
+# Best fit
+[SUNSTEELSTRIKE]
+Condition = COOL
+#-------------------------------
+[METEORMASH]
+Condition = COOL
+#-------------------------------
+# Best fit
+[ANCHORSHOT]
+Condition = TOUGH
+#-------------------------------
+[FLASHCANNON]
+Condition = SMART
+#-------------------------------
+[IRONHEAD]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[SMARTSTRIKE]
+Condition = SMART
+#-------------------------------
+[STEELWING]
+Condition = COOL
+#-------------------------------
+# Best fit
+[DOUBLEIRONBASH]
+Condition = TOUGH
+#-------------------------------
+[MIRRORSHOT]
+Condition = CUTE
+#-------------------------------
+[MAGNETBOMB]
+Condition = COOL
+#-------------------------------
+[GEARGRIND]
+Condition = SMART
+#-------------------------------
+[METALCLAW]
+Condition = COOL
+#-------------------------------
+[BULLETPUNCH]
+Condition = TOUGH
+#-------------------------------
+[GYROBALL]
+Condition = COOL
+#-------------------------------
+[HEAVYSLAM]
+Condition = TOUGH
+#-------------------------------
+[METALBURST]
+Condition = BEAUTY
+#-------------------------------
+[AUTOTOMIZE]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[GEARUP]
+Condition = SMART
+#-------------------------------
+[IRONDEFENSE]
+Condition = TOUGH
+#-------------------------------
+[KINGSSHIELD]
+Condition = COOL
+#-------------------------------
+[METALSOUND]
+Condition = SMART
+#-------------------------------
+[SHIFTGEAR]
+Condition = SMART
+#-------------------------------
+[HYDROCANNON]
+Condition = BEAUTY
+#-------------------------------
+[WATERSPOUT]
+Condition = BEAUTY
+#-------------------------------
+[HYDROPUMP]
+Condition = BEAUTY
+#-------------------------------
+[ORIGINPULSE]
+Condition = BEAUTY
+#-------------------------------
+[STEAMERUPTION]
+Condition = BEAUTY
+#-------------------------------
+[CRABHAMMER]
+Condition = TOUGH
+#-------------------------------
+[AQUATAIL]
+Condition = CUTE
+#-------------------------------
+[MUDDYWATER]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[SPARKLINGARIA]
+Condition = BEAUTY
+#-------------------------------
+[SURF]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[FISHIOUSREND]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[LIQUIDATION]
+Condition = COOL
+#-------------------------------
+[DIVE]
+Condition = BEAUTY
+#-------------------------------
+[SCALD]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[SNIPESHOT]
+Condition = COOL
+#-------------------------------
+[WATERPLEDGE]
+Condition = BEAUTY
+#-------------------------------
+[WATERFALL]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[RAZORSHELL]
+Condition = COOL
+#-------------------------------
+[BRINE]
+Condition = TOUGH
+#-------------------------------
+[BUBBLEBEAM]
+Condition = BEAUTY
+#-------------------------------
+[OCTAZOOKA]
+Condition = TOUGH
+#-------------------------------
+# Best fit
+[FLIPTURN]
+Condition = CUTE
+#-------------------------------
+[WATERPULSE]
+Condition = BEAUTY
+#-------------------------------
+[AQUAJET]
+Condition = COOL
+#-------------------------------
+[BUBBLE]
+Condition = CUTE
+#-------------------------------
+[WATERGUN]
+Condition = CUTE
+#-------------------------------
+[CLAMP]
+Condition = TOUGH
+#-------------------------------
+[WHIRLPOOL]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[SURGINGSTRIKES]
+Condition = COOL
+#-------------------------------
+[WATERSHURIKEN]
+Condition = COOL
+#-------------------------------
+[AQUARING]
+Condition = BEAUTY
+#-------------------------------
+# Best fit
+[LIFEDEW]
+Condition = BEAUTY
+#-------------------------------
+[RAINDANCE]
+Condition = TOUGH
+#-------------------------------
+[SOAK]
+Condition = CUTE
+#-------------------------------
+[WATERSPORT]
+Condition = CUTE
+#-------------------------------
+[WITHDRAW]
+Condition = CUTE

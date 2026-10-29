@@ -6313,6 +6313,15 @@ FieldUse = Direct
 Flags = KeyItem
 Description = A case for holding coins obtained at the Game Corner. It holds up to 99,999 coins.
 #-------------------------------
+[POFFINCASE]
+Name = Poffin Case
+NamePlural = Poffin Cases
+Pocket = 8
+Price = 0
+FieldUse = Direct
+Flags = KeyItem
+Description = A case for keeping Poffins cooked from Berries. It holds up to 100 Poffins.
+#-------------------------------
 [POKEFLUTE]
 Name = Poké Flute
 NamePlural = Poké Flutes

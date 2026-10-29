@@ -1,0 +1,226 @@
+# Poffin kinds that cooking can produce.
+#   Name        - shown in the Poffin Case and messages
+#   Description - shown when checking a poffin
+#   Icon        - x,y of the poffin's cell on the future Poffin Case graphic
+#   Priority    - when a poffin matches several kinds, the highest wins
+#   Foul        - true for the kind made when cooking fails (same berry
+#                 twice, or no flavor left). Never matched otherwise.
+#                 At least one kind must be Foul.
+#   MinLevel    - the poffin's level (strongest flavor) must be at least this
+#   MinFlavors  - the poffin must have at least this many flavors above 0
+#   MaxFlavors  - the poffin must have at most this many flavors above 0
+#   Flavors     - the poffin's flavors above 0, strongest first, must be
+#                 exactly these (ties go Spicy, Dry, Sweet, Bitter, Sour)
+# Section names are stored on poffins in save data: renaming or removing
+# a section turns poffins players already own into the Foul kind.
+#-------------------------------
+[FOUL]
+Name = Foul Poffin
+Description = A poffin that was overcooked or made with the same berry twice. It barely raises any condition.
+Icon = 7,0
+Priority = 0
+Foul = true
+#-------------------------------
+[SUPERMILD]
+Name = Super Mild Poffin
+Description = An exquisite poffin of the very highest level. It raises conditions enormously.
+Icon = 9,0
+Priority = 50
+MinLevel = 95
+#-------------------------------
+[MILD]
+Name = Mild Poffin
+Description = A high-level poffin with a well-rounded taste. It raises conditions a great deal.
+Icon = 8,0
+Priority = 40
+MinLevel = 50
+#-------------------------------
+[OVERRIPE]
+Name = Overripe Poffin
+Description = A poffin with four or more flavors mixed together. It raises many conditions a little.
+Icon = 6,0
+Priority = 30
+MinFlavors = 4
+#-------------------------------
+[RICH]
+Name = Rich Poffin
+Description = A poffin with three flavors mixed together. It raises three conditions.
+Icon = 5,0
+Priority = 20
+MinFlavors = 3
+MaxFlavors = 3
+#-------------------------------
+[SPICY]
+Name = Spicy Poffin
+Description = A spicy poffin. It raises the Cool condition.
+Icon = 0,0
+Priority = 10
+Flavors = SPICY
+#-------------------------------
+[DRY]
+Name = Dry Poffin
+Description = A dry poffin. It raises the Beauty condition.
+Icon = 1,0
+Priority = 10
+Flavors = DRY
+#-------------------------------
+[SWEET]
+Name = Sweet Poffin
+Description = A sweet poffin. It raises the Cute condition.
+Icon = 2,0
+Priority = 10
+Flavors = SWEET
+#-------------------------------
+[BITTER]
+Name = Bitter Poffin
+Description = A bitter poffin. It raises the Smart condition.
+Icon = 3,0
+Priority = 10
+Flavors = BITTER
+#-------------------------------
+[SOUR]
+Name = Sour Poffin
+Description = A sour poffin. It raises the Tough condition.
+Icon = 4,0
+Priority = 10
+Flavors = SOUR
+#-------------------------------
+[SPICYDRY]
+Name = Spicy-Dry Poffin
+Description = A poffin that is mostly spicy and a little dry. It raises the Cool and Beauty conditions.
+Icon = 0,0
+Priority = 10
+Flavors = SPICY,DRY
+#-------------------------------
+[SPICYSWEET]
+Name = Spicy-Sweet Poffin
+Description = A poffin that is mostly spicy and a little sweet. It raises the Cool and Cute conditions.
+Icon = 0,0
+Priority = 10
+Flavors = SPICY,SWEET
+#-------------------------------
+[SPICYBITTER]
+Name = Spicy-Bitter Poffin
+Description = A poffin that is mostly spicy and a little bitter. It raises the Cool and Smart conditions.
+Icon = 0,0
+Priority = 10
+Flavors = SPICY,BITTER
+#-------------------------------
+[SPICYSOUR]
+Name = Spicy-Sour Poffin
+Description = A poffin that is mostly spicy and a little sour. It raises the Cool and Tough conditions.
+Icon = 0,0
+Priority = 10
+Flavors = SPICY,SOUR
+#-------------------------------
+[DRYSPICY]
+Name = Dry-Spicy Poffin
+Description = A poffin that is mostly dry and a little spicy. It raises the Beauty and Cool conditions.
+Icon = 1,0
+Priority = 10
+Flavors = DRY,SPICY
+#-------------------------------
+[DRYSWEET]
+Name = Dry-Sweet Poffin
+Description = A poffin that is mostly dry and a little sweet. It raises the Beauty and Cute conditions.
+Icon = 1,0
+Priority = 10
+Flavors = DRY,SWEET
+#-------------------------------
+[DRYBITTER]
+Name = Dry-Bitter Poffin
+Description = A poffin that is mostly dry and a little bitter. It raises the Beauty and Smart conditions.
+Icon = 1,0
+Priority = 10
+Flavors = DRY,BITTER
+#-------------------------------
+[DRYSOUR]
+Name = Dry-Sour Poffin
+Description = A poffin that is mostly dry and a little sour. It raises the Beauty and Tough conditions.
+Icon = 1,0
+Priority = 10
+Flavors = DRY,SOUR
+#-------------------------------
+[SWEETSPICY]
+Name = Sweet-Spicy Poffin
+Description = A poffin that is mostly sweet and a little spicy. It raises the Cute and Cool conditions.
+Icon = 2,0
+Priority = 10
+Flavors = SWEET,SPICY
+#-------------------------------
+[SWEETDRY]
+Name = Sweet-Dry Poffin
+Description = A poffin that is mostly sweet and a little dry. It raises the Cute and Beauty conditions.
+Icon = 2,0
+Priority = 10
+Flavors = SWEET,DRY
+#-------------------------------
+[SWEETBITTER]
+Name = Sweet-Bitter Poffin
+Description = A poffin that is mostly sweet and a little bitter. It raises the Cute and Smart conditions.
+Icon = 2,0
+Priority = 10
+Flavors = SWEET,BITTER
+#-------------------------------
+[SWEETSOUR]
+Name = Sweet-Sour Poffin
+Description = A poffin that is mostly sweet and a little sour. It raises the Cute and Tough conditions.
+Icon = 2,0
+Priority = 10
+Flavors = SWEET,SOUR
+#-------------------------------
+[BITTERSPICY]
+Name = Bitter-Spicy Poffin
+Description = A poffin that is mostly bitter and a little spicy. It raises the Smart and Cool conditions.
+Icon = 3,0
+Priority = 10
+Flavors = BITTER,SPICY
+#-------------------------------
+[BITTERDRY]
+Name = Bitter-Dry Poffin
+Description = A poffin that is mostly bitter and a little dry. It raises the Smart and Beauty conditions.
+Icon = 3,0
+Priority = 10
+Flavors = BITTER,DRY
+#-------------------------------
+[BITTERSWEET]
+Name = Bitter-Sweet Poffin
+Description = A poffin that is mostly bitter and a little sweet. It raises the Smart and Cute conditions.
+Icon = 3,0
+Priority = 10
+Flavors = BITTER,SWEET
+#-------------------------------
+[BITTERSOUR]
+Name = Bitter-Sour Poffin
+Description = A poffin that is mostly bitter and a little sour. It raises the Smart and Tough conditions.
+Icon = 3,0
+Priority = 10
+Flavors = BITTER,SOUR
+#-------------------------------
+[SOURSPICY]
+Name = Sour-Spicy Poffin
+Description = A poffin that is mostly sour and a little spicy. It raises the Tough and Cool conditions.
+Icon = 4,0
+Priority = 10
+Flavors = SOUR,SPICY
+#-------------------------------
+[SOURDRY]
+Name = Sour-Dry Poffin
+Description = A poffin that is mostly sour and a little dry. It raises the Tough and Beauty conditions.
+Icon = 4,0
+Priority = 10
+Flavors = SOUR,DRY
+#-------------------------------
+[SOURSWEET]
+Name = Sour-Sweet Poffin
+Description = A poffin that is mostly sour and a little sweet. It raises the Tough and Cute conditions.
+Icon = 4,0
+Priority = 10
+Flavors = SOUR,SWEET
+#-------------------------------
+[SOURBITTER]
+Name = Sour-Bitter Poffin
+Description = A poffin that is mostly sour and a little bitter. It raises the Tough and Smart conditions.
+Icon = 4,0
+Priority = 10
+Flavors = SOUR,BITTER
