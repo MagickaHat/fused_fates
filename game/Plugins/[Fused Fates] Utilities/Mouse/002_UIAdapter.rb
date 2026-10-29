@@ -7,26 +7,34 @@
 #
 # Adapters live on a stack (MouseUI); only the top one is asked. While it is active,
 # Input.trigger?(button) is also true whenever the adapter says the mouse produced that button.
+# When nothing is pushed, an ambient MenuAdapter is used, so every list window
+# (SpriteWindow_Selectable and its subclasses: choices, pause menu, bag, mart, options...)
+# supports hover and click automatically, and a right click acts as Back everywhere.
 #
 # Adding mouse support to a new screen:
-#   1. Subclass UIAdapter and override #trigger? (and #update if it needs per-frame state).
-#   2. Run the screen's main loop inside MouseUI.with(MyAdapter.new) { ... }, usually by
-#      aliasing the method that runs it (see 003_DialogueAdapter.rb).
-#   3. Wrap anything inside it that must ignore the outer adapter in a BlockingAdapter.
+#   - Screens built from list windows need nothing: they already work.
+#   - Sprite-based screens (party, summary, battle menus...): subclass UIAdapter, override
+#     #trigger? (and #update for per-frame work such as hover), then run the screen's main
+#     loop inside MouseUI.with(MyAdapter.new) { ... }, usually by aliasing the method that
+#     runs it (see 003_DialogueAdapter.rb and 004_MenuAdapter.rb).
+#   - Wrap anything that must ignore the mouse in a BlockingAdapter.
 
 #==================================================================
 # class UIAdapter
 #==================================================================
 # @brief Base class for objects that translate mouse input into button presses.
+# On its own it only maps a right click to Input::BACK (see UtilitySettings::MOUSE_RIGHT_CLICK_BACK).
 class UIAdapter
   # @brief Checks whether the mouse pressed a button this frame.
+  # Only asked on frames where a mouse button was clicked. Subclasses should call super for
+  # buttons they don't handle themselves.
   # @param button [Integer] An Input button constant such as Input::USE.
   # @return [Boolean]
   def trigger?(button)
-    return false
+    return button == Input::BACK && UtilitySettings::MOUSE_RIGHT_CLICK_BACK && MouseInput.right_clicked?
   end
 
-  # @brief Called once per frame by Input.update while the adapter is on top of the stack.
+  # @brief Called once per frame by Input.update while the adapter is the current one.
   def update; end
 
   # @brief Called when the adapter is pushed onto the stack.
@@ -39,9 +47,15 @@ end
 #==================================================================
 # class BlockingAdapter
 #==================================================================
-# @brief An adapter that maps nothing. Push it over screens that don't support the mouse yet
-# so an outer adapter (e.g. dialogue) can't turn clicks into presses there.
+# @brief An adapter that maps nothing, not even right click. Push it over screens where
+# clicks must never count as button presses.
 class BlockingAdapter < UIAdapter
+  # @brief Never reports a press.
+  # @param button [Integer]
+  # @return [Boolean]
+  def trigger?(button)
+    return false
+  end
 end
 
 #==================================================================
@@ -49,17 +63,27 @@ end
 #==================================================================
 # @brief The stack of active UI adapters.
 module MouseUI
-  @stack = []
+  @stack   = []
+  @ambient = nil   # Adapter used when the stack is empty
 
   module_function
 
   # @brief The adapter currently receiving mouse input.
-  # @return [UIAdapter, nil]
+  # @return [UIAdapter] The top of the stack, or the ambient adapter if nothing is pushed.
   def current
-    return @stack.last
+    return @stack.last || ambient
   end
 
-  # @brief Number of adapters on the stack.
+  # @brief The adapter used when nothing is pushed: a MenuAdapter if UtilitySettings::MOUSE_MENUS
+  # is on, otherwise a plain UIAdapter (right click = Back only).
+  # @return [UIAdapter]
+  def ambient
+    return @ambient if @ambient
+    @ambient = (UtilitySettings::MOUSE_MENUS && defined?(MenuAdapter)) ? MenuAdapter.new : UIAdapter.new
+    return @ambient
+  end
+
+  # @brief Number of adapters pushed onto the stack (the ambient adapter isn't counted).
   # @return [Integer]
   def depth
     return @stack.length
@@ -90,7 +114,7 @@ module MouseUI
     begin
       return yield
     ensure
-      pop if current.equal?(adapter)
+      pop if @stack.last.equal?(adapter)
     end
   end
 
@@ -99,18 +123,20 @@ module MouseUI
     @stack.clear
   end
 
-  # @brief Updates the active adapter. Called by Input.update.
+  # @brief Updates the mouse state and the active adapter. Called by Input.update.
   def update
+    MouseInput.update
+    MenuWindows.next_frame if defined?(MenuWindows)
     return if !MouseInput.available?
-    DevLog.guard("Mouse adapter update") { current&.update }
+    DevLog.guard("Mouse adapter update") { current.update }
   end
 
   # @brief Checks whether the active adapter produced a button press this frame.
   # @param button [Integer]
   # @return [Boolean]
   def virtual_trigger?(button)
+    return false if !MouseInput.any_click?
     adapter = current
-    return false if !adapter || !MouseInput.available?
     return DevLog.guard("Mouse adapter trigger?", false) { adapter.trigger?(button) } ? true : false
   end
 end
@@ -131,7 +157,7 @@ module Input
       return MouseUI.virtual_trigger?(button)
     end
 
-    # @brief Engine input update, then lets the active UI adapter update.
+    # @brief Engine input update, then lets the mouse state and active UI adapter update.
     def update
       __mouse_update
       MouseUI.update

@@ -9,7 +9,36 @@
 # Everything returns a "no mouse" answer when UtilitySettings::MOUSE_ENABLED is false or the
 # engine has no mouse support, so adapters never need to check that themselves.
 module MouseInput
+  @position      = nil     # Cursor position this frame ([x, y] or nil)
+  @last_position = nil     # Cursor position last frame
+  @any_click     = false   # Whether a left or right click happened this frame
+
   module_function
+
+  # @brief Records this frame's cursor position and clicks. Called by Input.update.
+  def update
+    @last_position = @position
+    @position = position
+    @any_click = available? && (clicked?(Input::MOUSELEFT) || clicked?(Input::MOUSERIGHT))
+  end
+
+  # @brief Checks whether the cursor moved (or entered the window) this frame.
+  # @return [Boolean]
+  def moved?
+    return !@position.nil? && @position != @last_position
+  end
+
+  # @brief Checks whether a left or right click happened this frame (cheap; cached by update).
+  # @return [Boolean]
+  def any_click?
+    return @any_click ? true : false
+  end
+
+  # @brief Checks whether the right mouse button was pressed down this frame inside the window.
+  # @return [Boolean]
+  def right_clicked?
+    return available? && clicked?(Input::MOUSERIGHT)
+  end
 
   # @brief Checks whether the mouse can be used at all.
   # @return [Boolean]

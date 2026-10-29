@@ -6,12 +6,14 @@
 # class DialogueAdapter
 #==================================================================
 # @brief Lets a left click anywhere in the game window advance dialogue, as Input::USE does.
+# A right click acts as Input::BACK, which also advances message boxes.
 class DialogueAdapter < UIAdapter
-  # @brief A left click counts as Input::USE.
+  # @brief A left click counts as Input::USE; other buttons fall back to UIAdapter.
   # @param button [Integer]
   # @return [Boolean]
   def trigger?(button)
-    return button == Input::USE && MouseInput.clicked?
+    return true if button == Input::USE && MouseInput.clicked?
+    return super
   end
 end
 
@@ -29,11 +31,11 @@ module DialogueMouse
     return MouseUI.with(DialogueAdapter.new, &block)
   end
 
-  # @brief Runs a block where clicks don't count as button presses (choices, number entry),
-  # so a click can't pick whichever option happens to be highlighted.
+  # @brief Runs a block where only a right click (Back) is mapped, e.g. number entry, so a
+  # left click can't confirm whatever number happens to be shown.
   # @return [Object] The block's result.
-  def without_mouse(&block)
-    return MouseUI.with(BlockingAdapter.new, &block)
+  def back_only(&block)
+    return MouseUI.with(UIAdapter.new, &block)
   end
 end
 
@@ -42,8 +44,6 @@ end
 #==================================================================
 alias __mouse_pbMessageDisplay pbMessageDisplay unless defined?(__mouse_pbMessageDisplay)
 alias __mouse_pbMessageWaitForInput pbMessageWaitForInput unless defined?(__mouse_pbMessageWaitForInput)
-alias __mouse_pbShowCommands pbShowCommands unless defined?(__mouse_pbShowCommands)
-alias __mouse_pbShowCommandsWithHelp pbShowCommandsWithHelp unless defined?(__mouse_pbShowCommandsWithHelp)
 alias __mouse_pbChooseNumber pbChooseNumber unless defined?(__mouse_pbChooseNumber)
 
 # @brief Displays a message; a left click advances it.
@@ -56,19 +56,9 @@ def pbMessageWaitForInput(*args, &block)
   return DialogueMouse.with_dialogue { __mouse_pbMessageWaitForInput(*args, &block) }
 end
 
-# @brief Shows a choice list; clicks are ignored until choices get their own adapter.
-def pbShowCommands(*args, &block)
-  return DialogueMouse.without_mouse { __mouse_pbShowCommands(*args, &block) }
-end
-
-# @brief Shows a choice list with help text; clicks are ignored.
-def pbShowCommandsWithHelp(*args, &block)
-  return DialogueMouse.without_mouse { __mouse_pbShowCommandsWithHelp(*args, &block) }
-end
-
-# @brief Asks for a number; clicks are ignored.
+# @brief Asks for a number; a right click cancels and left clicks are ignored.
 def pbChooseNumber(*args, &block)
-  return DialogueMouse.without_mouse { __mouse_pbChooseNumber(*args, &block) }
+  return DialogueMouse.back_only { __mouse_pbChooseNumber(*args, &block) }
 end
 
 #==================================================================

@@ -40,4 +40,11 @@ module UtilitySettings
 
   # A left click anywhere in the game window advances dialogue (overworld and battle)
   MOUSE_DIALOGUE = true
+
+  # Hovering an option in a list window (choices, pause menu, bag, mart...) highlights it
+  # and a left click picks it
+  MOUSE_MENUS = true
+
+  # A right click acts as the Back button everywhere (on the map it opens the pause menu)
+  MOUSE_RIGHT_CLICK_BACK = true
 end
