@@ -2,7 +2,8 @@
 # that map gets one Pokémon a day.
 #   Name      - shown in the Underground menu
 #   Encounter - species,weight,min level,max level (one line per species)
-# The example map IDs below don't exist yet: replace them with your own.
+# The example map IDs below don't exist yet: replace them with your own, and
+# give each hideaway map "Flags = Underground" in map_metadata.txt.
 #-------------------------------
 [101]
 Name = Grassland Cave

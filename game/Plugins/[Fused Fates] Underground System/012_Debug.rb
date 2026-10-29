@@ -60,7 +60,9 @@ module UndergroundDebug
       ret.push("#{id} stock: " + wares.map { |w, sold| sold ? "#{w} (traded)" : w.to_s }.join(", "))
     end
     if map_id
-      ret.push("Current map #{map_id}: #{Underground.in_underground?(map_id) ? 'in' : 'not in'} the Underground")
+      flagged = Underground.in_underground?(map_id)
+      ret.push("Current map #{map_id}: #{flagged ? 'in' : 'not in'} the Underground " +
+               "(#{flagged ? 'has' : 'no'} #{UndergroundSettings::MAP_FLAG} flag)")
       dug = d.dug_spots.select { |m, _e| m == map_id }.map { |_m, e| e }
       ret.push("  Dig spots dug today: #{dug.empty? ? 'none' : dug.join(', ')}")
       found = d.diglett_found.select { |m, _e| m == map_id }.map { |_m, e| e }
@@ -71,6 +73,10 @@ module UndergroundDebug
         cleared = Underground::Hideaways.cleared?(m, e) ? " (cleared)" : ""
         ret.push("  Hideaway event #{e}: #{mon} Lv. #{spawn[:level]}#{cleared}")
       end
+    end
+    unflagged = Underground.unflagged_maps
+    unless unflagged.empty?
+      ret.push("Maps with an Underground role but no #{UndergroundSettings::MAP_FLAG} flag: #{unflagged.join(', ')}")
     end
     stats = d.stats.map { |k, v| "#{k} #{v}" }
     ret.push("Stats: #{stats.empty? ? 'none' : stats.join(', ')}")

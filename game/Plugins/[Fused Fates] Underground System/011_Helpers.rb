@@ -19,21 +19,23 @@ module Underground
     return $underground
   end
 
-  # @brief Every map that counts as part of the Underground.
-  # @return [Array<Integer>]
-  def maps
-    return UndergroundSettings::TUNNEL_MAPS + UndergroundSettings::BASE_MAPS.values +
-           UndergroundSettings::RIVAL_BASE_MAPS + UndergroundSettings::STATION_MAPS +
-           GameData::UndergroundHideaway.keys
-  end
-
-  # @brief Whether a map is part of the Underground.
+  # @brief Whether a map is part of the Underground: it has the
+  # UndergroundSettings::MAP_FLAG flag in its map metadata.
   # @param map_id [Integer] Defaults to the current map.
   # @return [Boolean]
   def in_underground?(map_id = nil)
     map_id ||= $game_map&.map_id
     return false unless map_id
-    return maps.include?(map_id)
+    return GameData::MapMetadata.try_get(map_id)&.has_flag?(UndergroundSettings::MAP_FLAG) || false
+  end
+
+  # @brief Maps given an Underground role (tunnel, base room or hideaway)
+  # that are missing the map metadata flag.
+  # @return [Array<Integer>]
+  def unflagged_maps
+    ids = UndergroundSettings::TUNNEL_MAPS + UndergroundSettings::BASE_MAPS.values +
+          GameData::UndergroundHideaway.keys
+    return ids.uniq.reject { |id| in_underground?(id) }
   end
 
   #-----------------------------------------------------------------------------

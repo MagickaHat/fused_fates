@@ -7,13 +7,19 @@
 #==================================================================
 # @brief Tunable values and map setup for the Fused Fates Underground.
 #
-# The map IDs below are examples only. Point them at your own Underground
-# maps before playtesting: anything listed here is treated as "inside the
-# Underground" (sphere growth, pause menu entry, cave-in refresh...).
+# A map is "inside the Underground" (pause menu entry, sphere growth, cave-in
+# refresh...) only if it has the MAP_FLAG flag in PBS/map_metadata.txt.
+# The map IDs below only say what role a map plays, and are examples: point
+# them at your own Underground maps before playtesting.
 module UndergroundSettings
   #-----------------------------------------------------------------------------
   # Maps
   #-----------------------------------------------------------------------------
+  # @brief Map metadata flag that marks a map as part of the Underground. Add
+  # "Flags = Underground" to every tunnel, base room, rival base, station and
+  # hideaway map in PBS/map_metadata.txt (or in the debug map metadata editor).
+  MAP_FLAG = "Underground"
+
   # @brief Tunnel maps that contain dig spots and Diglett events
   TUNNEL_MAPS = [1, 2, 3]
 
@@ -23,12 +29,6 @@ module UndergroundSettings
   # @brief Where the player appears in each Secret Base room, as
   # [x, y, direction] (2 = down, 4 = left, 6 = right, 8 = up).
   BASE_ENTRY = { small: [7, 10, 8], medium: [9, 12, 8], large: [11, 14, 8] }
-
-  # @brief Rival digger base maps (rivals are in PBS/underground_rivals.txt).
-  RIVAL_BASE_MAPS = []
-
-  # @brief Station maps (platforms and ladders) that are part of the Underground.
-  STATION_MAPS = []
 
   # Hideaway map IDs are the section names in PBS/underground_hideaways.txt.
 
