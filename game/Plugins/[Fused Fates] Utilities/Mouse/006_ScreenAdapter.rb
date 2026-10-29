@@ -115,7 +115,9 @@ class ScreenAdapter < MenuAdapter
       # The keyboard takes over: stop steering the cursor
       @nav_spot = nil
       @pending_click = nil
-    elsif spot && (MouseInput.moved? || spot[:id] != @hover_id)
+    elsif spot && MouseInput.moved?
+      # Only a moving mouse hovers. Reacting when the screen slides a different sprite under a
+      # resting cursor (scrolling panels, shifting buttons) would select it, slide again, and run away.
       spot[:hover]&.call
       start_nav(spot[:id]) if spot[:goto] && spot[:hover_nav] != false
     end

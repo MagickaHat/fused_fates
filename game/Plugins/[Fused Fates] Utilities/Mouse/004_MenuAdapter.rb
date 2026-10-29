@@ -353,11 +353,13 @@ class SpriteWindow_Selectable
 
   # @brief Positions the cursor as usual, except while the mouse has pinned the view: then the
   # list only scrolls when the highlight would leave the screen, and by as little as possible.
+  # The pinned case never calls the original: it would set the cursor to its centred position
+  # first, and every cursor_rect change re-enters this method through Window_CommandPokemon#width=,
+  # so the two positions would keep replacing each other until the stack overflowed.
   # @param force [Boolean] Whether to redraw the contents.
   def priv_update_cursor_rect(force = false)
     return __mouse_priv_update_cursor_rect(force) if !@mouse_pin || @index < 0
     old_top = self.top_row
-    __mouse_priv_update_cursor_rect(false)
     @mouse_pin = MenuWindows.pin_for(self, @mouse_pin)
     self.top_row = @mouse_pin if self.top_row != @mouse_pin
     cursor_width = (self.width - self.borderX) / @column_max

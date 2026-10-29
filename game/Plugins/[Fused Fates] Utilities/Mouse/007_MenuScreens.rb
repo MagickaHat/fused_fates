@@ -472,25 +472,23 @@ ScreenMouse.wrap(PokemonPokegear_Scene, PokegearMouseAdapter, :pbScene)
 #==================================================================
 # @brief Load screen (Continue / New Game / Options...): hover a panel to highlight it, click
 # to choose it, wheel to move up/down.
+# The highlight is moved with Up/Down presses rather than by setting the hidden command
+# window's index, because the scene only redraws (and scrolls) its panels when the index
+# changes during its own update.
 class LoadMouseAdapter < ScreenAdapter
   CONTINUE_HEIGHT = 222
   PANEL_HEIGHT    = 46
 
   # @return [Array<Hash>]
   def hotspots
+    cmd = sprite("cmdwindow")
+    return [] if !cmd
     return numbered_sprites("panel").map do |n, panel|
       height = panel.instance_variable_get(:@isContinue) ? CONTINUE_HEIGHT : PANEL_HEIGHT
       width = panel.bitmap ? panel.bitmap.width : 416
-      { id: n, rect: [panel.x, panel.y, width, height], hover: proc { select(n) }, click: Input::USE }
+      { id: n, rect: [panel.x, panel.y, width, height],
+        goto: proc { step_toward(cmd.index, n, Input::UP, Input::DOWN) } }
     end
-  end
-
-  # @param i [Integer]
-  def select(i)
-    cmd = sprite("cmdwindow")
-    return if !cmd || cmd.index == i
-    cmd.index = i
-    pbPlayCursorSE
   end
 
   # @param step [Integer]
