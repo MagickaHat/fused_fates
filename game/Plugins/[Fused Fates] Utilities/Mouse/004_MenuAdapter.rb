@@ -103,6 +103,96 @@ module MenuWindows
     end
     return nil
   end
+
+  # @brief Highest top row a window can scroll to.
+  # @param window [SpriteWindow_Selectable]
+  # @return [Integer]
+  def max_top_row(window)
+    return [window.row_max - window.page_row_max, 0].max
+  end
+
+  # @brief Adjusts a pinned top row so the highlighted row stays on screen. The view moves by
+  # as little as possible, unlike Essentials' own scrolling, which centres the highlight.
+  # @param window [SpriteWindow_Selectable]
+  # @param pin [Integer] Wanted top row.
+  # @return [Integer] The top row to use.
+  def pin_for(window, pin)
+    cols = [window.columns, 1].max
+    rows = [window.page_row_max, 1].max
+    row = window.index / cols
+    pin = row if row < pin
+    pin = row - rows + 1 if row > pin + rows - 1
+    return pin.clamp(0, max_top_row(window))
+  end
+
+  # @brief The top row a window is showing (its pinned row while the mouse controls it).
+  # @param window [SpriteWindow_Selectable]
+  # @return [Integer]
+  def shown_top_row(window)
+    return window.instance_variable_get(:@mouse_pin) || window.top_row
+  end
+
+  # @brief Scrolls a window's view by whole rows, keeping the highlight on screen.
+  # If the cursor is over the list, the item now under it becomes highlighted.
+  # @param window [SpriteWindow_Selectable]
+  # @param rows [Integer] Negative scrolls up.
+  # @return [Boolean] Whether the view moved.
+  def scroll(window, rows)
+    old_top = shown_top_row(window)
+    new_top = (old_top + rows).clamp(0, max_top_row(window))
+    return false if new_top == old_top
+    window.instance_variable_set(:@mouse_pin, new_top)
+    cols = [window.columns, 1].max
+    last_row = new_top + window.page_row_max - 1
+    row = window.index / cols
+    index = window.index
+    index = (new_top * cols) + (index % cols) if row < new_top
+    index = (last_row * cols) + (index % cols) if row > last_row
+    index = index.clamp(0, window.itemCount - 1)
+    if window.index == index
+      window.send(:priv_update_cursor_rect, true)   # Same highlight; redraw the moved view
+    else
+      window.index = index
+    end
+    under = item_at(window, MouseInput.position) if MouseInput.over?(window)
+    window.index = under if under && under != window.index
+    return true
+  end
+
+  # @brief Moves a short list's highlight by one row (used by the wheel when nothing scrolls).
+  # @param window [SpriteWindow_Selectable]
+  # @param rows [Integer] -1 or 1.
+  # @return [Boolean] Whether the highlight moved.
+  def step(window, rows)
+    cols = [window.columns, 1].max
+    index = (window.index + (rows * cols)).clamp(0, window.itemCount - 1)
+    return false if index == window.index
+    window.instance_variable_set(:@mouse_pin, shown_top_row(window))
+    window.index = index
+    return true
+  end
+
+  # @brief Works out whether the cursor is on one of a window's scroll arrows (or the border
+  # strip they sit in) and whether that way can scroll.
+  # @param window [SpriteWindow_Selectable]
+  # @return [Integer, nil] -1 for the up arrow, 1 for the down arrow, nil otherwise.
+  def arrow_at(window)
+    return nil if max_top_row(window) == 0
+    wx, wy, ww, wh = MouseInput.screen_rect(window)
+    return nil if !wx
+    top = shown_top_row(window)
+    edge = [window.respond_to?(:topEdge) ? window.topEdge : 16, 16].max
+    up = window.instance_variable_get(:@uparrow)
+    down = window.instance_variable_get(:@downarrow)
+    if top > 0 && (MouseInput.over?([wx, wy, ww, edge]) || (up && MouseInput.over?(up)))
+      return -1
+    end
+    if top < max_top_row(window) &&
+       (MouseInput.over?([wx, wy + wh - edge, ww, edge]) || (down && MouseInput.over?(down)))
+      return 1
+    end
+    return nil
+  end
 end
 
 #==================================================================
@@ -151,8 +241,63 @@ class MenuAdapter < UIAdapter
     return if !focused_window.equal?(window)
     index = MenuWindows.item_at(window, MouseInput.position)
     return if !index || index == window.index
+    # Pin the view so the list doesn't re-centre (and scroll away) under the cursor
+    window.instance_variable_set(:@mouse_pin, MenuWindows.shown_top_row(window))
     window.index = index
     pbPlayCursorSE if defined?(pbPlayCursorSE)
+  end
+
+  # @brief Clears the once-per-frame wheel flag. Called once per frame by MouseUI.update.
+  def update
+    super
+    @wheel_used = false
+  end
+
+  # @brief Everything the mouse does to a list window each frame: hover, wheel and the scroll
+  # arrows. Called from SpriteWindow_Selectable#update.
+  # @param window [SpriteWindow_Selectable]
+  def window_frame(window)
+    hover(window)
+    return if !handles?(window) || !MenuWindows.interactive?(window)
+    wheel(window)
+    arrows(window)
+  end
+
+  # @brief Applies this frame's wheel step to the list under the cursor (or to the only list
+  # on screen). Long lists scroll one row; short lists move the highlight one row.
+  # @param window [SpriteWindow_Selectable]
+  def wheel(window)
+    step = MouseInput.wheel
+    return if step == 0 || @wheel_used
+    target = focused_window
+    if !target
+      lists = MenuWindows.windows.select { |w| handles?(w) && MenuWindows.interactive?(w) }
+      target = lists[0] if lists.length == 1
+    end
+    return if !target.equal?(window)
+    @wheel_used = true
+    if window.respond_to?(:mouse_wheel_value) && window.mouse_wheel_value(step)
+      return   # The window used the wheel itself (e.g. Options values)
+    end
+    old_index = window.index
+    if MenuWindows.max_top_row(window) > 0
+      MenuWindows.scroll(window, step)
+    else
+      MenuWindows.step(window, step)
+    end
+    pbPlayCursorSE if window.index != old_index && defined?(pbPlayCursorSE)
+  end
+
+  # @brief Clicking or holding a list's up/down arrow scrolls it one row at a time, at the calm
+  # MOUSE_HOLD_DELAY / MOUSE_HOLD_RATE pace. This keeps long lists usable without a wheel.
+  # @param window [SpriteWindow_Selectable]
+  def arrows(window)
+    return if !MouseInput.held_repeat?
+    dir = MenuWindows.arrow_at(window)
+    return if !dir
+    old_index = window.index
+    MenuWindows.scroll(window, dir)
+    pbPlayCursorSE if window.index != old_index && defined?(pbPlayCursorSE)
   end
 
   # @brief A left click on an item selects it and counts as Input::USE.
@@ -185,13 +330,41 @@ class SpriteWindow_Selectable
     MenuWindows.stamp(self)
   end
 
-  # @brief Updates the window as usual, then lets the mouse move its highlight.
+  # Keys that move a list's highlight; using any of them hands scrolling back to Essentials
+  MOUSE_NAV_KEYS = [Input::UP, Input::DOWN, Input::LEFT, Input::RIGHT,
+                    Input::JUMPUP, Input::JUMPDOWN].freeze
+
+  # @brief Updates the window as usual, then lets the mouse move its highlight and scroll it.
   def update
+    if @mouse_pin && MOUSE_NAV_KEYS.any? { |k| Input.__mouse_repeat?(k) }
+      @mouse_pin = nil   # Keyboard in use: go back to Essentials' centred scrolling
+    end
     __mouse_update
     return if !UtilitySettings::MOUSE_MENUS || !MouseInput.available? || disposed?
     MenuWindows.register(self)
     adapter = MouseUI.current
-    DevLog.guard("Mouse menu hover") { adapter.hover(self) } if adapter.respond_to?(:hover)
+    return if !adapter.respond_to?(:window_frame)
+    DevLog.guard("Mouse menu frame") { adapter.window_frame(self) }
+  end
+
+  private
+
+  alias __mouse_priv_update_cursor_rect priv_update_cursor_rect unless private_method_defined?(:__mouse_priv_update_cursor_rect)
+
+  # @brief Positions the cursor as usual, except while the mouse has pinned the view: then the
+  # list only scrolls when the highlight would leave the screen, and by as little as possible.
+  # @param force [Boolean] Whether to redraw the contents.
+  def priv_update_cursor_rect(force = false)
+    return __mouse_priv_update_cursor_rect(force) if !@mouse_pin || @index < 0
+    old_top = self.top_row
+    __mouse_priv_update_cursor_rect(false)
+    @mouse_pin = MenuWindows.pin_for(self, @mouse_pin)
+    self.top_row = @mouse_pin if self.top_row != @mouse_pin
+    cursor_width = (self.width - self.borderX) / @column_max
+    x = @index % @column_max * (cursor_width + @column_spacing)
+    y = (@index / @column_max * @row_height) - @virtualOy
+    self.cursor_rect.set(x, y, cursor_width, @row_height)
+    refresh if force || self.top_row != old_top
   end
 end
 

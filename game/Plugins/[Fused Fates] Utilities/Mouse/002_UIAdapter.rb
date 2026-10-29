@@ -13,10 +13,12 @@
 #
 # Adding mouse support to a new screen:
 #   - Screens built from list windows need nothing: they already work.
-#   - Sprite-based screens (party, summary, battle menus...): subclass UIAdapter, override
-#     #trigger? (and #update for per-frame work such as hover), then run the screen's main
-#     loop inside MouseUI.with(MyAdapter.new) { ... }, usually by aliasing the method that
-#     runs it (see 003_DialogueAdapter.rb and 004_MenuAdapter.rb).
+#   - Sprite-based screens: subclass ScreenAdapter (006_ScreenAdapter.rb) and describe the
+#     screen's clickable areas in #hotspots, then attach it with ScreenMouse.wrap(SceneClass,
+#     MyAdapter, :loop_method), or MouseUI.attach_scene when another plugin replaces the loop
+#     (see 007-009 for the Party, Summary, PC, battle and Pokédex screens).
+#   - Adapters can press keys for a frame (UIAdapter#press), so screens that keep their
+#     selection in local variables are driven through their own key handling.
 #   - Wrap anything that must ignore the mouse in a BlockingAdapter.
 
 #==================================================================
@@ -25,6 +27,27 @@
 # @brief Base class for objects that translate mouse input into button presses.
 # On its own it only maps a right click to Input::BACK (see UtilitySettings::MOUSE_RIGHT_CLICK_BACK).
 class UIAdapter
+  # @brief Presses buttons for the rest of this frame: Input.trigger? and Input.repeat? both
+  # report them until the next Input.update. Used to drive screens whose selection can only be
+  # changed through their own key handling (one key per frame).
+  # @param buttons [Array<Integer>] Input button constants.
+  def press(*buttons)
+    @presses ||= []
+    buttons.flatten.each { |b| @presses.push(b) if b && !@presses.include?(b) }
+  end
+
+  # @brief Checks whether #press pressed a button this frame.
+  # @param button [Integer]
+  # @return [Boolean]
+  def pressed?(button)
+    return @presses ? @presses.include?(button) : false
+  end
+
+  # @brief Forgets last frame's presses. Called by MouseUI.update before #update.
+  def clear_presses
+    @presses&.clear
+  end
+
   # @brief Checks whether the mouse pressed a button this frame.
   # Only asked on frames where a mouse button was clicked. Subclasses should call super for
   # buttons they don't handle themselves.
@@ -114,8 +137,17 @@ module MouseUI
     begin
       return yield
     ensure
-      pop if @stack.last.equal?(adapter)
+      remove(adapter)
     end
+  end
+
+  # @brief Removes one adapter wherever it is on the stack, leaving the others in place.
+  # @param adapter [UIAdapter]
+  def remove(adapter)
+    i = @stack.rindex { |a| a.equal?(adapter) }
+    return if !i
+    @stack.delete_at(i)
+    adapter.on_pop
   end
 
   # @brief Forgets every adapter (e.g. after a soft reset).
@@ -123,21 +155,66 @@ module MouseUI
     @stack.clear
   end
 
+  # @brief Gives a scene class an adapter for as long as it is open, by pushing one when any
+  # start method runs and removing it when the finish method runs. Used for scenes whose input
+  # loops other plugins replace, since start/end methods are rarely overridden.
+  # @param klass [Class] The scene class.
+  # @param adapter_class [Class] A UIAdapter subclass; created with the scene as its argument.
+  # @param start [Array<Symbol>] Methods that open the scene.
+  # @param finish [Symbol] Method that closes the scene.
+  def attach_scene(klass, adapter_class, start: [:pbStartScene], finish: :pbEndScene)
+    start.each do |name|
+      next if !klass.method_defined?(name)
+      original = :"__mouse_attach_#{name}"
+      next if klass.method_defined?(original)
+      klass.send(:alias_method, original, name)
+      klass.send(:define_method, name) do |*args, **kwargs, &block|
+        ret = send(original, *args, **kwargs, &block)
+        if UtilitySettings::MOUSE_SCREENS && !@mouse_adapter
+          @mouse_adapter = MouseUI.push(adapter_class.new(self))
+        end
+        next ret
+      end
+    end
+    return if !klass.method_defined?(finish)
+    original = :"__mouse_attach_#{finish}"
+    return if klass.method_defined?(original)
+    klass.send(:alias_method, original, finish)
+    klass.send(:define_method, finish) do |*args, **kwargs, &block|
+      begin
+        next send(original, *args, **kwargs, &block)
+      ensure
+        MouseUI.remove(@mouse_adapter) if @mouse_adapter
+        @mouse_adapter = nil
+      end
+    end
+  end
+
   # @brief Updates the mouse state and the active adapter. Called by Input.update.
   def update
     MouseInput.update
     MenuWindows.next_frame if defined?(MenuWindows)
+    adapter = current
+    adapter.clear_presses
     return if !MouseInput.available?
-    DevLog.guard("Mouse adapter update") { current.update }
+    DevLog.guard("Mouse adapter update") { adapter.update }
   end
 
   # @brief Checks whether the active adapter produced a button press this frame.
   # @param button [Integer]
   # @return [Boolean]
   def virtual_trigger?(button)
-    return false if !MouseInput.any_click?
     adapter = current
+    return true if adapter.pressed?(button)
+    return false if !MouseInput.any_click?
     return DevLog.guard("Mouse adapter trigger?", false) { adapter.trigger?(button) } ? true : false
+  end
+
+  # @brief Checks whether the active adapter pressed a button this frame (see UIAdapter#press).
+  # @param button [Integer]
+  # @return [Boolean]
+  def virtual_repeat?(button)
+    return current.pressed?(button)
   end
 end
 
@@ -147,6 +224,7 @@ end
 module Input
   class << self
     alias __mouse_trigger? trigger? unless method_defined?(:__mouse_trigger?)
+    alias __mouse_repeat? repeat? unless method_defined?(:__mouse_repeat?)
     alias __mouse_update update unless method_defined?(:__mouse_update)
 
     # @brief Engine trigger check, also true when the active UI adapter pressed the button.
@@ -155,6 +233,14 @@ module Input
     def trigger?(button)
       return true if __mouse_trigger?(button)
       return MouseUI.virtual_trigger?(button)
+    end
+
+    # @brief Engine repeat check, also true when the active UI adapter pressed the button.
+    # @param button [Integer]
+    # @return [Boolean]
+    def repeat?(button)
+      return true if __mouse_repeat?(button)
+      return MouseUI.virtual_repeat?(button)
     end
 
     # @brief Engine input update, then lets the mouse state and active UI adapter update.

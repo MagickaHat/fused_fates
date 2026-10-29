@@ -12,14 +12,101 @@ module MouseInput
   @position      = nil     # Cursor position this frame ([x, y] or nil)
   @last_position = nil     # Cursor position last frame
   @any_click     = false   # Whether a left or right click happened this frame
+  @wheel         = 0       # Rate-limited wheel step this frame (-1, 0 or 1)
+  @wheel_page    = 0       # Slower rate-limited wheel step this frame
+  @wheel_time    = -1.0    # When the last wheel step happened
+  @wheel_page_time = -1.0  # When the last page wheel step happened
+  @hold_fire     = false   # Whether a held left button repeats this frame
+  @hold_next     = 0.0     # When a held left button next repeats
 
   module_function
 
-  # @brief Records this frame's cursor position and clicks. Called by Input.update.
+  # @brief Records this frame's cursor position, clicks, wheel and held buttons. Called by Input.update.
   def update
     @last_position = @position
     @position = position
     @any_click = available? && (clicked?(Input::MOUSELEFT) || clicked?(Input::MOUSERIGHT))
+    update_wheel
+    update_hold
+  end
+
+  # @brief The current time in seconds.
+  # @return [Float]
+  def now
+    return System.uptime if defined?(System) && System.respond_to?(:uptime)
+    return Process.clock_gettime(Process::CLOCK_MONOTONIC)
+  end
+
+  # @brief Turns this frame's raw wheel movement into at most one rate-limited step.
+  def update_wheel
+    @wheel = 0
+    @wheel_page = 0
+    return if !in_window? || !Input.respond_to?(:scroll_v)
+    raw = scroll_delta
+    return if raw == 0
+    dir = (raw > 0) ? -1 : 1   # Wheel away from the player (positive) moves up
+    dir = -dir if UtilitySettings::MOUSE_WHEEL_INVERT
+    t = now
+    if t - @wheel_time >= UtilitySettings::MOUSE_WHEEL_DELAY
+      @wheel = dir
+      @wheel_time = t
+    end
+    if t - @wheel_page_time >= UtilitySettings::MOUSE_WHEEL_PAGE_DELAY
+      @wheel_page = dir
+      @wheel_page_time = t
+    end
+  end
+
+  # @brief This frame's raw wheel movement. Input.scroll_v reports the movement since the last
+  # update; if it ever reports the same non-zero value for a long time it is treated as a running
+  # total instead, so the wheel can never keep scrolling by itself.
+  # @return [Integer]
+  def scroll_delta
+    raw = Input.scroll_v.to_i
+    if @scroll_total
+      delta = raw - @scroll_last.to_i
+      @scroll_last = raw
+      return delta
+    end
+    @scroll_same = (raw != 0 && raw == @scroll_last) ? @scroll_same.to_i + 1 : 0
+    @scroll_last = raw
+    @scroll_total = true if @scroll_same >= 300   # Five seconds of identical non-zero values
+    return 0 if @scroll_total
+    return raw
+  end
+
+  # @brief Works out whether a held left button repeats this frame.
+  def update_hold
+    @hold_fire = false
+    return if !in_window?
+    t = now
+    if clicked?
+      @hold_fire = true
+      @hold_next = t + UtilitySettings::MOUSE_HOLD_DELAY
+    elsif pressed? && t >= @hold_next
+      @hold_fire = true
+      @hold_next = t + UtilitySettings::MOUSE_HOLD_RATE
+    end
+  end
+
+  # @brief This frame's wheel step for scrolling lists, limited to one per MOUSE_WHEEL_DELAY.
+  # @return [Integer] -1 (up), 0 or 1 (down).
+  def wheel
+    return @wheel
+  end
+
+  # @brief This frame's wheel step for changing pages or Pokémon, limited to one per
+  # MOUSE_WHEEL_PAGE_DELAY.
+  # @return [Integer] -1 (up), 0 or 1 (down).
+  def wheel_page
+    return @wheel_page
+  end
+
+  # @brief Checks whether the left button was clicked this frame, or is being held and repeats
+  # this frame (see MOUSE_HOLD_DELAY and MOUSE_HOLD_RATE).
+  # @return [Boolean]
+  def held_repeat?
+    return @hold_fire ? true : false
   end
 
   # @brief Checks whether the cursor moved (or entered the window) this frame.
