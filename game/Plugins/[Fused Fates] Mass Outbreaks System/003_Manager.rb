@@ -156,4 +156,128 @@ module MassOutbreaks
     return false if !GameData::Species.exists?(entry[:species])
     return true
   end
+
+  # @brief Weighted random choice.
+  # @param list [Array<Hash>] Entries with a :weight key.
+  # @param rng [Random] RNG to draw from.
+  # @return [Hash] The chosen entry.
+  def self.weighted_pick(list, rng)
+    total = list.sum { |e| e[:weight] }
+    r = rng.rand(total)
+    list.each do |e|
+      r -= e[:weight]
+      return e if r < 0
+    end
+    return list.last
+  end
+
+  # @brief Hours until a :rotating outbreak ends.
+  # @param id [Symbol] Entry ID.
+  # @return [Integer, nil] Hours left, or nil for :daily outbreaks.
+  def self.hours_left(id)
+    rec = record(id)
+    return nil if !rec || !rec[:expires]
+    return [rec[:expires] - current_tick, 0].max
+  end
+
+  #----------------------------------------------------------------
+  # Lookup
+  #----------------------------------------------------------------
+  # @brief Today's outbreaks.
+  # Records whose ID no longer exists in the pool are discarded here.
+  # @return [Array<Array(Hash, Hash)>] [pool entry, saved record] pairs.
+  def self.active
+    refresh
+    return [] if !enabled?
+    state[:active].select! { |rec| entry(rec[:id]) }
+    return state[:active].map { |rec| [entry(rec[:id]), rec] }
+  end
+
+  # @brief Find the outbreak on a map for an encounter category.
+  # @param map_id [Integer] Map ID.
+  # @param category [Symbol] GameData::EncounterType#type, e.g. :land.
+  # @return [Array(Hash, Hash), nil] [entry, record], or nil if none.
+  def self.find(map_id, category)
+    return active.find { |e, _rec| e[:map] == map_id && e[:category] == category }
+  end
+
+  # @brief Saved record for an active outbreak.
+  # @param id [Symbol] Entry ID.
+  # @return [Hash, nil] { id:, count: }, or nil if not active.
+  def self.record(id)
+    return state[:active].find { |rec| rec[:id] == id }
+  end
+
+# @brief Whether a wild Pokémon belongs to an outbreak entry.
+  # @param pkmn [Pokemon] The Pokémon to check.
+  # @param entry [Hash] Pool entry.
+  # @return [Boolean]
+  #
+  def self.matches?(pkmn, entry)
+    return pkmn.species == entry[:species]
+  end
+ 
+  #----------------------------------------------------------------------------
+  # Counter and tiers
+  #----------------------------------------------------------------------------
+ 
+  ##
+  # @brief Tier list used by an entry.
+  # @param id [Symbol] Entry ID.
+  # @return [Array<Hash>] The entry's :perks, or TIERS.
+  #
+  def self.tiers_for(id)
+    e = entry(id)
+    return (e && e[:perks]) || TIERS
+  end
+ 
+  ##
+  # @brief Tier reached at a given count.
+  # @param id [Symbol] Entry ID.
+  # @param count [Integer, nil] Count to check (default: current counter).
+  # @return [Hash] The tier hash.
+  #
+  def self.tier_for(id, count = nil)
+    rec = record(id)
+    count ||= rec ? rec[:count] : 0
+    tiers = tiers_for(id)
+    return tiers.find { |t| count >= t[:count] } || tiers.last
+  end
+ 
+  ##
+  # @brief Counter value needed for the next tier.
+  # @param id [Symbol] Entry ID.
+  # @return [Integer, nil] Next threshold, or nil if already at the top tier.
+  #
+  def self.next_threshold(id)
+    rec = record(id)
+    count = rec ? rec[:count] : 0
+    return tiers_for(id).map { |t| t[:count] }.select { |c| c > count }.min
+  end
+ 
+  ##
+  # @brief Add to an outbreak's counter.
+  # @param id [Symbol] Entry ID.
+  # @param amount [Integer] Amount to add.
+  # @return [Boolean] True if this reached a new tier.
+  #
+  def self.add_to_counter(id, amount = 1)
+    rec = record(id)
+    return false if !rec
+    old_tier = tier_for(id)
+    rec[:count] += amount
+    return !tier_for(id).equal?(old_tier)
+  end
+ 
+  ##
+  # @brief Whether the battle being set up or fought came from an outbreak.
+  #
+  # Other plugins (such as the fusion system) can check this to leave
+  # outbreak Pokémon alone or to react to them.
+  #
+  # @return [Boolean]
+  #
+  def self.outbreak_battle?
+    return !$game_temp.mass_outbreak_id.nil?
+  end
 end
