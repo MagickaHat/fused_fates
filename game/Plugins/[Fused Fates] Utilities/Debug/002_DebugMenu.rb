@@ -39,7 +39,7 @@ end
 MenuHandlers.add(:debug_menu, :utilities_menu, {
   "name"        => _INTL("Utilities..."),
   "parent"      => :main,
-  "description" => _INTL("Inspect and clear graphics caches, dump graphics and palettes."),
+  "description" => _INTL("Inspect and clear graphics caches, dump graphics and palettes, print event flags."),
   "always_show" => false
 })
 
@@ -96,5 +96,15 @@ MenuHandlers.add(:debug_menu, :utilities_palette, {
       Console.echoln("Ramp #{i + 1}: " + ramp.map(&:to_hex).join(" "))
     end
     pbMessage(_INTL("{1} colors in {2} ramps. See the console for the list.", palette.size, palette.ramps.length))
+  }
+})
+
+MenuHandlers.add(:debug_menu, :utilities_event_flags, {
+  "name"        => _INTL("Print event flags"),
+  "parent"      => :utilities_menu,
+  "description" => _INTL("List every named event flag and its value in the console."),
+  "effect"      => proc {
+    EventUtils.dump_flags
+    pbMessage(_INTL("{1} event flags. See the console for the list.", EventUtils.flags.to_h.length))
   }
 })
