@@ -31,4 +31,16 @@ module UtilitySettings
 
   # Default largest RGB distance PaletteSwap.apply_nearest will snap a color across
   PALETTE_MATCH_TOLERANCE = 48
+
+  #----------------------------------------------------------------
+  # Events
+  #----------------------------------------------------------------
+  # Most tiles EventPathfinder looks at before deciding a target can't be reached
+  PATHFIND_MAX_NODES = 2000
+
+  # Times EventUtils.walk_to works out a new path when something blocks the way
+  PATHFIND_RETRIES = 3
+
+  # Seconds EventUtils.walk_to waits for a blocker to move before working out a new path
+  PATHFIND_RETRY_WAIT = 0.25
 end
