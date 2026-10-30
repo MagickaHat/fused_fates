@@ -1,0 +1,5 @@
+Name = Pokémon Fused Fates Mass Outbreaks System
+Version = 1.0
+Essentials = 21.1
+Requires = Pokémon Fused Fates Utilities,1.0
+Credits = MagickaHat
