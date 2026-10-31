@@ -17,6 +17,12 @@ module WonderLink
   def encode
     # Isolate the Data
     party = $player.party
+    
+    # Party failsafe
+    if party.empty?
+      pbMessage(_INTL("You don't have any Pokémon in your party to export!"))
+      return false
+    end
 
     #return data
   end
