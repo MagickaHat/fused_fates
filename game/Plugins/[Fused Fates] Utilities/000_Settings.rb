@@ -67,6 +67,17 @@ module UtilitySettings
   MOUSE_HOLD_DELAY = 0.4
   MOUSE_HOLD_RATE  = 0.15
 
+  # Also treat the cursor as over the game window whenever its coordinates are inside the screen,
+  # even if the engine says it isn't. Wine/Proton (Linux, Steam Deck) often never tell mkxp-z
+  # that the cursor entered the window, which otherwise leaves the mouse completely dead there.
+  # Side effect: after the cursor leaves the window, the last hovered option can stay
+  # highlighted (clicks outside the window never reach the game, so nothing is picked).
+  MOUSE_BOUNDS_FALLBACK = true
+
+  # Writes a one-time report of what the engine says about the mouse to the dev log, after the
+  # first time the mouse is moved or clicked. Use it to check mouse problems on other platforms.
+  MOUSE_DIAGNOSTICS = false
+
   #----------------------------------------------------------------
   # Events
   #----------------------------------------------------------------

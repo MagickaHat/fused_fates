@@ -28,6 +28,7 @@ module MouseInput
     @any_click = available? && (clicked?(Input::MOUSELEFT) || clicked?(Input::MOUSERIGHT))
     update_wheel
     update_hold
+    log_diagnostics
   end
 
   # @brief The current time in seconds.
@@ -135,16 +136,54 @@ module MouseInput
   end
 
   # @brief Checks whether the cursor is over the game window.
+  # Trusts the engine's Input.mouse_in_window first; if that says no and
+  # UtilitySettings::MOUSE_BOUNDS_FALLBACK is on, the cursor counts as inside whenever its
+  # coordinates are on screen (Wine/Proton often never report the cursor entering the window).
   # @return [Boolean]
   def in_window?
-    return available? && Input.mouse_in_window ? true : false
+    return false if !available?
+    return true if Input.mouse_in_window
+    return false if !UtilitySettings::MOUSE_BOUNDS_FALLBACK
+    return on_screen?(raw_position)
+  end
+
+  # @brief The cursor position as the engine reports it, whether or not it is over the window.
+  # @return [Array<Integer>, nil] [x, y], or nil if the mouse can't be used.
+  def raw_position
+    return nil if !available?
+    return [Input.mouse_x.to_i, Input.mouse_y.to_i]
+  end
+
+  # @brief Checks whether a position lies inside the game screen.
+  # @param pos [Array<Integer>, nil] [x, y].
+  # @return [Boolean]
+  def on_screen?(pos)
+    return false if !pos
+    return pos[0] >= 0 && pos[0] < Graphics.width && pos[1] >= 0 && pos[1] < Graphics.height
   end
 
   # @brief The cursor position in screen coordinates.
+  # Doesn't use Essentials' Mouse.getMousePos, which only trusts Input.mouse_in_window.
   # @return [Array<Integer>, nil] [x, y], or nil if the cursor is outside the window.
   def position
-    return nil if !available?
-    return Mouse.getMousePos
+    return nil if !in_window?
+    return raw_position
+  end
+
+  # @brief Logs, once, what the engine reports about the mouse, the first frame the mouse is
+  # moved or clicked. Only runs when UtilitySettings::MOUSE_DIAGNOSTICS is on.
+  def log_diagnostics
+    return if @diagnosed || !UtilitySettings::MOUSE_DIAGNOSTICS || !available?
+    raw = raw_position
+    return if !@any_click && (@first_raw ||= raw) == raw   # Wait until the mouse does something
+    @diagnosed = true
+    platform = (defined?(System) && System.respond_to?(:platform)) ? System.platform : RUBY_PLATFORM
+    engine_in = Input.mouse_in_window ? true : false
+    DevLog.once(:mouse_diagnostics,
+                "Mouse report: platform=#{platform} mouse_in_window=#{engine_in} " \
+                "raw=#{raw.inspect} screen=#{Graphics.width}x#{Graphics.height} " \
+                "in_window?=#{in_window?} bounds_fallback_used=#{!engine_in && in_window?} " \
+                "scroll_v=#{Input.respond_to?(:scroll_v)}")
   end
 
   # @brief Checks whether a mouse button was pressed down this frame inside the window.
