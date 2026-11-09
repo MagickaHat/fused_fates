@@ -34,3 +34,28 @@ Color = 80,64,160
 [VIOLET]
 Name = Violet
 Color = 152,80,184
+#-------------------------------
+[SKIN_PALE]
+Name = Pale
+Color = 248,220,200
+Flags = Skin
+#-------------------------------
+[SKIN_LIGHT]
+Name = Light
+Color = 232,190,156
+Flags = Skin
+#-------------------------------
+[SKIN_TAN]
+Name = Tan
+Color = 200,148,104
+Flags = Skin
+#-------------------------------
+[SKIN_BROWN]
+Name = Brown
+Color = 150,100,68
+Flags = Skin
+#-------------------------------
+[SKIN_DARK]
+Name = Dark
+Color = 96,62,44
+Flags = Skin

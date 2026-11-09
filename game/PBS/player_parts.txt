@@ -1,4 +1,22 @@
 #-------------------------------
+[BODY]
+Name = Body
+Slot = Body
+Graphic = body
+ColorSlots = 1
+RegionNames = Skin
+DefaultColors = SKIN_LIGHT
+Unlocked = true
+#-------------------------------
+[EYES]
+Name = Eyes
+Slot = Eyes
+Graphic = eyes
+ColorSlots = 1
+RegionNames = Iris
+DefaultColors = BLUE
+Unlocked = true
+#-------------------------------
 [JEANS]
 Name = Jeans
 Slot = Bottom
@@ -42,3 +60,31 @@ DefaultHues = 0
 DefaultSaturations = 0
 DefaultValues = -10
 Unlocked = true
+#-------------------------------
+[HAIR_LONG]
+Name = Long hair
+Slot = Hair
+Graphic = hair_long
+ColorSlots = 1
+DefaultColors = BLACK
+DefaultHues = 0
+DefaultSaturations = 0
+DefaultValues = -10
+Unlocked = true
+#-------------------------------
+[CAP]
+Name = Cap
+Slot = Hat
+Graphic = cap
+ColorSlots = 2
+RegionNames = Crown,Brim
+DefaultColors = RED,WHITE
+Price = 1500
+#-------------------------------
+[SCARF]
+Name = Scarf
+Slot = Accessory
+Graphic = scarf
+ColorSlots = 1
+DefaultColors = YELLOW
+Price = 800

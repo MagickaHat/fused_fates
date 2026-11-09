@@ -1,5 +1,5 @@
 #================================================================================================
-# Pokémon Fused Fates Character Customization System - 008_Debug.rb
+# Pokémon Fused Fates Character Customization System - 012_Debug.rb
 #================================================================================================
 
 #==================================================================
@@ -18,6 +18,28 @@ MenuHandlers.add(:debug_menu, :customization_editor, {
   "description" => _INTL("Open the character editor."),
   "effect"      => proc {
     pbCustomizeCharacter
+  }
+})
+
+MenuHandlers.add(:debug_menu, :customization_test_modes, {
+  "name"        => _INTL("Test editor mode..."),
+  "parent"      => :customization_menu,
+  "description" => _INTL("Open the editor the way the intro, a boutique, a stylist or the debug editor would."),
+  "effect"      => proc {
+    cmds = [_INTL("Intro (character creation)"), _INTL("Boutique (every locked part)"),
+            _INTL("Hair salon ($500)"), _INTL("Debug editor (every part)"), _INTL("Cancel")]
+    case pbMessage(_INTL("Which mode?"), cmds, cmds.length)
+    when 0
+      pbCharacterCreation
+    when 1
+      stock = []
+      GameData::PlayerPart.each { |part| stock.push(part.id) if !$player.part_unlocked?(part.id) }
+      pbCosmeticShop(stock, title: _INTL("Test Boutique"))
+    when 2
+      pbStylist([:Hair, :Eyes], fee: 500, title: _INTL("Test Hair Salon"))
+    when 3
+      pbCustomizeCharacter(CustomizationConfig.debug)
+    end
   }
 })
 
