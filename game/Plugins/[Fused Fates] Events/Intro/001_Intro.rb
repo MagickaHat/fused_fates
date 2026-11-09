@@ -44,7 +44,13 @@ module Introduction
       pbMessage(_INTL("Now, why don't you tell me a little bit about yourself?"))
       pbMessage(_INTL("What do you look like?"))
 
-      #character customization comes here
+      # Character creation: answering "No" reopens the editor on the look made so far
+      loop do
+        pbCharacterCreation
+        break if pbConfirmMessage(_INTL("So this is what you look like?"))
+        pbMessage(_INTL("Oh? Then show me again, what do you look like?"))
+      end
+
       # Player name entry
       pbMessage(_INTL("And what is your name?"))
       loop do

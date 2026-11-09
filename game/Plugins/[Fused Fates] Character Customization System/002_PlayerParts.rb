@@ -60,6 +60,24 @@ module GameData
     def has_flag?(flag)
       return @flags.any? { |f| f.downcase == flag.downcase }
     end
+
+    # @brief Lists the swatches offered for a slot, following CustomizationSettings::SWATCH_PALETTES.
+    # A slot with a palette gets the swatches flagged for it; any other slot gets the swatches
+    # that belong to no palette. If that leaves nothing (e.g. no skin tones defined yet), every
+    # swatch is offered instead.
+    # @param slot [Symbol] e.g. :Body, :Hair.
+    # @return [Array<PlayerColor>]
+    def self.for_slot(slot)
+      palette = CustomizationSettings::SWATCH_PALETTES[slot]
+      palette_flags = CustomizationSettings::SWATCH_PALETTES.values.compact.uniq
+      all = []
+      each { |swatch| all.push(swatch) }
+      ret = all.select do |swatch|
+        next swatch.has_flag?(palette) if palette
+        next palette_flags.none? { |flag| swatch.has_flag?(flag) }
+      end
+      return ret.empty? ? all : ret
+    end
   end
 
   #==================================================================

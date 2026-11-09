@@ -22,6 +22,8 @@ module CustomizationSettings
 
   # Parts a new player starts with (slot => part id); missing ids are skipped
   DEFAULT_PARTS = {
+    Body:   :BODY,
+    Eyes:   :EYES,
     Bottom: :JEANS,
     Shoes:  :SNEAKERS,
     Top:    :TEE,
@@ -77,6 +79,13 @@ module CustomizationSettings
   # Step used by the fine-tune number entry
   CUSTOM_COLOR_STEP = 5
 
+  # Swatch palettes: a slot listed here only offers swatches carrying that flag in
+  # player_colors.txt (e.g. skin tones for the body). Slots not listed offer every swatch that
+  # carries none of these flags, so skin tones never show up as shirt colors.
+  SWATCH_PALETTES = {
+    Body: "Skin"
+  }.freeze
+
   #----------------------------------------------------------------
   # Editor
   #----------------------------------------------------------------
@@ -92,9 +101,57 @@ module CustomizationSettings
   # Only list parts the player has unlocked (debug mode always lists every part)
   ONLY_UNLOCKED = true
 
-  # Zoom applied to the editor's preview sprite
-  PREVIEW_ZOOM = 2
+  # Zoom applied to the editor's preview sprite, by context kind (:derived is the mugshot and map icon)
+  PREVIEW_ZOOM = {
+    charset: 2,
+    trainer: 1,
+    derived: 2
+  }.freeze
 
   # Frames each walking frame is shown for in the editor's preview
   PREVIEW_FRAME_TIME = 10
+
+  #----------------------------------------------------------------
+  # Editor layout and art
+  #----------------------------------------------------------------
+  # Sizes (in pixels) of the editor's panels. The command list runs down the left side; the
+  # header (title and money), the preview and the info panel share the rest, top to bottom.
+  # The header is only shown when the session has a title or prices.
+  EDITOR_LAYOUT = {
+    list_width:    224,
+    header_height: 32,
+    info_height:   112
+  }.freeze
+
+  # Optional art for the editor, looked up in UI_FOLDER. Any file that doesn't exist is replaced
+  # by flat colors, so the editor works without art; drop a PNG in to restyle a panel.
+  #   :background - whole screen, drawn behind everything
+  #   :header     - stretched to the header panel
+  #   :preview    - stretched to the preview panel
+  #   :info       - stretched to the info panel
+  UI_FOLDER = "Graphics/UI/Customization/"
+  UI_GRAPHICS = {
+    background: "bg",
+    header:     "header",
+    preview:    "preview",
+    info:       "info"
+  }.freeze
+
+  #----------------------------------------------------------------
+  # Editor presets (see CustomizationConfig)
+  #----------------------------------------------------------------
+  # Slots offered when the player creates their look in the intro
+  INTRO_SLOTS = [:Body, :Eyes, :Hair].freeze
+
+  # Commands offered in the intro
+  INTRO_COMMANDS = [:undo, :redo, :revert, :done].freeze
+
+  # Commands offered by boutiques and stylists
+  SERVICE_COMMANDS = [:undo, :redo, :revert, :done].freeze
+
+  # Preview context shown first by the intro and boutiques (the full-body trainer sprite)
+  SHOWCASE_CONTEXT = :front
+
+  # Sound effect played when the player pays a boutique or stylist
+  PAY_SE = "Mart buy item"
 end
